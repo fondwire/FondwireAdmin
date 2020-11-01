@@ -1,26 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState} from 'react';
 import './App.css';
+import Preloader from "./utils/preloader/preloader";
+import {useRoute} from "./router";
+import {BrowserRouter as Router} from "react-router-dom";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [pending, setPending] = useState(true)
+  const route = useRoute(true)
+
+
+  setTimeout(()=>{setPending(false)}, 2000)
+
+  if (pending) return <Preloader />
+  return <Router><div className="App">{route}</div></Router>
 }
 
 export default App;
