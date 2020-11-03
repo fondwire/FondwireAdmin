@@ -5,14 +5,20 @@
 @font-face {
     font-family: "Gotham-Bold";
     src: url("fonts/Gotham-Bold.otf") format("opentype");
-}@font-face {
+}
+@font-face {
     font-family: "Gotham-Medium";
     src: url("fonts/Gotham-Medium.otf") format("opentype");
+}
+@font-face {
+    font-family: "Gotham-Thin";
+    src: url("fonts/Gotham-Thin.otf") format("opentype");
 }
 .adminPanelWrapper{
     display: grid;
     grid-template-columns: 265px 1fr;
 }
 .contentWrapper{
-    padding: 40px;
+    padding: 40px 45px;
+    font-family: 'Gotham-Medium', sans-serif;
 }

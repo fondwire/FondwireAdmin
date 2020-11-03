@@ -2,6 +2,7 @@ import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import Navbar from "./components/navbar/Navbar";
 import Dashboard from "./pages/dashboard/Dashboard";
+import AnalyticsPage from "./pages/analytics/Analytics-page";
 
 
 export const useRoute = (isAuth: boolean) => {
@@ -17,7 +18,7 @@ export const useRoute = (isAuth: boolean) => {
                         <h1>Feed</h1>
                     </Route>
                     <Route path={'/analytics'}>
-                        <h1>Analytics</h1>
+                        <AnalyticsPage />
                     </Route>
                     <Route path={'/settings'}>
                         <h1>Settings</h1>
