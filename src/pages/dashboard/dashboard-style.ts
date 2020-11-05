@@ -11,4 +11,7 @@ export const DashboardWrapper = styled.div`
     margin: 40px 0 25px 20px;
     font-size: 15px;
   }
+  &>.feedTitle{
+    margin: 40px 0 25px 0;
+  }
 `
