@@ -47,7 +47,7 @@ export const FeedComponentWrapper:any = styled(FeedWrapper)`
   }
 `
 
-export const ActionWrapper = styled.div`
+export const ActionWrapper:any = styled.div`
   border-radius: 50%;
   background: rgba(47,157, 251, 0.1);
   display: flex;
@@ -57,10 +57,37 @@ export const ActionWrapper = styled.div`
   width: 22px;
   height: 22px;
   cursor: pointer;
+  position:relative;
+  
   &>span{
     border-radius: 50%;
     width: 2px;
     height: 2px;
     background: #2f9dfb;
+  }
+  
+  &>.modal{
+    cursor:default;
+    color: white;
+    min-width: 80px;
+    padding: 10px 20px;
+    position: absolute;
+    background: #121e34;
+    bottom: 11px;
+    z-index: 3;
+    right: 70%;
+    opacity: ${(props:any) => props.opacity};
+    transition: all 0.3s linear;
+    
+    &>div{
+      font-family: 'Gotham-Medium', sans-serif;
+      font-size: 10px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+      
+    &>.delete{
+      color: red;
+    }
   }
 `
