@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { FeedWrapper, FeedComponentWrapper, ActionWrapper } from './Feed-style';
+import { FeedWrapper, FeedComponentWrapper, ActionWrapper, CreateNewWrapper, FeedModal } from './Feed-style';
+import { Link } from 'react-router-dom';
 
 const FeedHeader = () => {
     return (
@@ -12,6 +13,7 @@ const FeedHeader = () => {
         </FeedWrapper>
     );
 };
+export default FeedHeader;
 
 type FeedComponentProps = {
     title: string
@@ -67,18 +69,27 @@ const Action = () => {
         };
     }, [wrapperRef]);
     return (
-        <ActionWrapper ref={wrapperRef} opacity={opacity} onClick={()=> setOpacity(1)} >
-            <span/>
-            <span/>
-            <span/>
-            <div className={'modal'}>
+        <span ref={wrapperRef} className={'pos-relative'}>
+            <ActionWrapper onClick={()=> setOpacity(1)}>
+                <span/>
+                <span/>
+                <span/>
+            </ActionWrapper>
+            <FeedModal  opacity={opacity}>
                 <div>EDIT</div>
                 <div>ANALYTICS</div>
                 <div>REPORT</div>
                 <div className={'delete'}>DELETE</div>
-            </div>
-        </ActionWrapper>
+            </FeedModal>
+        </span>
     )
 }
 
-export default FeedHeader;
+export const CreateNew = () => {
+    return (
+        <CreateNewWrapper>
+            <span>CREATE NEW</span>
+            <Link to={'/feed/create'} className={'plus'}>+</Link>
+        </CreateNewWrapper>
+    )
+}

@@ -14,6 +14,9 @@
     font-family: "Gotham-Thin";
     src: url("fonts/Gotham-Thin.otf") format("opentype");
 }
+.pos-relative{
+    position: relative;
+}
 .adminPanelWrapper{
     display: grid;
     grid-template-columns: 265px 1fr;

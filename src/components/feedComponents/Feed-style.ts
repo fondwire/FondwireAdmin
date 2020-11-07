@@ -47,7 +47,7 @@ export const FeedComponentWrapper:any = styled(FeedWrapper)`
   }
 `
 
-export const ActionWrapper:any = styled.div`
+export const ActionWrapper = styled.div`
   border-radius: 50%;
   background: rgba(47,157, 251, 0.1);
   display: flex;
@@ -65,8 +65,9 @@ export const ActionWrapper:any = styled.div`
     height: 2px;
     background: #2f9dfb;
   }
-  
-  &>.modal{
+`
+
+export const FeedModal:any = styled.span`
     cursor:default;
     color: white;
     min-width: 80px;
@@ -76,8 +77,9 @@ export const ActionWrapper:any = styled.div`
     bottom: 11px;
     z-index: 3;
     right: 70%;
+    visibility: ${(props:any) => props.opacity ? 'visible' : 'hidden'};
     opacity: ${(props:any) => props.opacity};
-    transition: all 0.3s linear;
+    transition: visibility 0s , opacity 0.5s linear;
     
     &>div{
       font-family: 'Gotham-Medium', sans-serif;
@@ -89,5 +91,27 @@ export const ActionWrapper:any = styled.div`
     &>.delete{
       color: red;
     }
+`
+
+export const CreateNewWrapper = styled.div`
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  .plus{
+    //cursor: pointer;
+    text-decoration:none;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Gotham-Thin', sans-serif;
+    font-size: 25px;
+    color: #2f9dfb;
+    background:#ffffff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
   }
 `
