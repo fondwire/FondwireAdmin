@@ -4,6 +4,7 @@ import Navbar from "./components/navbar/Navbar";
 import Dashboard from "./pages/dashboard/Dashboard";
 import AnalyticsPage from "./pages/analytics/Analytics-page";
 import Feed from "./pages/feed/Feed";
+import SettingsPage from "./pages/settings/Settings-page";
 
 
 export const useRoute = (isAuth: boolean) => {
@@ -25,7 +26,7 @@ export const useRoute = (isAuth: boolean) => {
                         <AnalyticsPage />
                     </Route>
                     <Route path={'/settings'}>
-                        <h1>Settings</h1>
+                        <SettingsPage />
                     </Route>
                     <Redirect to={'/dashboard'} />
                 </Switch>
