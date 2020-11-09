@@ -1,0 +1,34 @@
+import React from 'react';
+import styled from "styled-components";
+
+const SettingsBlockWrapper = styled.div`
+  background: #f1f9ff;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  margin: 15px 0;
+  
+  &>:first-child{
+    font-family: 'Gotham-Bold', sans-serif;
+    font-size: 12px;
+  }
+  &>:last-child{
+    font-weight: 600;
+    font-family: 'Gotham-Thin', sans-serif;
+    font-size: 12px;
+  }
+`
+type SettingsBlockProps = {
+
+}
+const SettingsBlock: React.FC<SettingsBlockProps> = (props) => {
+    return (
+        <SettingsBlockWrapper className={'blueColor'}>
+            {props.children}
+        </SettingsBlockWrapper>
+    );
+}
+
+export default SettingsBlock;

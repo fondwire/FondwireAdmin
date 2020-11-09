@@ -3,6 +3,8 @@ import {Switch, Route, Redirect} from 'react-router-dom';
 import Navbar from "./components/navbar/Navbar";
 import Dashboard from "./pages/dashboard/Dashboard";
 import AnalyticsPage from "./pages/analytics/Analytics-page";
+import Feed from "./pages/feed/Feed";
+import SettingsPage from "./pages/settings/Settings-page";
 
 
 export const useRoute = (isAuth: boolean) => {
@@ -14,14 +16,17 @@ export const useRoute = (isAuth: boolean) => {
                     <Route path={'/dashboard'}>
                         <Dashboard />
                     </Route>
+                    <Route path={'/feed/create'}>
+                        <h1>Create</h1>
+                    </Route>
                     <Route path={'/feed'}>
-                        <h1>Feed</h1>
+                        <Feed />
                     </Route>
                     <Route path={'/analytics'}>
                         <AnalyticsPage />
                     </Route>
                     <Route path={'/settings'}>
-                        <h1>Settings</h1>
+                        <SettingsPage />
                     </Route>
                     <Redirect to={'/dashboard'} />
                 </Switch>
