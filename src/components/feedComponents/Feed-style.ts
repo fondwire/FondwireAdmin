@@ -9,7 +9,8 @@ export const FeedWrapper = styled.div`
   height: 40px;
   border-radius: 3px;
   
-  &>div{
+  &>div, a{
+    text-decoration: none;
     margin: auto 0;
     text-align: left;
     font-weight: 600;
@@ -20,7 +21,7 @@ export const FeedWrapper = styled.div`
 `
 
 export const FeedComponentWrapper:any = styled(FeedWrapper)`
-  &>div{
+  &>div, a{
     font-weight: 400;
     font-family: 'Gotham-Medium', sans-serif;
     font-size: 13px;

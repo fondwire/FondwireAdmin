@@ -16,24 +16,28 @@ const Dashboard = () => {
             </div>
             <FeedHeader />
             <FeedComponent
+                id={1}
                 title={'Tesla had just revealed its plans to join Nikola. Tesla had just revealed its plans to join Nikola.'}
                 date={'Oct 25'}
                 type={'VIDEO'}
                 status={'draft'}
             />
             <FeedComponent
+                id={1}
                 title={'Tesla had just revealed its plans to join Nikola.'}
                 date={'Oct 25'}
                 type={'ARTICLE'}
                 status={'Active'}
             />
             <FeedComponent
+                id={1}
                 title={'Tesla had just revealed its plans to join Nikola. Tesla had just revealed its plans to join Nikola.'}
                 date={'Oct 25'}
                 type={'EVENT'}
                 status={'Pending'}
             />
             <FeedComponent
+                id={1}
                 title={'Tesla had just revealed its plans to join Nikola.'}
                 date={'Oct 25'}
                 type={'PODCAST'}

@@ -20,8 +20,9 @@ type FeedComponentProps = {
     date: string
     type: string
     status: string
+    id: string | number
 }
-export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,status}) => {
+export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,status, id}) => {
     const Status = status.toUpperCase()
     const [background, setBackground] = useState<string>('#a2a2a2')
 
@@ -41,7 +42,7 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,sta
     }, [Status])
     return (
         <FeedComponentWrapper bg={background}>
-            <div>{title}</div>
+            <Link to={`feed/create/${id}`}>{title}</Link>
             <div>{date}</div>
             <div>{type}</div>
             <div className={'status'}><span>{Status}</span></div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import css from './preloader.module.css'
-// import favicon from '../../img/favicon.png'
+import favicon from '../../images/Logo .png'
 
 
 const Preloader = () => {
@@ -14,7 +14,7 @@ const Preloader = () => {
                     <circle cx="170" cy="170" r="85" stroke="#121e34"/>
                     {/*<circle cx="170" cy="170" r="60" stroke="#00bdd0"/>*/}
                 </svg>
-                {/*<img className={css.img} src={favicon} alt="Heard"/>*/}
+                <img className={css.img} src={favicon} alt="FONDWIRE"/>
             </div>
         </div>
     )

@@ -2,6 +2,7 @@ import React from 'react';
 import { AnalyticsWrapper, ContentWrapper } from './Analytics-style';
 import chart from './chart.png'
 import './analytics.css'
+
 const Analytics = () => {
     return (
         <AnalyticsWrapper>
