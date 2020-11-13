@@ -5,6 +5,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import AnalyticsPage from "./pages/analytics/Analytics-page";
 import Feed from "./pages/feed/Feed";
 import SettingsPage from "./pages/settings/Settings-page";
+import CreateFeed from "./pages/create(edit)-feed";
 
 
 export const useRoute = (isAuth: boolean) => {
@@ -16,8 +17,11 @@ export const useRoute = (isAuth: boolean) => {
                     <Route path={'/dashboard'}>
                         <Dashboard />
                     </Route>
+                    <Route path={'/feed/create/:id'}>
+                        <CreateFeed />
+                    </Route>
                     <Route path={'/feed/create'}>
-                        <h1>Create</h1>
+                        <CreateFeed />
                     </Route>
                     <Route path={'/feed'}>
                         <Feed />

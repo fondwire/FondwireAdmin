@@ -29,3 +29,18 @@
 .blueColor{
     color: #2f9dfb;
 }
+
+.editor_textarea{
+    background: #ffffff;
+    cursor: text;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    min-height: 200px;
+    padding: 0 10px;
+}
+.toolbarClassName{
+    background: #d7d8d7 !important;
+}
+.rdw-option-wrapper, .rdw-dropdown-wrapper{
+    box-sizing: content-box;
+}
