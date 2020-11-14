@@ -35,13 +35,13 @@ const ChartStyleWrapper = styled.div`
       }
   }
 `
-const heightAnimation = keyframes`
+const heightAnimation = (height:string | number) => keyframes`
   from {
-    opacity: 0;
+    height: 0;
   }
 
   to {
-    opacity: 1;
+    height: ${height}%;
   }
 `;
 type chartProps = {
@@ -52,10 +52,10 @@ const ChartBlock = styled.div`
   background: linear-gradient(to bottom, #289afd, #ffffff ) ;
   height: ${(props:chartProps) => props.height + '%'};
   width: 28px;
-  margin: 0 1px 8px 1px;
+  margin: 0 0.5px 8px 0.5px;
   cursor: pointer;
   transition: background 0.5s linear;
-  animation: ${heightAnimation} 0.7s linear;
+  animation: ${(props:chartProps) => heightAnimation(props.height)} 0.8s linear;
   
   &:hover{
     background: #289afd;
@@ -70,13 +70,14 @@ const ChartBlock = styled.div`
 const ChartWrapper = () => {
     const [maxHeight, setMaxHeight] = useState(0)
     const data = [
-        { name: 'Mon', value: 20 },
-        { name: 'Tue', value: 40 },
+        { name: 'Mon', value: 10 },
+        { name: 'Tue', value: 20 },
         { name: 'Wed', value: 35 },
         { name: 'Thu', value: 50 },
         { name: 'Fri', value: 55 },
-        { name: 'Sat', value: 40 },
-        { name: 'Sun', value: 30 }
+        { name: 'Sat', value: 30 },
+        { name: 'Sun', value: 20 },
+        { name: 'Asd', value: 10 }
     ]
     useEffect(()=>{
         data.forEach((dataItem) => {
