@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { AnalyticsWrapper, ContentWrapper } from './Analytics-style';
-import chart from './chart.png'
+// import chart from './chart.png'
 import './analytics.css'
+import styled, { keyframes } from "styled-components";
 
 const Analytics = () => {
     return (
@@ -13,12 +14,93 @@ const Analytics = () => {
     );
 };
 
+const ChartStyleWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+  min-height: 220px;
+  font-size: 8px;
+  color: #2f9dfb;
+  text-align:center;
+  margin-top: 15px;
+  
+  &>div{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      
+      &>div{
+        height: 200px;
+        display: flex;
+        align-items: flex-end;
+      }
+  }
+`
+const heightAnimation = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
+type chartProps = {
+    height: string | number
+    content: string | number
+}
+const ChartBlock = styled.div`
+  background: linear-gradient(to bottom, #289afd, #ffffff ) ;
+  height: ${(props:chartProps) => props.height + '%'};
+  width: 28px;
+  margin: 0 1px 8px 1px;
+  cursor: pointer;
+  transition: background 0.5s linear;
+  animation: ${heightAnimation} 0.7s linear;
+  
+  &:hover{
+    background: #289afd;
+  }
+  &:hover:after{
+    content: ${(props:chartProps)=> props.content ? props.content : '15' };
+    color: #ffffff;
+    font-size: 13px;
+  }
+`
+
 const ChartWrapper = () => {
+    const [maxHeight, setMaxHeight] = useState(0)
+    const data = [
+        { name: 'Mon', value: 20 },
+        { name: 'Tue', value: 40 },
+        { name: 'Wed', value: 35 },
+        { name: 'Thu', value: 50 },
+        { name: 'Fri', value: 55 },
+        { name: 'Sat', value: 40 },
+        { name: 'Sun', value: 30 }
+    ]
+    useEffect(()=>{
+        data.forEach((dataItem) => {
+            if(maxHeight < dataItem.value){
+                setMaxHeight(dataItem.value)
+            }
+        })
+    }, [data, maxHeight])
     return (
         <div className={'chart_analytic__wrapper'}>
             <div className={'chart__content'}>General progress chart</div>
             <div>
-                <img width={'100%'} src={chart} alt={'#'}/>
+                <ChartStyleWrapper>
+                    {
+                        data.map((el) => (
+                            <div key={el.name}>
+                                <div>
+                                    <ChartBlock content={el.value} height={(el.value*100)/maxHeight} />
+                                </div>
+                                {el.name}
+                            </div>
+                        ))
+                    }
+                </ChartStyleWrapper>
             </div>
         </div>
     )
