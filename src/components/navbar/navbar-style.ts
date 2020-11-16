@@ -10,8 +10,9 @@ export const NavbarWrapper = styled.div`
   
   
   &>.logoWrapper>div{
+    margin-top: 25px;
     width: 100%;
-    height: 95px;
+    height: 85px;
     &>img{
       height: 100%;
       

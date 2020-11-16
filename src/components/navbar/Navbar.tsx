@@ -1,14 +1,14 @@
 import React from 'react';
 import {NavbarWrapper, NavList} from './navbar-style';
 import {Link, NavLink} from 'react-router-dom';
-import logo from '../../images/Adminlogo.png'
+import logo from '../../images/AdminLogo.png'
 
 function Navbar() {
     return (
         <NavbarWrapper>
             <Link to={'/dashboard'} className={'logoWrapper'}>
                 <div>
-                    <img src={logo} alt="Fondwire"/>
+                    <img src={logo} alt="Fundwire"/>
                 </div>
             </Link>
             <NavList>

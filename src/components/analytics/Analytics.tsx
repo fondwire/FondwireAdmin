@@ -18,7 +18,7 @@ const ChartStyleWrapper = styled.div`
   display: flex;
   align-items: flex-end;
   min-height: 220px;
-  font-size: 8px;
+  font-size: 7px;
   color: #2f9dfb;
   text-align:center;
   margin-top: 15px;
@@ -70,14 +70,14 @@ const ChartBlock = styled.div`
 const ChartWrapper = () => {
     const [maxHeight, setMaxHeight] = useState(0)
     const data = [
-        { name: 'Mon', value: 10 },
-        { name: 'Tue', value: 20 },
-        { name: 'Wed', value: 35 },
-        { name: 'Thu', value: 50 },
-        { name: 'Fri', value: 55 },
-        { name: 'Sat', value: 30 },
-        { name: 'Sun', value: 20 },
-        { name: 'Asd', value: 10 }
+        { name: '10nov', value: 10 },
+        { name: '11nov', value: 20 },
+        { name: '12nov', value: 35 },
+        { name: '13nov', value: 50 },
+        { name: '14nov', value: 40 },
+        { name: '15nov', value: 30 },
+        { name: '16nov', value: 20 },
+        { name: '17nov', value: 10 }
     ]
     useEffect(()=>{
         data.forEach((dataItem) => {
