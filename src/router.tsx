@@ -6,6 +6,7 @@ import AnalyticsPage from "./pages/analytics/Analytics-page";
 import Feed from "./pages/feed/Feed";
 import SettingsPage from "./pages/settings/Settings-page";
 import CreateFeed from "./pages/create(edit)-feed";
+import WelcomePage from "./pages/welocome/Welcome-page";
 
 
 export const useRoute = (isAuth: boolean) => {
@@ -37,10 +38,15 @@ export const useRoute = (isAuth: boolean) => {
             </div>
         </div>
     } else {
-        return <div>
-            welcome to fondwire
+        return <div className={'notLoggedInWrapper'}>
             <Switch>
-
+                <Route exact path={'/'}>
+                    <WelcomePage />
+                </Route>
+                <Route path={'/sign-in'}>
+                    Login
+                </Route>
+                <Redirect to={'/'}/>
             </Switch>
         </div>
     }

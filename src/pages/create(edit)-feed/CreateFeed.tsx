@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import FeedCreateInput from "../../components/FeedCreateInput/FeedCreateInput";
 import { Editor, EditorState } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { SubmitButton } from '../../components/submitBtn/submit-button';
+import { SubmitButton } from '../../components/Buttons/submit-button';
 // import draftToHtml from 'draftjs-to-html';
 
 

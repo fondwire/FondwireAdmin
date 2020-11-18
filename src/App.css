@@ -44,3 +44,8 @@
 .rdw-option-wrapper, .rdw-dropdown-wrapper{
     box-sizing: content-box;
 }
+
+.notLoggedInWrapper{
+    background: linear-gradient(to bottom, #5D7193, #121E34);
+    min-height: 100vh;
+}

@@ -6,7 +6,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 
 function App() {
   const [pending, setPending] = useState(true)
-  const route = useRoute(true)
+  const route = useRoute(false)
 
 
   setTimeout(()=>{setPending(false)}, 2000)
