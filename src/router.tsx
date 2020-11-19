@@ -7,6 +7,7 @@ import Feed from "./pages/feed/Feed";
 import SettingsPage from "./pages/settings/Settings-page";
 import CreateFeed from "./pages/create(edit)-feed";
 import WelcomePage from "./pages/welocome/Welcome-page";
+import SignIn from "./pages/sign-in/Sign-in";
 
 
 export const useRoute = (isAuth: boolean) => {
@@ -44,7 +45,7 @@ export const useRoute = (isAuth: boolean) => {
                     <WelcomePage />
                 </Route>
                 <Route path={'/sign-in'}>
-                    Login
+                    <SignIn />
                 </Route>
                 <Redirect to={'/'}/>
             </Switch>

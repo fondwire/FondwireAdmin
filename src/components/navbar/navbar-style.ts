@@ -15,7 +15,6 @@ export const NavbarWrapper = styled.div`
     height: 85px;
     &>img{
       height: 100%;
-      
     }
   }
 `

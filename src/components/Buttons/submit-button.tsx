@@ -25,6 +25,7 @@ export const YellowButton = styled.button`
   font-size: 20px;
   font-family: 'Gotham-Medium', sans-serif;
   text-decoration: none;
+  cursor: pointer;
   :focus{
     outline: none;
   }

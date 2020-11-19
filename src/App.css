@@ -49,3 +49,7 @@
     background: linear-gradient(to bottom, #5D7193, #121E34);
     min-height: 100vh;
 }
+
+.fullWidth{
+    width: 100%;
+}
