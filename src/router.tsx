@@ -11,41 +11,52 @@ import SignIn from "./pages/sign-in/Sign-in";
 
 
 export const useRoute = (isAuth: boolean) => {
+    const isAdmin = false
     if (isAuth) {
         return <div className={'adminPanelWrapper'}>
-            <Navbar/>
+            <Navbar isAdmin={isAdmin}/>
             <div className={'contentWrapper'}>
-                <Switch>
-                    <Route path={'/dashboard'}>
-                        <Dashboard />
-                    </Route>
-                    <Route path={'/feed/create/:id'}>
-                        <CreateFeed />
-                    </Route>
-                    <Route path={'/feed/create'}>
-                        <CreateFeed />
-                    </Route>
-                    <Route path={'/feed'}>
-                        <Feed />
-                    </Route>
-                    <Route path={'/analytics'}>
-                        <AnalyticsPage />
-                    </Route>
-                    <Route path={'/settings'}>
-                        <SettingsPage />
-                    </Route>
-                    <Redirect to={'/dashboard'} />
-                </Switch>
+                {
+                    !isAdmin
+                        ? <Switch>
+                            <Route path={'/dashboard'}>
+                                <Dashboard/>
+                            </Route>
+                            <Route path={'/feed/create/:id'}>
+                                <CreateFeed/>
+                            </Route>
+                            <Route path={'/feed/create'}>
+                                <CreateFeed/>
+                            </Route>
+                            <Route path={'/feed'}>
+                                <Feed/>
+                            </Route>
+                            <Route path={'/analytics'}>
+                                <AnalyticsPage/>
+                            </Route>
+                            <Route path={'/settings'}>
+                                <SettingsPage/>
+                            </Route>
+                            <Redirect to={'/dashboard'}/>
+                        </Switch>
+                        : <Switch>
+                            <Route path={'/users'}>
+                                Users
+                            </Route>
+                            <Redirect to={'/users'}/>
+                        </Switch>
+                }
+
             </div>
         </div>
     } else {
         return <div className={'notLoggedInWrapper'}>
             <Switch>
                 <Route exact path={'/'}>
-                    <WelcomePage />
+                    <WelcomePage/>
                 </Route>
                 <Route path={'/sign-in'}>
-                    <SignIn />
+                    <SignIn/>
                 </Route>
                 <Redirect to={'/'}/>
             </Switch>
