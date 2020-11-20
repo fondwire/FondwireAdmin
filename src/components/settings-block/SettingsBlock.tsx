@@ -13,6 +13,14 @@ const SettingsBlockWrapper = styled.div`
   &>:first-child{
     font-family: 'Gotham-Bold', sans-serif;
     font-size: 12px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &>img{
+      height: 14px;
+      margin-right: 7px;
+    }
   }
   &>:last-child{
     font-weight: 600;

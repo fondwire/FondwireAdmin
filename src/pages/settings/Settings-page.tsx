@@ -1,6 +1,7 @@
 import React from 'react';
 import { SettingsPageWrapper } from './settings-page-style';
 import SettingsBlock from "../../components/settings-block/SettingsBlock";
+import question from '../../images/question.png'
 
 function SettingsPage() {
     return (
@@ -9,19 +10,22 @@ function SettingsPage() {
 
             <div>
                 <SettingsBlock>
-                    <div>Me</div>
+                    <div><img src={question} alt="?"/> Me</div>
                     <div>John Doe</div>
                 </SettingsBlock>
                 <SettingsBlock>
-                    <div>Notifications</div>
+                    <div><img src={question} alt="?"/> Notifications</div>
                     <div>All</div>
                 </SettingsBlock>
                 <SettingsBlock>
-                    <div>Privacy</div>
+                    <div><img src={question} alt="?"/> Privacy</div>
                     <div>Only me</div>
                 </SettingsBlock>
                 <SettingsBlock>
-                    <div>Login/Logout</div>
+                    <div onClick={()=>{
+                        localStorage.removeItem('userData')
+                        window.location.reload()
+                    }}><img src={question} alt="?"/> Login/Logout</div>
                     <div />
                 </SettingsBlock>
             </div>

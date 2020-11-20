@@ -5,6 +5,9 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import AnalyticsPage from "./pages/analytics/Analytics-page";
 import Feed from "./pages/feed/Feed";
 import SettingsPage from "./pages/settings/Settings-page";
+import CreateFeed from "./pages/create(edit)-feed";
+import WelcomePage from "./pages/welocome/Welcome-page";
+import SignIn from "./pages/sign-in/Sign-in";
 
 
 export const useRoute = (isAuth: boolean) => {
@@ -16,8 +19,11 @@ export const useRoute = (isAuth: boolean) => {
                     <Route path={'/dashboard'}>
                         <Dashboard />
                     </Route>
+                    <Route path={'/feed/create/:id'}>
+                        <CreateFeed />
+                    </Route>
                     <Route path={'/feed/create'}>
-                        <h1>Create</h1>
+                        <CreateFeed />
                     </Route>
                     <Route path={'/feed'}>
                         <Feed />
@@ -33,10 +39,15 @@ export const useRoute = (isAuth: boolean) => {
             </div>
         </div>
     } else {
-        return <div>
-            welcome to fondwire
+        return <div className={'notLoggedInWrapper'}>
             <Switch>
-
+                <Route exact path={'/'}>
+                    <WelcomePage />
+                </Route>
+                <Route path={'/sign-in'}>
+                    <SignIn />
+                </Route>
+                <Redirect to={'/'}/>
             </Switch>
         </div>
     }

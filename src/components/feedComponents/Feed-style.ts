@@ -2,14 +2,16 @@ import styled from "styled-components";
 
 export const FeedWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 160px 160px 110px 95px;
+  grid-template-columns: 1fr 80px 140px 140px 110px 95px;
+  grid-gap: 1em;
   background: #ffffff;
   padding: 0 5px;
   margin: 10px 0; 
   height: 40px;
   border-radius: 3px;
   
-  &>div{
+  &>div, a{
+    text-decoration: none;
     margin: auto 0;
     text-align: left;
     font-weight: 600;
@@ -20,7 +22,7 @@ export const FeedWrapper = styled.div`
 `
 
 export const FeedComponentWrapper:any = styled(FeedWrapper)`
-  &>div{
+  &>div, a{
     font-weight: 400;
     font-family: 'Gotham-Medium', sans-serif;
     font-size: 13px;
