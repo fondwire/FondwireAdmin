@@ -22,7 +22,10 @@ function SettingsPage() {
                     <div>Only me</div>
                 </SettingsBlock>
                 <SettingsBlock>
-                    <div><img src={question} alt="?"/> Login/Logout</div>
+                    <div onClick={()=>{
+                        localStorage.removeItem('userData')
+                        window.location.reload()
+                    }}><img src={question} alt="?"/> Login/Logout</div>
                     <div />
                 </SettingsBlock>
             </div>

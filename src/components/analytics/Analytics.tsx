@@ -111,7 +111,7 @@ const Content = () => {
     return (
         <ContentWrapper>
             <div className={'chart__content'}>Content views for last 30 days</div>
-            <div className={'content__info'}>30 views</div>
+            <div className={'content__info'}>30</div>
             <div className={'chart__content functions'}>
                 <div>
                     <div>previous</div>

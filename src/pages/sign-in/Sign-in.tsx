@@ -39,7 +39,8 @@ const SignIn = () => {
                 onSubmit={()=>{
                     signInFirebase('aman@gmail.com', 'qwerty123')
                         .then((res)=>{
-                            console.log(res.user)
+                            window.location.reload()
+                            localStorage.setItem('userData', JSON.stringify(res.user?.toJSON()))
                         })
                 }}
                 validationSchema={Yup.object().shape(validateFormik)}
@@ -58,7 +59,7 @@ const SignIn = () => {
                                 <Field as={AuthInput} title={'Email'} type={'email'} name={'email'}/>
                                 <Field as={AuthInput} title={'Password'} type={'password'} name={'password'}/>
                                 <br/>
-                                <YellowButton className={'fullWidth'}>Sign in</YellowButton>
+                                <YellowButton type={'submit'} className={'fullWidth'}>Sign in</YellowButton>
                             </Form>
                         )
                     }}
