@@ -6,6 +6,7 @@ const FeedHeader = () => {
     return (
         <FeedWrapper>
             <div>TITLE</div>
+            <div>ID</div>
             <div>DATE</div>
             <div>TYPE</div>
             <div>STATUS</div>
@@ -43,6 +44,7 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,sta
     return (
         <FeedComponentWrapper bg={background}>
             <Link to={`feed/create/${id}`}>{title}</Link>
+            <div>{id}</div>
             <div>{date}</div>
             <div>{type}</div>
             <div className={'status'}><span>{Status}</span></div>

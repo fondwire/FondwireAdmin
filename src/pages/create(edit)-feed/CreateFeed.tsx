@@ -73,11 +73,15 @@ function CreateFeed() {
                       handleChange,
                       handleBlur,
                 }) => {
+                        let titleLength = 80
+                        titleLength = titleLength - values.title.length
+                        let teaserLength = 100
+                        teaserLength = teaserLength - values.teaser.length
                         // const hasErrors = Object.keys(errors).length > 0;
                         return (
                             <Form>
-                                <Field as={FeedCreateInput} name={'title'} title={'Title (80)'} maxLength={'80'} />
-                                <Field as={FeedCreateInput} name={'teaser'} title={'Teaser (100)'} maxLength={'100'} />
+                                <Field as={FeedCreateInput} name={'title'} status={!!titleLength} title={`Title (${titleLength})`} maxLength={'80'} />
+                                <Field as={FeedCreateInput} name={'teaser'} status={!!teaserLength} title={`Teaser (${teaserLength})`} maxLength={'100'} />
                                 <Field as={FeedCreateInput} name={'link'} title={'Link to external article (optional)'} />
                                 <Editor
                                     editorState={editor}

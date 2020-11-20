@@ -23,11 +23,13 @@ const FeedInputWrapper = styled.label`
 
 type FeedCreateInputProps = {
     title: string
+    status?: boolean
 }
-const FeedCreateInput:React.FC<FeedCreateInputProps> = ({title, ...props}) => {
+const FeedCreateInput:React.FC<FeedCreateInputProps> = ({title,status, ...props}) => {
+    console.log(status)
     return (
         <FeedInputWrapper>
-            <div>{title}</div>
+            <div className={ status !== undefined && !status ? 'error' : ''}>{title}</div>
             <input type="text" {...props} />
         </FeedInputWrapper>
     );
