@@ -18,7 +18,7 @@ const validateFormik = {
 
 const uploadCallback = async (file: any) => {
     return await new Promise(
-        (resolve, reject) => {
+        (resolve) => {
             let reader = new FileReader();
 
             reader.onloadend = function () {
@@ -110,7 +110,7 @@ function CreateFeed() {
                                     }}
                                 />
                                 <SubmitButton>
-                                    Submit
+                                    Approve and submit (12)
                                 </SubmitButton>
                             </Form>
                         )

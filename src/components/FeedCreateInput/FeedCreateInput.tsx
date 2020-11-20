@@ -26,7 +26,6 @@ type FeedCreateInputProps = {
     status?: boolean
 }
 const FeedCreateInput:React.FC<FeedCreateInputProps> = ({title,status, ...props}) => {
-    console.log(status)
     return (
         <FeedInputWrapper>
             <div className={ status !== undefined && !status ? 'error' : ''}>{title}</div>

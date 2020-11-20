@@ -12,8 +12,9 @@ export const SubmitButton = styled.button`
   border: none;
   border-radius: 10px;
   margin-top: 15px;
-  float: right;
+  width: 100%;
   cursor: pointer;
+  letter-spacing: 1px;
 `
 export const YellowButton = styled.button`
   background: ${yellow};
