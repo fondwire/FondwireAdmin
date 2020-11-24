@@ -97,6 +97,9 @@ function CreateFeed() {
                                         // textAlign: { inDropdown: true },
                                         // link: { inDropdown: true },
                                         // history: { inDropdown: true },
+                                        fontFamily: {
+                                            options: ['Gotham Book', 'Gotham-Thin', 'Gotham-Bold', 'Gotham-Medium']
+                                        },
                                         colorPicker: { visible: false, icon: undefined, },
                                         image: {
                                             uploadCallback: uploadCallback,

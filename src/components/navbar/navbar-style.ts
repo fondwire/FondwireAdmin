@@ -24,7 +24,7 @@ export const NavList = styled.div`
   grid-gap: 1.5em;
   margin: 67px 0 0 15px;
   
-  &>a{
+  &>a,span{
     font-family: 'Gotham-Medium', sans-serif;
     color: white;
     text-decoration: none;
@@ -34,6 +34,7 @@ export const NavList = styled.div`
     font-weight: 500;
     letter-spacing: 1px;
     transition: all 0.25s linear;
+    cursor: pointer;
   }
   &>.active{
       color: #43b9ea;
