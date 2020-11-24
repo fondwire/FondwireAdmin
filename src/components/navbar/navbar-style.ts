@@ -34,6 +34,7 @@ export const NavList = styled.div`
     font-weight: 500;
     letter-spacing: 1px;
     transition: all 0.25s linear;
+    cursor: pointer;
   }
   &>.active{
       color: #43b9ea;

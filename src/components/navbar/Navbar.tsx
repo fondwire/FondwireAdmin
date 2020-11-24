@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavbarWrapper, NavList} from './navbar-style';
 import {Link, NavLink} from 'react-router-dom';
 import logo from '../../images/AdminLogo.png'
+import {SIGN_IN_TYPE} from "../../state/RootReducer";
+import {MyContext} from "../../App";
 
 type NavbarProps = {
     isAdmin: boolean
 }
 const Navbar:React.FC<NavbarProps> = ({isAdmin,...props}) => {
+    const {dispatch} = useContext(MyContext)
     return (
         <NavbarWrapper>
             <Link to={`${!isAdmin ? '/dashboard' : '/users'}`} className={'logoWrapper'}>
@@ -26,7 +29,13 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin,...props}) => {
                             <NavLink to={'/users'}>Users</NavLink>
                             <NavLink to={'/companies'}>Companies</NavLink>
                             <NavLink to={'/notifications'}>Notifications</NavLink>
-                            <span >Logout</span>
+                            <span onClick={()=>{
+                                localStorage.removeItem('userData')
+                                dispatch({
+                                    type: SIGN_IN_TYPE,
+                                    data: null
+                                })
+                            }}>Logout</span>
                         </>
                 }
             </NavList>

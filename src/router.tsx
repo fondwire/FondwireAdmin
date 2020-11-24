@@ -10,14 +10,13 @@ import WelcomePage from "./pages/welocome/Welcome-page";
 import SignIn from "./pages/sign-in/Sign-in";
 
 
-export const useRoute = (isAuth: boolean) => {
-    const isAdmin = false
-    if (isAuth) {
+export const useRoute = (state:any) => {
+    if (!!state?.userData) {
         return <div className={'adminPanelWrapper'}>
-            <Navbar isAdmin={isAdmin}/>
+            <Navbar isAdmin={state.userData.isAdmin}/>
             <div className={'contentWrapper'}>
                 {
-                    !isAdmin
+                    !state.userData.isAdmin
                         ? <Switch>
                             <Route path={'/dashboard'}>
                                 <Dashboard/>

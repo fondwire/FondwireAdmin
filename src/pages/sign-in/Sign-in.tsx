@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Formik, Form, Field} from "formik";
 import * as Yup from "yup";
 import { SignInWrapper, SignWrapperStyle } from './Sign-in-style';
@@ -6,6 +6,8 @@ import AuthInput from "../../components/Auth-input/Auth-input";
 import {YellowButton} from "../../components/Buttons/submit-button";
 import { Link } from 'react-router-dom';
 import {signInFirebase} from '../../firebase'
+import {MyContext} from "../../App";
+import {SIGN_IN_TYPE} from "../../state/RootReducer";
 
 function SignWrapper() {
     return (
@@ -23,7 +25,11 @@ export default SignWrapper;
 
 
 const validateFormik = {
-
+    email: Yup.string()
+        .required('Required'),
+    password: Yup.string()
+        .required('Required')
+        .min(8)
 }
 
 const initialValue = {
@@ -31,33 +37,40 @@ const initialValue = {
     password: ''
 }
 const SignIn = () => {
+    const {dispatch} = useContext(MyContext)
+
     return (
         <SignInWrapper>
             <div className={'title'}>Sign in</div>
             <Formik
                 initialValues={initialValue}
-                onSubmit={()=>{
-                    signInFirebase('aman@gmail.com', 'qwerty123')
+                validationSchema={Yup.object().shape(validateFormik)}
+                onSubmit={(values)=>{
+                    signInFirebase(values.email, values.password)
                         .then((res)=>{
-                            window.location.reload()
-                            localStorage.setItem('userData', JSON.stringify(res.user?.toJSON()))
+                            let data = {
+                                isAdmin: false,
+                                ...res.user?.toJSON()
+                            }
+                            dispatch({
+                                type: SIGN_IN_TYPE,
+                                data: data
+                            })
+                            localStorage.setItem('userData', JSON.stringify(data))
+                        }, () => {
+                            alert('Not correct')
                         })
                 }}
-                validationSchema={Yup.object().shape(validateFormik)}
             >
                 {
-                    ({ values,
+                    ({
                          touched,
                          errors,
-                         // initialValues,
-                         isSubmitting,
-                         handleChange,
-                         handleBlur,
                      }) => {
                         return (
                             <Form>
-                                <Field as={AuthInput} title={'Email'} type={'email'} name={'email'}/>
-                                <Field as={AuthInput} title={'Password'} type={'password'} name={'password'}/>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Email'} type={'email'} name={'email'}/>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Password'} type={'password'} name={'password'}/>
                                 <br/>
                                 <YellowButton type={'submit'} className={'fullWidth'}>Sign in</YellowButton>
                             </Form>

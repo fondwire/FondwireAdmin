@@ -19,3 +19,11 @@ export const db = firebase.firestore();
 export function signInFirebase(email:string, password: string) {
     return auth().signInWithEmailAndPassword(email, password);
 }
+
+export function Logout() {
+    return auth().signOut()
+}
+
+auth().onAuthStateChanged((user:any)=>{
+    console.log(user?.toJSON())
+})
