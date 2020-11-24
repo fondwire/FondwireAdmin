@@ -3,7 +3,7 @@ import {useParams, useHistory} from 'react-router-dom';
 import {CreatePageWrapper} from './Create-page';
 import {Formik, Field, Form} from "formik";
 import * as Yup from "yup";
-import FeedCreateInput from "../../components/FeedCreateInput/FeedCreateInput";
+import FeedCreateInput, {FeedAddPrimp} from "../../components/FeedCreateInput/FeedCreateInput";
 import { Editor, EditorState } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { SubmitButton } from '../../components/Buttons/submit-button';
@@ -32,7 +32,11 @@ const uploadCallback = async (file: any) => {
 const initialValue = {
     title: '',
     teaser: '',
-    link: ''
+    link: '',
+    proofForTeaser: false,
+    proofForTitle: false,
+    proofForMessage: false,
+    proofForImage: false
 }
 function CreateFeed() {
     const {id} = useParams()
@@ -61,7 +65,7 @@ function CreateFeed() {
             </div>
             <Formik
                 initialValues={initialValue}
-                onSubmit={()=>{}}
+                onSubmit={(values)=>console.log(values)}
                 validationSchema={Yup.object().shape(validateFormik)}
             >
                 {
@@ -81,8 +85,14 @@ function CreateFeed() {
                         return (
                             <Form>
                                 <Field as={FeedCreateInput} name={'title'} status={!!titleLength} title={`Title (${titleLength})`} maxLength={'80'} />
+                                <Field as={FeedAddPrimp} name={'proofForTitle'} title={`Add pimp & proof for $14.50`} />
+                                <br/>
                                 <Field as={FeedCreateInput} name={'teaser'} status={!!teaserLength} title={`Teaser (${teaserLength})`} maxLength={'100'} />
+                                <Field as={FeedAddPrimp} name={'proofForTeaser'} title={`Add pimp & proof for $14.50`} />
+                                <br/>
                                 <Field as={FeedCreateInput} name={'link'} title={'Link to external article (optional)'} />
+                                <br/>
+                                <br/>
                                 <Editor
                                     editorState={editor}
                                     toolbarClassName="toolbarClassName"
@@ -112,7 +122,10 @@ function CreateFeed() {
                                         },
                                     }}
                                 />
-                                <SubmitButton>
+                                <Field as={FeedAddPrimp} name={'proofForMessage'} title={`Add pimp & proof for $39.50`} />
+                                <br/>
+                                <Field as={FeedAddPrimp} name={'proofForImage'} title={`Add image select & create service for $14.50`} />
+                                <SubmitButton type={'submit'}>
                                     Approve and submit (12)
                                 </SubmitButton>
                             </Form>
@@ -123,5 +136,7 @@ function CreateFeed() {
         </CreatePageWrapper>
     );
 }
+
+
 
 export default CreateFeed;

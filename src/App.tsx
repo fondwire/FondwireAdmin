@@ -10,7 +10,9 @@ export const MyContext = React.createContext<any>(null)
 
 function App() {
     const [pending, setPending] = useState(true)
-    const [state, dispatch] = useReducer(reducer, JSON.parse(localStorage.getItem('userData') as string))
+    const [state, dispatch] = useReducer(reducer,{
+        userData: JSON.parse(localStorage.getItem('userData') as string),
+    })
     const route = useRoute(state)
 
     setTimeout(() => {
