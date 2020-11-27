@@ -10,6 +10,7 @@ import WelcomePage from "./pages/welocome/Welcome-page";
 import SignIn from "./pages/sign-in/Sign-in";
 import Users from './pages/super-admin/users/UsersPage';
 import CompaniesPage from './pages/super-admin/companies/Companies-page';
+import NotificationsPage from "./pages/super-admin/notifications/Notifications-page";
 
 
 export const useRoute = (state:any) => {
@@ -48,7 +49,7 @@ export const useRoute = (state:any) => {
                                 <CompaniesPage />
                             </Route>
                             <Route path={'/notifications'}>
-                                Notifications
+                                <NotificationsPage />
                             </Route>
                             <Redirect to={'/users'}/>
                         </Switch>
