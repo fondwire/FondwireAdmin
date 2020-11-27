@@ -49,7 +49,7 @@ const SignIn = () => {
                     signInFirebase(values.email, values.password)
                         .then((res)=>{
                             let data = {
-                                isAdmin: true,
+                                isAdmin: false,
                                 ...res.user?.toJSON()
                             }
                             dispatch({
