@@ -1,28 +1,12 @@
 import styled from "styled-components";
+import { TableStyle } from "../table-style/table-style";
 
-export const FeedWrapper = styled.div`
-  display: grid;
+export const FeedWrapper = styled(TableStyle)`
   grid-template-columns: 1fr 80px 140px 140px 110px 95px;
-  grid-gap: 1em;
-  background: #ffffff;
-  padding: 0 5px;
-  margin: 10px 0; 
-  height: 40px;
-  border-radius: 3px;
-  
-  &>div, a{
-    text-decoration: none;
-    margin: auto 0;
-    text-align: left;
-    font-weight: 600;
-    font-family: 'Gotham-Bold', sans-serif;
-    font-size: 15px;
-    color: rgba(0,0,0,0.5);
-  }
 `
 
-export const FeedComponentWrapper:any = styled(FeedWrapper)`
-  &>div, a{
+export const TableComponentWrapper = (props:any) => `
+ &>div, a{
     font-weight: 400;
     font-family: 'Gotham-Medium', sans-serif;
     font-size: 13px;
@@ -31,7 +15,7 @@ export const FeedComponentWrapper:any = styled(FeedWrapper)`
     display: flex;
     width: 80px;
     justify-content: center;
-    background: ${(props:any)=> props.bg};
+    background: ${props};
     border-radius: 10px;
     font-size: 10px;
     padding: 4px 0;
@@ -47,6 +31,10 @@ export const FeedComponentWrapper:any = styled(FeedWrapper)`
     display: flex;
     justify-content: center;
   }
+`
+
+export const FeedComponentWrapper:any = styled(FeedWrapper)`
+  ${(props:any)=>TableComponentWrapper(props.bg)}
 `
 
 export const ActionWrapper = styled.div`

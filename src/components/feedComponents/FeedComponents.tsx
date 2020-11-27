@@ -16,7 +16,7 @@ const FeedHeader = () => {
 };
 export default FeedHeader;
 
-type FeedComponentProps = {
+export type FeedComponentProps = {
     title: string
     date: string
     type: string
@@ -53,7 +53,7 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,sta
     )
 }
 
-const Action = () => {
+export const Action = () => {
     const [opacity, setOpacity] = useState(0)
     const wrapperRef:any = useRef(null);
     useEffect(() => {
