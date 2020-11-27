@@ -9,6 +9,7 @@ import CreateFeed from "./pages/create(edit)-feed";
 import WelcomePage from "./pages/welocome/Welcome-page";
 import SignIn from "./pages/sign-in/Sign-in";
 import Users from './pages/super-admin/users/UsersPage';
+import CompaniesPage from './pages/super-admin/companies/Companies-page';
 
 
 export const useRoute = (state:any) => {
@@ -44,7 +45,10 @@ export const useRoute = (state:any) => {
                                 <Users />
                             </Route>
                             <Route path={'/companies'}>
-                                Companies
+                                <CompaniesPage />
+                            </Route>
+                            <Route path={'/notifications'}>
+                                Notifications
                             </Route>
                             <Redirect to={'/users'}/>
                         </Switch>
