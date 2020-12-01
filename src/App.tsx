@@ -19,7 +19,7 @@ function App() {
         setPending(false)
     }, 2000)
 
-    if (pending) return <Preloader/>
+    if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>
     return <MyContext.Provider value={{dispatch}}>
         <Router>
             <div className="App">{route}</div>

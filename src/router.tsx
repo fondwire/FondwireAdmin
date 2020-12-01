@@ -16,11 +16,23 @@ import NotificationsPage from "./pages/super-admin/notifications/Notifications-p
 export const useRoute = (state:any) => {
     if (!!state?.userData) {
         return <div className={'adminPanelWrapper'}>
-            <Navbar isAdmin={state.userData.isAdmin}/>
+            <Navbar isAdmin={!state.userData.isAdmin}/>
             <div className={'contentWrapper'}>
                 {
                     !state.userData.isAdmin
                         ? <Switch>
+                            <Route path={'/users'}>
+                                <Users />
+                            </Route>
+                            <Route path={'/companies'}>
+                                <CompaniesPage />
+                            </Route>
+                            <Route path={'/notifications'}>
+                                <NotificationsPage />
+                            </Route>
+                            <Redirect to={'/users'}/>
+                        </Switch>
+                        : <Switch>
                             <Route path={'/dashboard'}>
                                 <Dashboard/>
                             </Route>
@@ -40,18 +52,6 @@ export const useRoute = (state:any) => {
                                 <SettingsPage/>
                             </Route>
                             <Redirect to={'/dashboard'}/>
-                        </Switch>
-                        : <Switch>
-                            <Route path={'/users'}>
-                                <Users />
-                            </Route>
-                            <Route path={'/companies'}>
-                                <CompaniesPage />
-                            </Route>
-                            <Route path={'/notifications'}>
-                                <NotificationsPage />
-                            </Route>
-                            <Redirect to={'/users'}/>
                         </Switch>
                 }
 

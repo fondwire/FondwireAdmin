@@ -12,7 +12,7 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin,...props}) => {
     const {dispatch} = useContext(MyContext)
     return (
         <NavbarWrapper>
-            <Link to={`${!isAdmin ? '/dashboard' : '/users'}`} className={'logoWrapper'}>
+            <Link to={`${isAdmin ? '/dashboard' : '/users'}`} className={'logoWrapper'}>
                 <div>
                     <img src={logo} alt="Fundwire"/>
                 </div>
