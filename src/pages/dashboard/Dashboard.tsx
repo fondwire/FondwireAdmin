@@ -32,12 +32,12 @@ const Dashboard = () => {
             const feeds = {...fObject.article, ...fObject.events,...fObject.videos}
             const arr:Array<any> = Object.values(feeds)
                 .sort((a:any,b:any)=> a.issueDate - b.issueDate)
-                .filter(({uid}:any)=> uid === state.userData.uid )
+                .filter(({uid}:any)=> state.userData && uid === state.userData.uid )
 
             setFeeds(arr)
             setPending(false)
         })
-    },[state.userData.uid])
+    },[state.userData])
 
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (

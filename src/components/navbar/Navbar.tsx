@@ -8,7 +8,7 @@ import {MyContext} from "../../App";
 type NavbarProps = {
     isAdmin: boolean
 }
-const Navbar:React.FC<NavbarProps> = ({isAdmin,...props}) => {
+const Navbar:React.FC<NavbarProps> = ({isAdmin}) => {
     const {dispatch} = useContext(MyContext)
     return (
         <NavbarWrapper>
