@@ -8,16 +8,31 @@ import SettingsPage from "./pages/settings/Settings-page";
 import CreateFeed from "./pages/create(edit)-feed";
 import WelcomePage from "./pages/welocome/Welcome-page";
 import SignIn from "./pages/sign-in/Sign-in";
+import Users from './pages/super-admin/users/UsersPage';
+import CompaniesPage from './pages/super-admin/companies/Companies-page';
+import NotificationsPage from "./pages/super-admin/notifications/Notifications-page";
 
 
 export const useRoute = (state:any) => {
     if (!!state?.userData) {
         return <div className={'adminPanelWrapper'}>
-            <Navbar isAdmin={state.userData.isAdmin}/>
+            <Navbar isAdmin={!state.userData.isAdmin}/>
             <div className={'contentWrapper'}>
                 {
                     !state.userData.isAdmin
                         ? <Switch>
+                            <Route path={'/users'}>
+                                <Users />
+                            </Route>
+                            <Route path={'/companies'}>
+                                <CompaniesPage />
+                            </Route>
+                            <Route path={'/notifications'}>
+                                <NotificationsPage />
+                            </Route>
+                            <Redirect to={'/users'}/>
+                        </Switch>
+                        : <Switch>
                             <Route path={'/dashboard'}>
                                 <Dashboard/>
                             </Route>
@@ -37,12 +52,6 @@ export const useRoute = (state:any) => {
                                 <SettingsPage/>
                             </Route>
                             <Redirect to={'/dashboard'}/>
-                        </Switch>
-                        : <Switch>
-                            <Route path={'/users'}>
-                                Users
-                            </Route>
-                            <Redirect to={'/users'}/>
                         </Switch>
                 }
 

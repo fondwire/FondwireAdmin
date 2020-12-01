@@ -16,7 +16,7 @@ const FeedHeader = () => {
 };
 export default FeedHeader;
 
-type FeedComponentProps = {
+export type FeedComponentProps = {
     title: string
     date: string
     type: string
@@ -25,6 +25,8 @@ type FeedComponentProps = {
 }
 export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,status, id}) => {
     const Status = status.toUpperCase()
+    const Type = type.toUpperCase()
+    const Time = new Date(date).toLocaleDateString()
     const [background, setBackground] = useState<string>('#a2a2a2')
 
     useEffect(()=> {
@@ -45,15 +47,15 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,sta
         <FeedComponentWrapper bg={background}>
             <Link to={`feed/create/${id}`}>{title}</Link>
             <div>{id}</div>
-            <div>{date}</div>
-            <div>{type}</div>
+            <div>{Time}</div>
+            <div>{Type}</div>
             <div className={'status'}><span>{Status}</span></div>
             <div><Action/></div>
         </FeedComponentWrapper>
     )
 }
 
-const Action = () => {
+export const Action = () => {
     const [opacity, setOpacity] = useState(0)
     const wrapperRef:any = useRef(null);
     useEffect(() => {

@@ -10,14 +10,16 @@ export const MyContext = React.createContext<any>(null)
 
 function App() {
     const [pending, setPending] = useState(true)
-    const [state, dispatch] = useReducer(reducer, JSON.parse(localStorage.getItem('userData') as string))
+    const [state, dispatch] = useReducer(reducer,{
+        userData: JSON.parse(localStorage.getItem('userData') as string),
+    })
     const route = useRoute(state)
 
     setTimeout(() => {
         setPending(false)
     }, 2000)
 
-    if (pending) return <Preloader/>
+    if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>
     return <MyContext.Provider value={{dispatch}}>
         <Router>
             <div className="App">{route}</div>

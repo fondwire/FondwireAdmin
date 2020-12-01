@@ -5,7 +5,6 @@ import favicon from '../../images/Logo .png'
 
 const Preloader = () => {
     return (
-        <div className={css.wrapper}>
             <div className={css.container}>
                 <svg className={css.loader} viewBox="0 0 340 340">
                     <circle cx="170" cy="170" r="160" stroke="#00bdd0"/>
@@ -16,7 +15,6 @@ const Preloader = () => {
                 </svg>
                 <img className={css.img} src={favicon} alt="FONDWIRE"/>
             </div>
-        </div>
     )
 }
 

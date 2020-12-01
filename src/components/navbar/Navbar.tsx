@@ -8,11 +8,11 @@ import {MyContext} from "../../App";
 type NavbarProps = {
     isAdmin: boolean
 }
-const Navbar:React.FC<NavbarProps> = ({isAdmin,...props}) => {
+const Navbar:React.FC<NavbarProps> = ({isAdmin}) => {
     const {dispatch} = useContext(MyContext)
     return (
         <NavbarWrapper>
-            <Link to={`${!isAdmin ? '/dashboard' : '/users'}`} className={'logoWrapper'}>
+            <Link to={`${isAdmin ? '/dashboard' : '/users'}`} className={'logoWrapper'}>
                 <div>
                     <img src={logo} alt="Fundwire"/>
                 </div>

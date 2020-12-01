@@ -9,7 +9,7 @@ const FeedInputWrapper = styled.label`
   letter-spacing: 1px;
   
   &>input{
-    margin: 4px 0 18px 0;
+    margin: 4px 0 0 0;
     width: 100%;
     height: 38px;
     border-radius: 2px;
@@ -33,5 +33,26 @@ const FeedCreateInput:React.FC<FeedCreateInputProps> = ({title,status, ...props}
         </FeedInputWrapper>
     );
 }
-
 export default FeedCreateInput;
+
+
+const FeedAddPrimpWrapper = styled.label`
+  background: #121e34;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  padding: 6px 5px ;
+  text-transform: uppercase;
+  &>input{
+    margin-left: 5px;
+  }
+`
+export const FeedAddPrimp:React.FC<FeedCreateInputProps> = ({title, ...props}) => {
+    return (
+        <FeedAddPrimpWrapper>
+            <span>{title}</span>
+            <input type="checkbox" {...props}/>
+        </FeedAddPrimpWrapper>
+    )
+}

@@ -56,3 +56,10 @@
 .error{
     color: red;
 }
+
+.mainPreloaderWrapper {
+    height: 100vh;
+}
+.preloaderWrapper{
+    height: calc(100vh - 80px);
+}
