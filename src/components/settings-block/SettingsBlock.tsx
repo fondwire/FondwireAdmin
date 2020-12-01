@@ -18,8 +18,8 @@ const SettingsBlockWrapper = styled.div`
     align-items: center;
     cursor: pointer;
     &>img{
-      height: 14px;
-      margin-right: 7px;
+      width: 12px;
+      margin-right: 10px;
     }
   }
   &>:last-child{
