@@ -7,7 +7,7 @@ import {db} from "../../firebase";
 import reducer from '../../state/RootReducer'
 
 
-type FeedType = {
+export type FeedType = {
     title: string
     teaser: string
     type: string
