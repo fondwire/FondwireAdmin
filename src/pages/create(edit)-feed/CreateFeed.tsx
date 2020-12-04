@@ -7,6 +7,9 @@ import FeedCreateInput, {FeedAddPrimp} from "../../components/FeedCreateInput/Fe
 import { Editor, EditorState } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { SubmitButton } from '../../components/Buttons/submit-button';
+import draftToHtml from "draftjs-to-html";
+import {convertToRaw} from "draft-js";
+import {db} from "../../firebase";
 // import draftToHtml from 'draftjs-to-html';
 
 
@@ -43,6 +46,7 @@ function CreateFeed() {
     const history = useHistory()
     const [status, setStatus] = useState('New feed')
     const [editor, setEditor] = useState<EditorState>(EditorState?.createEmpty())
+    const [userData] = useState(JSON.parse(localStorage.getItem('userData') as string))
 
     useEffect(() => {
         if (id) {
@@ -65,17 +69,34 @@ function CreateFeed() {
             </div>
             <Formik
                 initialValues={initialValue}
-                onSubmit={(values)=>console.log(values)}
+                onSubmit={(values)=>{
+                    db.ref('/feeds').child('/articles').push({
+                        ...values,
+                        bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
+                        issueDate: Date.now(),
+                        uid: userData.uid,
+                        type: 'article'
+                    })
+                    console.log(
+                        {
+                            ...values,
+                            bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
+                            issueDate: Date.now(),
+                            uid: userData.uid,
+                            type: 'article'
+                        }
+                    )
+                }}
                 validationSchema={Yup.object().shape(validateFormik)}
             >
                 {
                     ({ values,
-                      touched,
-                      errors,
-                      // initialValues,
-                      isSubmitting,
-                      handleChange,
-                      handleBlur,
+                      // touched,
+                      // errors,
+                      // // initialValues,
+                      // isSubmitting,
+                      // handleChange,
+                      // handleBlur,
                 }) => {
                         let titleLength = 80
                         titleLength = titleLength - values.title.length

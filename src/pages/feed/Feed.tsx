@@ -20,11 +20,10 @@ function Feed() {
             return snapshot.toJSON()
         }).then((data)=>{
             const fObject:any = data.toJSON()
-            const feeds = {...fObject.article, ...fObject.events,...fObject.videos}
+            const feeds = {...fObject.articles, ...fObject.events,...fObject.videos}
             const arr:Array<any> = Object.values(feeds)
-                .sort((a:any,b:any)=> a.issueDate - b.issueDate)
+                .sort((a:any,b:any)=> b.issueDate - a.issueDate)
                 .filter(({uid}:any)=> state.userData && uid === state.userData.uid )
-
             setFeeds(arr)
             setPending(false)
         })
