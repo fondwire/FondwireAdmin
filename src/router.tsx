@@ -36,10 +36,10 @@ export const useRoute = (state:any) => {
                             <Route path={'/dashboard'}>
                                 <Dashboard/>
                             </Route>
-                            <Route path={'/feed/create/:id'}>
+                            <Route path={'/feed/create/:type/:id'}>
                                 <CreateFeed/>
                             </Route>
-                            <Route path={'/feed/create'}>
+                            <Route path={'/feed/create/:type'}>
                                 <CreateFeed/>
                             </Route>
                             <Route path={'/feed'}>

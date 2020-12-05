@@ -45,7 +45,7 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,sta
     }, [Status])
     return (
         <FeedComponentWrapper bg={background}>
-            <Link to={`feed/create/${id}`}>{title}</Link>
+            <Link to={`feed/create/${Type.toLowerCase()}/${id}`}>{title}</Link>
             <div>{id}</div>
             <div>{Time}</div>
             <div>{Type}</div>
@@ -91,10 +91,19 @@ export const Action = () => {
 }
 
 export const CreateNew = () => {
+    console.log(CreateNewWrapper.styledComponentId)
     return (
         <CreateNewWrapper>
             <span>CREATE NEW</span>
-            <Link to={'/feed/create'} className={'plus'}>+</Link>
+            <div className={'plus'}>
+                +
+                <div className={'modal'}>
+                    <div><Link to={'/feed/create/video'}>video</Link></div>
+                    <div><Link to={'/feed/create/event'}>event</Link></div>
+                    <div><Link to={'/feed/create/article'}>article</Link></div>
+                    <div><Link to={'/feed/create/podcast'}>podcast</Link></div>
+                </div>
+            </div>
         </CreateNewWrapper>
     )
 }

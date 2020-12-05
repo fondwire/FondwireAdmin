@@ -42,12 +42,11 @@ const initialValue = {
     proofForImage: false
 }
 function CreateFeed() {
-    const {id} = useParams()
+    const {id, type} = useParams()
     const history = useHistory()
     const [status, setStatus] = useState('New feed')
     const [editor, setEditor] = useState<EditorState>(EditorState?.createEmpty())
     const [userData] = useState(JSON.parse(localStorage.getItem('userData') as string))
-
     useEffect(() => {
         if (id) {
             setStatus(`Feed id: ${id}`)
@@ -55,7 +54,6 @@ function CreateFeed() {
             setStatus('new feed')
         }
     }, [id])
-
     return (
         <CreatePageWrapper>
             <div>
@@ -70,12 +68,14 @@ function CreateFeed() {
             <Formik
                 initialValues={initialValue}
                 onSubmit={(values)=>{
-                    db.ref('/feeds').child('/articles').push({
+                    db.ref('/feeds').child(`/${type}s`).push({
                         ...values,
                         bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
                         issueDate: Date.now(),
                         uid: userData.uid,
-                        type: 'article'
+                        type: type
+                    }).then(()=>{
+                        history.push('/feed')
                     })
                     console.log(
                         {
@@ -83,7 +83,7 @@ function CreateFeed() {
                             bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
                             issueDate: Date.now(),
                             uid: userData.uid,
-                            type: 'article'
+                            type: type
                         }
                     )
                 }}
