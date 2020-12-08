@@ -70,6 +70,7 @@ function CreateFeed() {
                 onSubmit={(values)=>{
                     db.ref('/feeds').child(`/${type}s`).push({
                         ...values,
+                        status: 'pending',
                         bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
                         issueDate: Date.now(),
                         uid: userData.uid,
@@ -80,6 +81,7 @@ function CreateFeed() {
                     console.log(
                         {
                             ...values,
+                            status: 'pending',
                             bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
                             issueDate: Date.now(),
                             uid: userData.uid,

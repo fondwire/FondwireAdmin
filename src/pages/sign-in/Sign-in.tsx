@@ -29,7 +29,7 @@ const validateFormik = {
         .required('Required'),
     password: Yup.string()
         .required('Required')
-        .min(8)
+        .min(6)
 }
 
 const initialValue = {
@@ -52,11 +52,11 @@ const SignIn = () => {
                                 isAdmin: true,
                                 ...res.user?.toJSON()
                             }
+                            localStorage.setItem('userData', JSON.stringify(data))
                             dispatch({
                                 type: SIGN_IN_TYPE,
                                 data: data
                             })
-                            localStorage.setItem('userData', JSON.stringify(data))
                         }, () => {
                             alert('Not correct')
                         })

@@ -43,14 +43,14 @@ function Feed() {
                 <FeedHeader />
                 {
                     feeds.map(
-                        ({title,type, issueDate}:FeedType)=> {
+                        ({title,type, issueDate, status}:FeedType)=> {
 
                             return <FeedComponent
                                 key={issueDate}
                                 title={title}
                                 date={issueDate}
                                 type={type}
-                                status={'active'}
+                                status={status ? status : 'draft'}
                                 id={'5'}/>
                         })
                 }

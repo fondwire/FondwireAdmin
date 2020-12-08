@@ -15,6 +15,7 @@ export type FeedType = {
     eventDate: string
     issueDate: string
     bodyText: string
+    status: string
 }
 
 const Dashboard = () => {
@@ -31,7 +32,7 @@ const Dashboard = () => {
             const fObject:any = data.toJSON()
             const feeds = {...fObject.articles, ...fObject.events,...fObject.videos}
             const arr:Array<any> = Object.values(feeds)
-                .sort((a:any,b:any)=> a.issueDate - b.issueDate)
+                .sort((a:any,b:any)=> b.issueDate - a.issueDate)
                 .filter(({uid}:any)=> state.userData && uid === state.userData.uid )
 
             setFeeds(arr)
@@ -53,14 +54,14 @@ const Dashboard = () => {
             <FeedHeader />
             {
                 feeds.map(
-                    ({title,type, issueDate}:FeedType)=> {
+                    ({title,type, issueDate, status}:FeedType)=> {
 
                         return <FeedComponent
                             key={issueDate}
                             title={title}
                             date={issueDate}
                             type={type}
-                            status={'active'}
+                            status={status ? status : 'draft'}
                             id={'5'}/>
                     })
             }
