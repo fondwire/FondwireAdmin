@@ -48,8 +48,9 @@ const SignIn = () => {
                 onSubmit={(values)=>{
                     signInFirebase(values.email, values.password)
                         .then((res)=>{
+                            console.log(res)
                             let data = {
-                                isAdmin: true,
+                                // isAdmin: true,
                                 ...res.user?.toJSON()
                             }
                             localStorage.setItem('userData', JSON.stringify(data))

@@ -1,10 +1,25 @@
-import React from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import { DashboardWrapper } from '../../dashboard/dashboard-style';
 import UsersHeader, { UserElement } from "../../../components/users-component/Users-component";
+import Preloader from "../../../utils/preloader/preloader";
+import reducer from "../../../state/RootReducer";
+import {getData} from "../../../App";
+import {UserType} from "../../../components/feedComponents/feed";
 
 
 
 function UsersPage() {
+    const [state] = useReducer(reducer, {
+        userData: JSON.parse(localStorage.getItem('userData') as string),
+    })
+    const [pending, setPending] = useState(true)
+    const [users, setUsers] = useState<any>([])
+
+    useEffect(()=>{
+        getData('/users', state, setUsers, setPending)
+    }, [state, state.userData])
+
+    if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
         <DashboardWrapper>
             <h3>WELCOME TO ADMIN PANEL</h3>
@@ -12,10 +27,19 @@ function UsersPage() {
                 <h3>USERS</h3>
             </div>
             <UsersHeader />
-            <UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'Active'} />
-            <UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'rejected'} />
-            <UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'pending'} />
-            <UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'suspended'} />
+            {
+                users.map((user:UserType)=> <UserElement
+                    key={user.email}
+                    title={user.fullname}
+                    email={user.email}
+                    company={user.companyName}
+                    status={user.status ? user.status : 'pending'}
+                    id={'5'}/>)
+            }
+            {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'Active'} />*/}
+            {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'rejected'} />*/}
+            {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'pending'} />*/}
+            {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'suspended'} />*/}
         </DashboardWrapper>
     );
 }

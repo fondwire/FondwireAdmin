@@ -91,7 +91,6 @@ export const Action = () => {
 }
 
 export const CreateNew = () => {
-    console.log(CreateNewWrapper.styledComponentId)
     return (
         <CreateNewWrapper>
             <span>CREATE NEW</span>
