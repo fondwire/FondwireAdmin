@@ -48,7 +48,6 @@ const SignIn = () => {
                 onSubmit={(values)=>{
                     signInFirebase(values.email, values.password)
                         .then((res)=>{
-                            console.log(res)
                             let data = {
                                 // isAdmin: true,
                                 ...res.user?.toJSON()

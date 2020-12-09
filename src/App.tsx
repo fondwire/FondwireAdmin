@@ -17,6 +17,15 @@ export const getData = (path:string , state:any, setData:(arr: Array<any>)=>void
         const fObject:any = data.toJSON()
         const feeds = path === '/feeds' ? {...fObject.articles, ...fObject.events,...fObject.videos} : {...fObject}
         let arr:Array<any> = Object.values(feeds)
+        if(path === '/assets'){
+            const nameArr:any = Object.keys(feeds)
+            arr = arr.map((item:any, index) => {
+                return {
+                    ...item,
+                    name: nameArr[index]
+                }
+            })
+        }
         if(arr.length && arr[0].issueDate){
             arr = arr.sort((a:any,b:any)=> b.issueDate - a.issueDate)
         }
@@ -37,7 +46,6 @@ function App() {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
     const route = useRoute(state)
-
     setTimeout(() => {
         setPending(false)
     }, 2000)
