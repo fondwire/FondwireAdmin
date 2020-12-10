@@ -16,10 +16,10 @@ import NotificationsPage from "./pages/super-admin/notifications/Notifications-p
 export const useRoute = (state:any) => {
     if (!!state?.userData) {
         return <div className={'adminPanelWrapper'}>
-            <Navbar isAdmin={!state.userData.isAdmin}/>
+            <Navbar isAdmin={state.userData.isAdmin}/>
             <div className={'contentWrapper'}>
                 {
-                    !state.userData.isAdmin
+                    state.userData.isAdmin
                         ? <Switch>
                             <Route path={'/users'}>
                                 <Users />

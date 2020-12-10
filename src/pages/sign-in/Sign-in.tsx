@@ -5,7 +5,7 @@ import { SignInWrapper, SignWrapperStyle } from './Sign-in-style';
 import AuthInput from "../../components/Auth-input/Auth-input";
 import {YellowButton} from "../../components/Buttons/submit-button";
 import { Link } from 'react-router-dom';
-import {signInFirebase} from '../../firebase'
+import {db, signInFirebase} from '../../firebase'
 import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 
@@ -48,14 +48,26 @@ const SignIn = () => {
                 onSubmit={(values)=>{
                     signInFirebase(values.email, values.password)
                         .then((res)=>{
-                            let data = {
-                                // isAdmin: true,
+                            let user:any = res.user?.toJSON()
+                            let data: any = {
+                                isAdmin: false,
                                 ...res.user?.toJSON()
                             }
-                            localStorage.setItem('userData', JSON.stringify(data))
-                            dispatch({
-                                type: SIGN_IN_TYPE,
-                                data: data
+                            db.ref('/admins').once('value', function(snapshot){
+                                return snapshot.toJSON()
+                            }).then((d)=>{
+                                let admins = Object.values(d.toJSON() as string)
+                                admins.forEach((admin) => {
+                                    if(admin === user.uid){
+                                        alert('admin')
+                                        data = {isAdmin: true, ...res.user?.toJSON()}
+                                    }
+                                })
+                                localStorage.setItem('userData', JSON.stringify(data))
+                                dispatch({
+                                    type: SIGN_IN_TYPE,
+                                    data: data
+                                })
                             })
                         }, () => {
                             alert('Not correct')
