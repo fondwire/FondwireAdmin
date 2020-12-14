@@ -5,6 +5,7 @@ import FeedHeader, {FeedComponent} from "../../components/feedComponents/FeedCom
 import Preloader from "../../utils/preloader/preloader";
 import reducer from '../../state/RootReducer'
 import {getData} from "../../App";
+import {UserType} from "../../components/feedComponents/feed";
 
 
 export type FeedType = {
@@ -19,7 +20,10 @@ export type FeedType = {
     id: string
 }
 
-const Dashboard = () => {
+type DashboardPropsType = {
+    user: UserType
+}
+const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
@@ -32,7 +36,7 @@ const Dashboard = () => {
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
         <DashboardWrapper>
-            <h3>WELCOME, JOHN</h3>
+            <h3>WELCOME{user && user.fullname ? `, ${user.fullname.toUpperCase()}` : ''}</h3>
             <div className={'title'}>
                 <h3>ANALYTICS</h3>
             </div>

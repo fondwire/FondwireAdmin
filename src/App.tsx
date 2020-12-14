@@ -1,4 +1,4 @@
-import React, {useReducer, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
 import Preloader from "./utils/preloader/preloader";
 import {useRoute} from "./router";
@@ -6,6 +6,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import reducer from './state/RootReducer'
 import {db} from "./firebase";
 import {FeedComponentProps} from "./components/feedComponents/FeedComponents";
+import {UserType} from "./components/feedComponents/feed";
 
 export const MyContext = React.createContext<any>(null)
 
@@ -50,13 +51,23 @@ export const getData = (path:string , state:any, setData:(arr: Array<any>)=>void
 
 function App() {
     const [pending, setPending] = useState(true)
+    const [users, setUsers] = useState<any>([])
+    const [user, setUser] = useState<any>(null)
     const [state, dispatch] = useReducer(reducer,{
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
-    const route = useRoute(state)
-    setTimeout(() => {
+    useEffect(()=>{
+        getData('/users', state, setUsers, ()=>{})
+    }, [state])
+    useEffect(()=>{
+        users.forEach((item:UserType)=>{
+            if(state.userData.email === item.email){
+                setUser(item)
+            }
+        })
         setPending(false)
-    }, 2000)
+    }, [users, state.userData.email])
+    const route = useRoute(state, user)
 
     if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>
     return <MyContext.Provider value={{dispatch}}>

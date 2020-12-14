@@ -8,17 +8,20 @@ import pen from '../../images/pen.png'
 import {Logout} from "../../firebase";
 import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
+import {UserType} from "../../components/feedComponents/feed";
 
-function SettingsPage() {
+type SettingsPagePropsType = {
+    user: UserType
+}
+const SettingsPage:React.FC<SettingsPagePropsType> = ({user}) => {
     const {dispatch} = useContext(MyContext)
     return (
         <SettingsPageWrapper>
             <h3>SETTINGS</h3>
-
             <div>
                 <SettingsBlock>
                     <div><img src={pen} alt="Pen"/> Me</div>
-                    <div>John Doe</div>
+                    <div>{user && user.fullname ? `${user.fullname}` : 'Manager'}</div>
                 </SettingsBlock>
                 <SettingsBlock>
                     <div><img src={bell} alt="Bell"/> Notifications</div>

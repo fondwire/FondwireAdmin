@@ -14,9 +14,11 @@ import NotificationsPage from "./pages/super-admin/notifications/Notifications-p
 import reducer from "./state/RootReducer";
 import {getData} from "./App";
 import {db} from "./firebase";
+import {UserType} from "./components/feedComponents/feed";
 
 
-export const useRoute = (state:any) => {
+export const useRoute = (state:any, user:UserType) => {
+    console.log(user)
     const [stat] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
@@ -78,7 +80,7 @@ export const useRoute = (state:any) => {
                         </Switch>
                         : <Switch>
                             <Route path={'/dashboard'}>
-                                <Dashboard/>
+                                <Dashboard user={user}/>
                             </Route>
                             <Route path={'/feed/create/:type/:id'}>
                                 <CreateFeed/>
@@ -93,7 +95,7 @@ export const useRoute = (state:any) => {
                                 <AnalyticsPage/>
                             </Route>
                             <Route path={'/settings'}>
-                                <SettingsPage/>
+                                <SettingsPage user={user}/>
                             </Route>
                             <Redirect to={'/dashboard'}/>
                         </Switch>

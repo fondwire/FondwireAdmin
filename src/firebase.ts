@@ -24,6 +24,6 @@ export function Logout() {
     return auth().signOut()
 }
 
-auth().onAuthStateChanged((user:any)=>{
-    console.log(user?.toJSON())
-})
+// auth().onAuthStateChanged((user:any)=>{
+//     console.log(user?.toJSON())
+// })
