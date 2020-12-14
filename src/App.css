@@ -56,7 +56,9 @@
 .error{
     color: red;
 }
-
+.logout{
+     color: #f86969 !important;
+ }
 .mainPreloaderWrapper {
     height: 100vh;
 }

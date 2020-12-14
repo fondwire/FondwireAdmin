@@ -44,7 +44,7 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
                                         : null
                                 }
                             </NavLink>
-                            <span onClick={()=>{
+                            <span className={'logout'} onClick={()=>{
                                 localStorage.removeItem('userData')
                                 dispatch({
                                     type: SIGN_IN_TYPE,

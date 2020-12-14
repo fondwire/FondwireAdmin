@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import { SettingsPageWrapper } from './settings-page-style';
 import SettingsBlock from "../../components/settings-block/SettingsBlock";
-import question from '../../images/question.png'
+// import question from '../../images/question.png'
 import lock from '../../images/zamok.png'
 import bell from '../../images/kolokolchik.png'
 import pen from '../../images/pen.png'
@@ -29,7 +29,7 @@ function SettingsPage() {
                     <div>Only me</div>
                 </SettingsBlock>
                 <SettingsBlock>
-                    <div onClick={()=>{
+                    <div className={'logout'} onClick={()=>{
                         Logout().then(()=>{
                             localStorage.removeItem('userData')
                             dispatch({
@@ -37,7 +37,9 @@ function SettingsPage() {
                                 data: null
                             })
                         })
-                    }}><img src={question} alt="?"/> Login/Logout</div>
+                    }}>
+                        {/*<img src={question} alt="?"/>*/}
+                        Logout</div>
                     <div />
                 </SettingsBlock>
             </div>
