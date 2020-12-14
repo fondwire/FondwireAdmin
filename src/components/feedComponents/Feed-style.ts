@@ -6,10 +6,26 @@ export const FeedWrapper = styled(TableStyle)`
 `
 
 export const TableComponentWrapper = (props: any) => `
+ &>.title{
+    color: #171616d1;
+    font-weight: 600;
+    font-family: 'Gotham-Bold', sans-serif;    
+ }
  &>div, a{
     font-weight: 400;
     font-family: 'Gotham-Medium', sans-serif;
     font-size: 13px;
+    &>.user__image{
+      width: 30px;
+      height: 30px;
+      background: #fbe163;
+      padding: 5px;
+      border-radius: 50%;
+      &>img{
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
   &>.status>span{
     display: flex;

@@ -18,7 +18,7 @@ export const getData = (path:string , state:any, setData:(arr: Array<any>)=>void
         const feeds = path === '/feeds' ? {...fObject.articles, ...fObject.events,...fObject.videos} : {...fObject}
         let arr:Array<any> = Object.values(feeds)
         if(path === '/notification'){
-            arr = [Object.values(arr[0]), arr[1]]
+            arr = feeds
         }
         if(path === '/assets'){
             const nameArr:any = Object.keys(feeds)

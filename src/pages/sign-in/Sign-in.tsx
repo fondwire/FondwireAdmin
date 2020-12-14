@@ -59,7 +59,6 @@ const SignIn = () => {
                                 let admins = Object.values(d.toJSON() as string)
                                 admins.forEach((admin) => {
                                     if(admin === user.uid){
-                                        alert('admin')
                                         data = {isAdmin: true, ...res.user?.toJSON()}
                                     }
                                 })

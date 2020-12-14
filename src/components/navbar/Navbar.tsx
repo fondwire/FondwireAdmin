@@ -7,9 +7,11 @@ import {MyContext} from "../../App";
 
 type NavbarProps = {
     isAdmin: boolean
+    notificationLength?: any
 }
-const Navbar:React.FC<NavbarProps> = ({isAdmin}) => {
+const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
     const {dispatch} = useContext(MyContext)
+    const length = notificationLength.length
     return (
         <NavbarWrapper>
             <Link to={`${isAdmin ? '/dashboard' : '/users'}`} className={'logoWrapper'}>
@@ -28,7 +30,20 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin}) => {
                         : <>
                             <NavLink to={'/users'}>Users</NavLink>
                             <NavLink to={'/companies'}>Companies</NavLink>
-                            <NavLink to={'/notifications'}>Notifications</NavLink>
+                            <NavLink to={'/notifications'}>
+                                Notifications
+                                {
+                                    length ?
+                                        <span className={
+                                            length && length > 99
+                                                ? ' notification plus'
+                                                : ' notification '
+                                        }>
+                                    {length && length > 99 ? '+99' : length}
+                                </span>
+                                        : null
+                                }
+                            </NavLink>
                             <span onClick={()=>{
                                 localStorage.removeItem('userData')
                                 dispatch({

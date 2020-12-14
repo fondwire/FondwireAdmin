@@ -35,6 +35,24 @@ export const NavList = styled.div`
     letter-spacing: 1px;
     transition: all 0.25s linear;
     cursor: pointer;
+    position:relative;
+    
+    &>.notification{
+       position: absolute;
+       right: 0;
+       top: -5px;
+       color: #121E34;
+       background: #f0db65;
+       border-radius: 50%;
+       width: 20px;
+       height: 20px;
+       text-align:center;
+       line-height: 20px;
+       font-size: 12px;
+    }
+    &>.plus{
+      font-size: 8px;
+    }
   }
   &>.active{
       color: #43b9ea;

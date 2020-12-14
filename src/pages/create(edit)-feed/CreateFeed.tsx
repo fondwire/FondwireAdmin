@@ -74,20 +74,28 @@ function CreateFeed() {
                         bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
                         issueDate: Date.now(),
                         uid: userData.uid,
-                        type: type
-                    }).then(()=>{
-                        history.push('/feed')
+                        type: type,
+                        isApproved: false
+                    }).then((res)=>{
+                        let arr:any = res.toJSON()
+                        let newArr = arr.split('/')
+                        db.ref('/notification').child('/feeds').child(`/${type}s`).push({
+                            id: newArr[newArr.length - 1],
+                            issueDate: Date.now()
+                        }).then(()=>{
+                            history.push('/feed')
+                        })
                     })
-                    console.log(
-                        {
-                            ...values,
-                            status: 'pending',
-                            bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
-                            issueDate: Date.now(),
-                            uid: userData.uid,
-                            type: type
-                        }
-                    )
+                    // console.log(
+                    //     {
+                    //         ...values,
+                    //         status: 'pending',
+                    //         bodyText: draftToHtml(convertToRaw(editor.getCurrentContent())),
+                    //         issueDate: Date.now(),
+                    //         uid: userData.uid,
+                    //         type: type
+                    //     }
+                    // )
                 }}
                 validationSchema={Yup.object().shape(validateFormik)}
             >
