@@ -6,11 +6,11 @@ const FeedHeader = () => {
     return (
         <FeedWrapper>
             <div>TITLE</div>
-            <div>ID</div>
             <div>DATE</div>
             <div>TYPE</div>
             <div>STATUS</div>
-            <div>ACTIONS</div>
+            <div>ID</div>
+            <div/>
         </FeedWrapper>
     );
 };
@@ -22,6 +22,7 @@ export type FeedComponentProps = {
     type: string
     status: string
     id: string | number
+    issueDate?: string
 }
 export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,status, id}) => {
     const Status = status.toUpperCase()
@@ -45,11 +46,11 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({title,date,type,sta
     }, [Status])
     return (
         <FeedComponentWrapper bg={background}>
-            <Link to={`feed/create/${Type.toLowerCase()}/${id}`}>{title}</Link>
-            <div>{id}</div>
+            <Link to={`feed/create/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
             <div>{Time}</div>
             <div>{Type}</div>
             <div className={'status'}><span>{Status}</span></div>
+            <div>{id}</div>
             <div><Action/></div>
         </FeedComponentWrapper>
     )

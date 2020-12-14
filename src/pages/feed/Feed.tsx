@@ -32,7 +32,7 @@ function Feed() {
                 <FeedHeader />
                 {
                     feeds.map(
-                        ({title,type, issueDate, status}:FeedType)=> {
+                        ({title,type, issueDate, status, id}:FeedType)=> {
 
                             return <FeedComponent
                                 key={issueDate}
@@ -40,7 +40,7 @@ function Feed() {
                                 date={issueDate}
                                 type={type}
                                 status={status ? status : 'draft'}
-                                id={'5'}/>
+                                id={id}/>
                         })
                 }
                 {/*<FeedComponent*/}

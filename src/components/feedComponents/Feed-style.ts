@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 
 export const FeedWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 80px 140px 140px 110px 95px;
+  grid-template-columns: 1fr 150px 140px 110px 200px 20px;
 `
 
 export const TableComponentWrapper = (props: any) => `
@@ -10,6 +10,7 @@ export const TableComponentWrapper = (props: any) => `
     color: #171616d1;
     font-weight: 600;
     font-family: 'Gotham-Bold', sans-serif;    
+    padding-right: 30px;
  }
  &>div, a{
     font-weight: 400;
@@ -55,9 +56,10 @@ export const FeedComponentWrapper: any = styled(FeedWrapper)`
 
 export const ActionWrapper = styled.div`
   border-radius: 50%;
-  background: rgba(47,157, 251, 0.1);
+  //background: rgba(47,157, 251, 0.1);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   padding: 0 5px;
   width: 22px;
@@ -67,9 +69,9 @@ export const ActionWrapper = styled.div`
   
   &>span{
     border-radius: 50%;
-    width: 2px;
-    height: 2px;
-    background: #2f9dfb;
+    width: 3px;
+    height: 3px;
+    background: #000;
   }
 `
 

@@ -5,6 +5,7 @@ import {useRoute} from "./router";
 import {BrowserRouter as Router} from "react-router-dom";
 import reducer from './state/RootReducer'
 import {db} from "./firebase";
+import {FeedComponentProps} from "./components/feedComponents/FeedComponents";
 
 export const MyContext = React.createContext<any>(null)
 
@@ -16,7 +17,11 @@ export const getData = (path:string , state:any, setData:(arr: Array<any>)=>void
     }).then((data)=>{
         const fObject:any = data.toJSON()
         const feeds = path === '/feeds' ? {...fObject.articles, ...fObject.events,...fObject.videos} : {...fObject}
-        let arr:Array<any> = Object.values(feeds)
+        let arr:Array<FeedComponentProps> = Object.values(feeds)
+        let keys:Array<string> = Object.keys(feeds)
+        keys.forEach((item:string, index)=>{
+            arr[index] = {id: item, ...arr[index]}
+        })
         if(path === '/notification'){
             arr = feeds
         }

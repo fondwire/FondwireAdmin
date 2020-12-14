@@ -16,6 +16,7 @@ export type FeedType = {
     issueDate: string
     bodyText: string
     status: string
+    id: string
 }
 
 const Dashboard = () => {
@@ -42,7 +43,7 @@ const Dashboard = () => {
             <FeedHeader />
             {
                 feeds.map(
-                    ({title,type, issueDate, status}:FeedType)=> {
+                    ({title,type, issueDate, status, id}:FeedType)=> {
 
                         return <FeedComponent
                             key={issueDate}
@@ -50,7 +51,7 @@ const Dashboard = () => {
                             date={issueDate}
                             type={type}
                             status={status ? status : 'draft'}
-                            id={'5'}/>
+                            id={id}/>
                     })
             }
             {/*<FeedComponent*/}

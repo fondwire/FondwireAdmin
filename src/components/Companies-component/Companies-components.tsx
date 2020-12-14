@@ -37,7 +37,7 @@ export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, symbol,
     const Symbol = symbol.split('').slice(0,3).join('')
     return (
         <CompaniesElementWrapper>
-            <Link to={`#`}>{title}</Link>
+            <Link to={`#`} className={'title'}>{title}</Link>
             <div>{Symbol}</div>
             <div>{manager}</div>
             <div><Action/></div>
