@@ -7,7 +7,7 @@ import {Action} from "../feedComponents/FeedComponents";
 
 
 const TableWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 0.8fr 2fr  80px;
+  grid-template-columns: 1fr 0.8fr 2fr  30px;
 `
 
 function CompaniesTableHeader() {
@@ -16,7 +16,7 @@ function CompaniesTableHeader() {
             <div>NAME</div>
             <div>SYMBOL</div>
             <div>MANAGERS</div>
-            <div>ACTIONS</div>
+            <div/>
         </TableWrapper>
     );
 }

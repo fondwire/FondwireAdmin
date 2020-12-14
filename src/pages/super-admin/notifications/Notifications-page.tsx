@@ -11,7 +11,7 @@ import user from '../../../images/user-profile.png'
 // import Preloader from "../../../utils/preloader/preloader";
 
 const TableWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr  80px;
+  grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr  30px;
 `
 const CompaniesElementWrapper:any = styled(TableWrapper)`
   ${(props:any)=> TableComponentWrapper(props.bg)}
@@ -54,7 +54,7 @@ const NotificationsPage:React.FC<NotificationsPageProps> = (props) => {
                 <div>TYPE</div>
                 <div>COMPANY</div>
                 <div>MANAGER</div>
-                <div>ACTIONS</div>
+                <div/>
             </TableWrapper>
             {
                 props.data.map((item:any) => {
