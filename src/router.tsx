@@ -18,7 +18,6 @@ import {UserType} from "./components/feedComponents/feed";
 
 
 export const useRoute = (state:any, user:UserType) => {
-    console.log(user)
     const [stat] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })

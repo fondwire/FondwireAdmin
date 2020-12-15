@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import {db, signInFirebase} from '../../firebase'
 import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
+import Swal from "sweetalert2";
 
 function SignWrapper() {
     return (
@@ -69,7 +70,28 @@ const SignIn = () => {
                                 })
                             })
                         }, () => {
-                            alert('Not correct')
+                            Swal.fire({
+                                icon: 'error',
+                                title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Something went wrong.</span>`,
+                                // text: 'Are you sure you want to log out ?',
+                                html: `<span style="font-family: 'Gotham-Medium', sans-serif">You can try later.</span>`,
+                                // showDenyButton: true,
+                                // denyButtonText: 'No',
+                                // showConfirmButton: true,
+                                // confirmButtonText: 'Yes',
+                                // // confirmButtonColor: 'green',
+                                // focusConfirm: false,
+                            }).then((result)=>{
+                                if (result.isConfirmed) {
+                                    localStorage.removeItem('userData')
+                                    dispatch({
+                                        type: SIGN_IN_TYPE,
+                                        data: null
+                                    })
+                                } else if (result.isDenied) {
+                                    // Swal.fire('Changes are not saved', '', 'info')
+                                }
+                            })
                         })
                 }}
             >

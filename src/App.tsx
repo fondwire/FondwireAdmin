@@ -60,13 +60,15 @@ function App() {
         getData('/users', state, setUsers, ()=>{})
     }, [state])
     useEffect(()=>{
-        users.forEach((item:UserType)=>{
-            if(state.userData.email === item.email){
-                setUser(item)
-            }
-        })
+        if(state.userData) {
+            users.forEach((item: UserType) => {
+                if (state.userData.email === item.email) {
+                    setUser(item)
+                }
+            })
+        }
         setPending(false)
-    }, [users, state.userData.email])
+    }, [users, state])
     const route = useRoute(state, user)
 
     if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>

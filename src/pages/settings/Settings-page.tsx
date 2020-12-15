@@ -9,6 +9,7 @@ import {Logout} from "../../firebase";
 import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import {UserType} from "../../components/feedComponents/feed";
+import Swal from "sweetalert2";
 
 type SettingsPagePropsType = {
     user: UserType
@@ -33,13 +34,37 @@ const SettingsPage:React.FC<SettingsPagePropsType> = ({user}) => {
                 </SettingsBlock>
                 <SettingsBlock>
                     <div className={'logout'} onClick={()=>{
-                        Logout().then(()=>{
-                            localStorage.removeItem('userData')
-                            dispatch({
-                                type: SIGN_IN_TYPE,
-                                data: null
-                            })
+                        Swal.fire({
+                            icon: 'error',
+                            title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Logout from your Account</span>`,
+                            // text: 'Are you sure you want to log out ?',
+                            html: `<span style="font-family: 'Gotham-Medium', sans-serif">Are you sure you want to log out ?</span>`,
+                            showDenyButton: true,
+                            denyButtonText: 'No',
+                            showConfirmButton: true,
+                            confirmButtonText: 'Yes',
+                            // confirmButtonColor: 'green',
+                            focusConfirm: false,
+                        }).then((result)=>{
+                            if (result.isConfirmed) {
+                                Logout().then(()=>{
+                                    localStorage.removeItem('userData')
+                                    dispatch({
+                                        type: SIGN_IN_TYPE,
+                                        data: null
+                                    })
+                                })
+                            } else if (result.isDenied) {
+                                // Swal.fire('Changes are not saved', '', 'info')
+                            }
                         })
+                        // Logout().then(()=>{
+                        //     localStorage.removeItem('userData')
+                        //     dispatch({
+                        //         type: SIGN_IN_TYPE,
+                        //         data: null
+                        //     })
+                        // })
                     }}>
                         {/*<img src={question} alt="?"/>*/}
                         Logout</div>

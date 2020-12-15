@@ -4,6 +4,7 @@ import {Link, NavLink} from 'react-router-dom';
 import logo from '../../images/AdminLogo.png'
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import {MyContext} from "../../App";
+import Swal from "sweetalert2";
 
 type NavbarProps = {
     isAdmin: boolean
@@ -45,11 +46,29 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
                                 }
                             </NavLink>
                             <span className={'logout'} onClick={()=>{
-                                localStorage.removeItem('userData')
-                                dispatch({
-                                    type: SIGN_IN_TYPE,
-                                    data: null
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Logout from your Account</span>`,
+                                    // text: 'Are you sure you want to log out ?',
+                                    html: `<span style="font-family: 'Gotham-Medium', sans-serif">Are you sure you want to log out ?</span>`,
+                                    showDenyButton: true,
+                                    denyButtonText: 'No',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Yes',
+                                    // confirmButtonColor: 'green',
+                                    focusConfirm: false,
+                                }).then((result)=>{
+                                    if (result.isConfirmed) {
+                                        localStorage.removeItem('userData')
+                                        dispatch({
+                                            type: SIGN_IN_TYPE,
+                                            data: null
+                                        })
+                                    } else if (result.isDenied) {
+                                        // Swal.fire('Changes are not saved', '', 'info')
+                                    }
                                 })
+
                             }}>Logout</span>
                         </>
                 }

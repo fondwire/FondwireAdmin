@@ -46,6 +46,7 @@ function CreateFeed() {
     const history = useHistory()
     const [status, setStatus] = useState('New feed')
     const [editor, setEditor] = useState<EditorState>(EditorState?.createEmpty())
+    // console.log(editor?.getCurrentContent().getPlainText('').length)
     const [userData] = useState(JSON.parse(localStorage.getItem('userData') as string))
     useEffect(() => {
         if (id) {
@@ -124,13 +125,18 @@ function CreateFeed() {
                                 <Field as={FeedCreateInput} name={'link'} title={'Link to external article (optional)'} />
                                 <br/>
                                 <br/>
+                                <span className={'bodyText'}>Body text</span>
+                                <br/>
                                 <Editor
                                     editorState={editor}
                                     toolbarClassName="toolbarClassName"
                                     wrapperClassName="wrapperClassName"
                                     editorClassName={'editor_textarea'}
                                     onEditorStateChange={(e) => {
-                                        setEditor(e)
+                                        // console.log(+editor?.getCurrentContent().getPlainText('').length)
+                                        // if(editor?.getCurrentContent().getPlainText('').length <= 10){
+                                            setEditor(e)
+                                        // }
                                     }}
                                     toolbar={{
                                         inline: { inDropdown: false },
@@ -157,7 +163,7 @@ function CreateFeed() {
                                 <br/>
                                 <Field as={FeedAddPrimp} name={'proofForImage'} title={`Add image select & create service for $14.50`} />
                                 <SubmitButton type={'submit'}>
-                                    Approve and submit (12)
+                                    submit
                                 </SubmitButton>
                             </Form>
                         )

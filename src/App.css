@@ -65,3 +65,11 @@
 .preloaderWrapper{
     height: calc(100vh - 80px);
 }
+.bodyText{
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.6);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
