@@ -75,7 +75,7 @@ export const Action = () => {
         };
     }, [wrapperRef]);
     return (
-        <span ref={wrapperRef} className={'pos-relative'}>
+        <span ref={wrapperRef} className={'pos-relative action__wrapper'}>
             <ActionWrapper onClick={()=> setOpacity(1)}>
                 <span/>
                 <span/>

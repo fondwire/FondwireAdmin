@@ -48,10 +48,21 @@ export const TableComponentWrapper = (props: any) => `
     display: flex;
     justify-content: center;
   }
+  &:hover  div>.action__wrapper {
+     opacity: 1;
+     visibility: visible;
+  }
+  
 `
 
 export const FeedComponentWrapper: any = styled(FeedWrapper)`
   ${(props: any) => TableComponentWrapper(props.bg)}
+  
+  &:hover + div>.action__wrapper {
+    //color: red !important;
+     opacity: 1;
+     visibility: visible;
+  }
 `
 
 export const ActionWrapper = styled.div`
