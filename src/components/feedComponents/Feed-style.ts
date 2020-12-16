@@ -13,9 +13,9 @@ export const TableComponentWrapper = (props: any) => `
     padding-right: 30px;
  }
  &>div, a{
-    font-weight: 400;
-    font-family: 'Gotham-Medium', sans-serif;
-    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Gotham Book', sans-serif;
+    font-size: 11px;
     &>.user__image{
       width: 30px;
       height: 30px;

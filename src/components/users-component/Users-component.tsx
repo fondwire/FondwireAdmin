@@ -55,7 +55,7 @@ export const UserElement:React.FC<UserElementProps> = ({id,title, email, company
     }, [Status])
     return (
         <UserElementWrapper bg={background}>
-            <Link to={`feed/create/${id}`} className={'title'}>{title}</Link>
+            <Link to={`user/${id}`} className={'title'}>{title}</Link>
             <div>{email}</div>
             <div>{company}</div>
             <div className={'status'}><span>{Status}</span></div>

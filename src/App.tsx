@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
 import Preloader from "./utils/preloader/preloader";
@@ -67,9 +68,76 @@ function App() {
                 }
             })
         }
-        setPending(false)
+        // setPending(false)
     }, [users, state])
-    const route = useRoute(state, user)
+
+    const [data, setData] = useState<any>([])
+    const [notifications, setNotifications] = useState<any>([])
+
+    useEffect(()=>{
+        const feed = data.feeds
+        const users = data.users
+        const feedLength = feed ? Object.keys(feed).length : null
+        const userLength = users ? Object.keys(users).length : null
+        let arr:any = []
+        let kk = 0
+        let ii = 0
+        let userCount = 0
+        for (let i in feed){
+            // console.log(ii)
+            for(let k in feed[i]){
+                let fLength = Object.keys(feed[i]).length
+                db.ref('/feeds').child(i).child(feed[i][k].id).once('value', function(snapshot){
+                    return snapshot.toJSON()
+                }).then((feedData) => {
+                    // setNotifications([...notifications,feedData.toJSON()])
+                    kk++
+                    if (feedData.toJSON()) {
+                        arr.push({isFeed: true, ...feedData.toJSON()})
+
+                        if (ii === feedLength && kk === fLength) {
+
+                            for (let i in users) {
+                                db.ref('/users').child(users[i].id).once('value', function (snapshot) {
+                                    return snapshot.toJSON()
+                                }).then((userData) => {
+                                    // setNotifications([...notifications, userData.toJSON()])
+                                    userCount++
+                                    if (userData.toJSON()) {
+                                        arr.push({isFeed: false, ...userData.toJSON()})
+                                        if (userCount === userLength) {
+                                            // console.log(userCount)
+                                            setNotifications(arr)
+                                            setPending(false)
+                                        }
+                                    } else {
+                                        if (userCount === userLength) {
+                                            setNotifications(arr)
+                                            setPending(false)
+                                        }
+                                    }
+                                })
+                            }
+
+                        }
+
+                    }
+                    ii++
+                })
+            }
+        }
+        // setPending(false)
+
+        // const feeds = feed ? Object.values(feed) : []
+        // const feedsArr:any = []
+        // feeds.forEach((feedType:any) => feedsArr.push(...Object.values(feedType)))
+        // console.log(feedsArr)
+    }, [data.feeds, data.users])
+    useEffect(()=>{
+        getData('/notification', state, setData, ()=>{})
+    }, [ state, state.userData ])
+
+    const route = useRoute(state, user, notifications)
 
     if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>
     return <MyContext.Provider value={{dispatch}}>

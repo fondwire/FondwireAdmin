@@ -69,12 +69,13 @@ const SignIn = () => {
                                     data: data
                                 })
                             })
-                        }, () => {
+                        }, (error) => {
+                            console.log(error.message)
                             Swal.fire({
                                 icon: 'error',
                                 title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Something went wrong.</span>`,
                                 // text: 'Are you sure you want to log out ?',
-                                html: `<span style="font-family: 'Gotham-Medium', sans-serif">You can try later.</span>`,
+                                html: `<span style="font-family: 'Gotham-Medium', sans-serif">${error?.message ? error.message : 'You can try later!'}</span>`,
                                 // showDenyButton: true,
                                 // denyButtonText: 'No',
                                 // showConfirmButton: true,

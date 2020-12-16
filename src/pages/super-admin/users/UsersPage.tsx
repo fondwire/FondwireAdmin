@@ -34,7 +34,7 @@ function UsersPage() {
                     email={user.email}
                     company={user.companyName}
                     status={user.status ? user.status : 'pending'}
-                    id={'5'}/>)
+                    id={user.id}/>)
             }
             {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'Active'} />*/}
             {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'rejected'} />*/}
