@@ -86,7 +86,7 @@ export const ActionWrapper = styled.div`
   }
 `
 
-export const FeedModal: any = styled.span`
+export const FeedModal:any = styled.span`
     cursor:default;
     color: white;
     min-width: 80px;

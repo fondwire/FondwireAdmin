@@ -18,6 +18,10 @@ export type FeedType = {
     bodyText: string
     status: string
     id: string
+    notificationId: string
+    isAdminApproved: boolean
+    isAssetManagerApproved: boolean
+    isFeed: boolean
 }
 
 type DashboardPropsType = {
@@ -47,45 +51,20 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
             <FeedHeader />
             {
                 feeds.map(
-                    ({title,type, issueDate, status, id}:FeedType)=> {
-
+                    ({title,type, issueDate, id, isAssetManagerApproved, isAdminApproved}:FeedType)=> {
                         return <FeedComponent
+                            setPending={setPending}
                             key={issueDate}
+                            isAssetManagerApprove={isAssetManagerApproved}
+                            isAdminApprove={isAdminApproved}
                             title={title}
                             date={issueDate}
                             type={type}
-                            status={status ? status : 'draft'}
-                            id={id}/>
+                            // status={status ? status : 'draft'}
+                            id={id}
+                        />
                     })
             }
-            {/*<FeedComponent*/}
-            {/*    id={1}*/}
-            {/*    title={'Tesla had just revealed its plans to join Nikola. Tesla had just revealed its plans to join Nikola.'}*/}
-            {/*    date={'Oct 25'}*/}
-            {/*    type={'VIDEO'}*/}
-            {/*    status={'draft'}*/}
-            {/*/>*/}
-            {/*<FeedComponent*/}
-            {/*    id={1}*/}
-            {/*    title={'Tesla had just revealed its plans to join Nikola.'}*/}
-            {/*    date={'Oct 25'}*/}
-            {/*    type={'ARTICLE'}*/}
-            {/*    status={'Active'}*/}
-            {/*/>*/}
-            {/*<FeedComponent*/}
-            {/*    id={1}*/}
-            {/*    title={'Tesla had just revealed its plans to join Nikola. Tesla had just revealed its plans to join Nikola.'}*/}
-            {/*    date={'Oct 25'}*/}
-            {/*    type={'EVENT'}*/}
-            {/*    status={'Pending'}*/}
-            {/*/>*/}
-            {/*<FeedComponent*/}
-            {/*    id={1}*/}
-            {/*    title={'Tesla had just revealed its plans to join Nikola.'}*/}
-            {/*    date={'Oct 25'}*/}
-            {/*    type={'PODCAST'}*/}
-            {/*    status={'Expired'}*/}
-            {/*/>*/}
         </DashboardWrapper>
     );
 }

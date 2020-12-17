@@ -59,7 +59,13 @@ export const UserElement:React.FC<UserElementProps> = ({id,title, email, company
             <div>{email}</div>
             <div>{company}</div>
             <div className={'status'}><span>{Status}</span></div>
-            <div><Action/></div>
+            <div>
+                <Action>
+                    <div>ACTIVATE</div>
+                    <div>DEACTIVATE</div>
+                    <div className={'delete'}>DELETE</div>
+                </Action>
+            </div>
         </UserElementWrapper>
     )
 }

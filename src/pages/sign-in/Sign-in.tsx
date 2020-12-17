@@ -74,14 +74,7 @@ const SignIn = () => {
                             Swal.fire({
                                 icon: 'error',
                                 title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Something went wrong.</span>`,
-                                // text: 'Are you sure you want to log out ?',
                                 html: `<span style="font-family: 'Gotham-Medium', sans-serif">${error?.message ? error.message : 'You can try later!'}</span>`,
-                                // showDenyButton: true,
-                                // denyButtonText: 'No',
-                                // showConfirmButton: true,
-                                // confirmButtonText: 'Yes',
-                                // // confirmButtonColor: 'green',
-                                // focusConfirm: false,
                             }).then((result)=>{
                                 if (result.isConfirmed) {
                                     localStorage.removeItem('userData')

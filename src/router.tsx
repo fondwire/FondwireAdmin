@@ -17,7 +17,7 @@ import NotificationsPage from "./pages/super-admin/notifications/Notifications-p
 import {UserType} from "./components/feedComponents/feed";
 
 
-export const useRoute = (state:any, user:UserType, notifications: any) => {
+export const useRoute = (state:any, user:UserType, notifications: any, setPending: (status:boolean)=>void) => {
     // const [stat] = useReducer(reducer, {
     //     userData: JSON.parse(localStorage.getItem('userData') as string),
     // })
@@ -35,7 +35,7 @@ export const useRoute = (state:any, user:UserType, notifications: any) => {
                                 <CompaniesPage />
                             </Route>
                             <Route path={'/notifications'}>
-                                <NotificationsPage data={notifications} />
+                                <NotificationsPage setPending={setPending} data={notifications} />
                             </Route>
                             <Redirect to={'/users'}/>
                         </Switch>

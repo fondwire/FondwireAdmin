@@ -57,9 +57,13 @@ function App() {
     const [state, dispatch] = useReducer(reducer,{
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
+    const [data, setData] = useState<any>([])
+    const [notifications, setNotifications] = useState<any>([])
+
     useEffect(()=>{
         getData('/users', state, setUsers, ()=>{})
     }, [state])
+
     useEffect(()=>{
         if(state.userData) {
             users.forEach((item: UserType) => {
@@ -71,9 +75,6 @@ function App() {
         // setPending(false)
     }, [users, state])
 
-    const [data, setData] = useState<any>([])
-    const [notifications, setNotifications] = useState<any>([])
-
     useEffect(()=>{
         const feed = data.feeds
         const users = data.users
@@ -83,49 +84,83 @@ function App() {
         let kk = 0
         let ii = 0
         let userCount = 0
-        for (let i in feed){
-            // console.log(ii)
-            for(let k in feed[i]){
-                let fLength = Object.keys(feed[i]).length
-                db.ref('/feeds').child(i).child(feed[i][k].id).once('value', function(snapshot){
-                    return snapshot.toJSON()
-                }).then((feedData) => {
-                    // setNotifications([...notifications,feedData.toJSON()])
-                    kk++
-                    if (feedData.toJSON()) {
-                        arr.push({isFeed: true, ...feedData.toJSON()})
-
-                        if (ii === feedLength && kk === fLength) {
-
-                            for (let i in users) {
-                                db.ref('/users').child(users[i].id).once('value', function (snapshot) {
-                                    return snapshot.toJSON()
-                                }).then((userData) => {
-                                    // setNotifications([...notifications, userData.toJSON()])
-                                    userCount++
-                                    if (userData.toJSON()) {
-                                        arr.push({isFeed: false, ...userData.toJSON()})
-                                        if (userCount === userLength) {
-                                            // console.log(userCount)
-                                            setNotifications(arr)
-                                            setPending(false)
+        if(feedLength) {
+            for (let i in feed) {
+                for (let k in feed[i]) {
+                    let fLength = Object.keys(feed[i]).length
+                    db.ref('/feeds').child(i).child(feed[i][k].id).once('value', function (snapshot) {
+                        return snapshot.toJSON()
+                    }).then((feedData) => {
+                        // setNotifications([...notifications,feedData.toJSON()])
+                        kk++
+                        if (feedData.toJSON()) {
+                            arr.push({
+                                id: feed[i][k].id,
+                                notificationId: k,
+                                isFeed: true,
+                                ...feedData.toJSON()
+                            })
+                            if (ii === feedLength && kk === fLength) {
+                                for (let i in users) {
+                                    db.ref('/users').child(users[i].id).once('value', function (snapshot) {
+                                        return snapshot.toJSON()
+                                    }).then((userData) => {
+                                        // setNotifications([...notifications, userData.toJSON()])
+                                        userCount++
+                                        if (userData.toJSON()) {
+                                            arr.push({isFeed: false, ...userData.toJSON()})
+                                            if (userCount === userLength) {
+                                                // console.log(userCount)
+                                                setNotifications(arr)
+                                                setPending(false)
+                                            }
+                                        } else {
+                                            if (userCount === userLength) {
+                                                setNotifications(arr)
+                                                setPending(false)
+                                            }
                                         }
-                                    } else {
-                                        if (userCount === userLength) {
-                                            setNotifications(arr)
-                                            setPending(false)
-                                        }
-                                    }
-                                })
+                                    })
+                                }
                             }
-
+                            setNotifications([...arr])
+                            if(kk === fLength){
+                                setPending(false)
+                            }
+                        }else{
+                            setPending(false)
                         }
-
+                        ii++
+                    })
+                }
+            }
+        }else if(userLength){
+            console.log(userLength, '2')
+            for (let i in users) {
+                db.ref('/users').child(users[i].id).once('value', function (snapshot) {
+                    return snapshot.toJSON()
+                }).then((userData) => {
+                    // setNotifications([...notifications, userData.toJSON()])
+                    userCount++
+                    if (userData.toJSON()) {
+                        arr.push({isFeed: false, ...userData.toJSON()})
+                        if (userCount === userLength) {
+                            // console.log(userCount)
+                            setNotifications(arr)
+                            setPending(false)
+                        }
+                    } else {
+                        if (userCount === userLength) {
+                            setNotifications(arr)
+                            setPending(false)
+                        }
                     }
-                    ii++
                 })
             }
         }
+        // else{
+        //     setPending(false)
+        // }
         // setPending(false)
 
         // const feeds = feed ? Object.values(feed) : []
@@ -135,9 +170,9 @@ function App() {
     }, [data.feeds, data.users])
     useEffect(()=>{
         getData('/notification', state, setData, ()=>{})
-    }, [ state, state.userData ])
+    }, [ state, state.userData, pending ])
 
-    const route = useRoute(state, user, notifications)
+    const route = useRoute(state, user, notifications, setPending)
 
     if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>
     return <MyContext.Provider value={{dispatch}}>

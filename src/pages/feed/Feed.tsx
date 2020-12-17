@@ -16,7 +16,7 @@ function Feed() {
     const [feeds, setFeeds] = useState<any>([])
     useEffect(()=>{
         getData('/feeds', state, setFeeds, setPending)
-    },[state, state.userData])
+    },[state, state.userData, pending])
 
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
@@ -32,14 +32,16 @@ function Feed() {
                 <FeedHeader />
                 {
                     feeds.map(
-                        ({title,type, issueDate, status, id}:FeedType)=> {
+                        ({title,type, issueDate, id,isAssetManagerApproved,isAdminApproved}:FeedType)=> {
 
                             return <FeedComponent
+                                setPending={setPending}
                                 key={issueDate}
                                 title={title}
                                 date={issueDate}
                                 type={type}
-                                status={status ? status : 'draft'}
+                                isAssetManagerApprove={isAssetManagerApproved}
+                                isAdminApprove={isAdminApproved}
                                 id={id}/>
                         })
                 }

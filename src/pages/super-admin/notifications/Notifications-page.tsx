@@ -6,6 +6,8 @@ import {TableComponentWrapper} from "../../../components/feedComponents/Feed-sty
 import {Link} from "react-router-dom";
 import {Action} from "../../../components/feedComponents/FeedComponents";
 import user from '../../../images/user-profile.png'
+import {db} from "../../../firebase";
+import {FeedType} from "../../dashboard/Dashboard";
 // import reducer from "../../../state/RootReducer";
 // import {getData} from "../../../App";
 // import Preloader from "../../../utils/preloader/preloader";
@@ -18,12 +20,28 @@ const CompaniesElementWrapper:any = styled(TableWrapper)`
 `
 type CompaniesElementProps = {
     title: string
-    id: string | number
+    id: string
     email: string
     company: string | number
     manager: string
+    type: string
+    notificationId: string
 }
-export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, email, company, manager}) => {
+export const CompaniesElement:React.FC<CompaniesElementProps> = (
+    {title,type, email, company, manager, id, notificationId}
+    ) => {
+    const onApprove = () => {
+        db.ref('/feeds').child(type+'s').child(id).child('isAdminApproved').set(true).then(()=>{
+            db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(()=>{
+                // alert('success set and removed')
+                // setPending(true)
+                window.location.reload()
+            })
+        })
+    }
+    const onDelete = () => {
+        alert(id)
+    }
     return (
         <CompaniesElementWrapper>
             <Link to={`#`} className={'title'}>{title}</Link>
@@ -34,15 +52,20 @@ export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, email, 
             </div>
             <div>{company}</div>
             <div>{manager}</div>
-            <div><Action/></div>
+            <div>
+                <Action>
+                    <div onClick={onApprove}>APPROVE</div>
+                    <div onClick={onDelete} className={'delete'}>DELETE</div>
+                </Action>
+            </div>
         </CompaniesElementWrapper>
     )
 }
 type NotificationsPageProps = {
     data: []
+    setPending: (status:boolean) => void
 }
 const NotificationsPage:React.FC<NotificationsPageProps> = (props) => {
-    console.log(props.data)
     return (
         <DashboardWrapper>
             <h3>WELCOME TO ADMIN PANEL</h3>
@@ -57,11 +80,11 @@ const NotificationsPage:React.FC<NotificationsPageProps> = (props) => {
                 <div/>
             </TableWrapper>
             {
-                props.data.map((item:any) => {
+                props.data.map((item:FeedType) => {
                     if(item.isFeed){
-                        return <CompaniesElement key={item.issueDate} id={2} title={'NEW FEED'} manager={'Aman'} company={5} email={item.type.toUpperCase()} />
+                        return <CompaniesElement notificationId={item.notificationId} type={item.type} key={item.issueDate} id={item.id} title={'NEW FEED'} manager={'Aman'} company={5} email={item.type.toUpperCase()} />
                     }else{
-                        return <CompaniesElement key={item.email} id={2} title={'NEW ACCOUNT REQUEST'} manager={'Aman'} company={5} email={'user'} />
+                        return <CompaniesElement notificationId={item.notificationId} type={item.type} key={item.id} id={item.id} title={'NEW ACCOUNT REQUEST'} manager={'Aman'} company={5} email={'user'} />
                     }
                 })
             }
