@@ -1911,6 +1911,13 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
 
+"@types/html-to-draftjs@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@types/html-to-draftjs/-/html-to-draftjs-1.4.0.tgz#bfd712d3c5993e0644b76d2654adeae214678fae"
+  integrity sha512-w7Te62TAk2xkl+f/PRepVfaVbsArRYRACqH7Rv9H97gKqglQye3Cf8EArsKuSsN7vW6/zf1kTCsm/jnSR0gDQA==
+  dependencies:
+    "@types/draft-js" "*"
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.1.tgz#42995b446db9a48a11a07ec083499a860e9138ff"

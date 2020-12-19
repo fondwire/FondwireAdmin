@@ -32,9 +32,10 @@ function Feed() {
                 <FeedHeader />
                 {
                     feeds.map(
-                        ({title,type, issueDate, id,isAssetManagerApproved,isAdminApproved}:FeedType)=> {
+                        ({title,type, issueDate, id,isAssetManagerApproved,isAdminApproved,isPublish}:FeedType)=> {
 
                             return <FeedComponent
+                                isPublish={isPublish}
                                 setPending={setPending}
                                 key={issueDate}
                                 title={title}

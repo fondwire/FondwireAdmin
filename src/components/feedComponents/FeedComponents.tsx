@@ -25,6 +25,7 @@ export type FeedComponentProps = {
     issueDate?: string
     isAdminApprove: boolean
     isAssetManagerApprove: boolean
+    isPublish: boolean
     setPending: (status:boolean)=>void
 }
 export const FeedComponent: React.FC<FeedComponentProps> = ({
@@ -34,11 +35,14 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 date,
                                                                 type,
                                                                 id,
+                                                                isPublish,
                                                                 setPending
                                                             }) => {
     // const Status = status.toUpperCase()
     let Status = 'DRAFT'
-    if(isAdminApprove && isAssetManagerApprove){
+    if(!isPublish){
+        Status = 'DRAFT'
+    }else if(isAdminApprove && isAssetManagerApprove){
         Status = 'ACTIVE'
     }else if(isAdminApprove){
         Status = 'APPROVED'

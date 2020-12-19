@@ -24,6 +24,7 @@ const FeedInputWrapper = styled.label`
 type FeedCreateInputProps = {
     title: string
     status?: boolean
+    value?: any
 }
 const FeedCreateInput:React.FC<FeedCreateInputProps> = ({title,status, ...props}) => {
     return (
@@ -52,7 +53,7 @@ export const FeedAddPrimp:React.FC<FeedCreateInputProps> = ({title, ...props}) =
     return (
         <FeedAddPrimpWrapper>
             <span>{title}</span>
-            <input type="checkbox" {...props}/>
+            <input type="checkbox" {...props} checked={props?.value}/>
         </FeedAddPrimpWrapper>
     )
 }

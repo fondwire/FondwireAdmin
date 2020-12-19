@@ -158,9 +158,9 @@ function App() {
                 })
             }
         }
-        // else{
-        //     setPending(false)
-        // }
+        else{
+            setPending(false)
+        }
         // setPending(false)
 
         // const feeds = feed ? Object.values(feed) : []

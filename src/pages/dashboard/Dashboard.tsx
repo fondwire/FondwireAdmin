@@ -22,6 +22,7 @@ export type FeedType = {
     isAdminApproved: boolean
     isAssetManagerApproved: boolean
     isFeed: boolean
+    isPublish: boolean
 }
 
 type DashboardPropsType = {
@@ -35,7 +36,7 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
     const [feeds, setFeeds] = useState<any>([])
     useEffect(()=>{
         getData('/feeds', state, setFeeds, setPending)
-    },[state, state.userData])
+    },[state, state.userData, pending])
 
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
@@ -51,8 +52,9 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
             <FeedHeader />
             {
                 feeds.map(
-                    ({title,type, issueDate, id, isAssetManagerApproved, isAdminApproved}:FeedType)=> {
+                    ({title,type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish}:FeedType)=> {
                         return <FeedComponent
+                            isPublish={isPublish}
                             setPending={setPending}
                             key={issueDate}
                             isAssetManagerApprove={isAssetManagerApproved}

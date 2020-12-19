@@ -78,3 +78,13 @@
     opacity: 0;
     visibility: hidden;
 }
+.save__wrapper{
+    font-family: 'Gotham Book', sans-serif;
+}
+.step__wrapper{
+    margin: 10px 0;
+}
+.step__number{
+    font-weight: 700;
+    color: black;
+}
