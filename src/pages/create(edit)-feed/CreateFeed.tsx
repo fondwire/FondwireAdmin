@@ -101,6 +101,16 @@ function CreateFeed() {
             }
         })
     }
+    const onApprove = () => {
+        db.ref('/feeds')
+            .child(type+'s')
+            .child(id)
+            .child('isAssetManagerApproved')
+            .set(true)
+            .then(()=>{
+                history.push('/feed')
+            })
+    }
     if(pending) return <div className={'preloaderWrapper'}><Preloader/></div>
     return (
         <CreatePageWrapper>
@@ -125,7 +135,7 @@ function CreateFeed() {
                          initialValues,
                          isSubmitting,
                      }) => {
-                        let {isPublish} = values
+                        let {isPublish, isAdminApproved} = values
                         let titleLength = 80
                         titleLength = titleLength - values.title.length
                         let teaserLength = 100
@@ -137,15 +147,15 @@ function CreateFeed() {
                         const isVideo = type !== 'video' ? editLen : false
                         return (
                             <Form>
-                                <Field as={FeedCreateInput} name={'title'} status={!!titleLength}
+                                <Field disabled={isPublish} as={FeedCreateInput} name={'title'} status={!!titleLength}
                                        title={`Title (${titleLength})`} maxLength={'80'}/>
-                                <Field as={FeedAddPrimp} name={'proofForTitle'} title={`Add pimp & proof for $14.50`}/>
+                                <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTitle'} title={`Add pimp & proof for $14.50`}/>
                                 <br/>
-                                <Field as={FeedCreateInput} name={'teaser'} status={!!teaserLength}
+                                <Field disabled={isPublish} as={FeedCreateInput} name={'teaser'} status={!!teaserLength}
                                        title={`Teaser (${teaserLength})`} maxLength={'100'}/>
-                                <Field as={FeedAddPrimp} name={'proofForTeaser'} title={`Add pimp & proof for $14.50`}/>
+                                <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'} title={`Add pimp & proof for $14.50`}/>
                                 <br/>
-                                <Field as={FeedCreateInput} name={'link'}
+                                <Field disabled={isPublish} as={FeedCreateInput} name={'link'}
                                        title={'Link to external article (optional)'}/>
                                 <br/>
                                 <br/>
@@ -186,10 +196,10 @@ function CreateFeed() {
                                                     },
                                                 }}
                                             />
-                                            <Field as={FeedAddPrimp} name={'proofForMessage'}
+                                            <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForMessage'}
                                                    title={`Add pimp & proof for $39.50`}/>
                                             <br/>
-                                            <Field as={FeedAddPrimp} name={'proofForImage'}
+                                            <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForImage'}
                                                    title={`Add image select & create service for $14.50`}/>
                                         </>
                                         : null
@@ -203,13 +213,14 @@ function CreateFeed() {
                                             onClick={()=>{
                                                 Swal.fire({
                                                     icon: "info",
+                                                    showCloseButton: true,
                                                     confirmButtonText: 'Save',
                                                     // showDenyButton: true,
                                                     html: `
                                                     <div class="save__wrapper">
                                                         <div class="step__wrapper">
                                                             <span class="step__number">1. </span>
-                                                            <span class="step__text">This is first step.</span>
+                                                            <span class="step__text">This is first step to save.</span>
                                                         </div>
                                                         <div class="step__wrapper">
                                                             <span class="step__number">2. </span>
@@ -231,18 +242,20 @@ function CreateFeed() {
                                             save
                                         </SubmitButton>
                                     }
-
-                                    <SubmitButton
-                                        disabled={isVideo || !hasChanged || hasErrors || isSubmitting }
-                                        onClick={()=>{
-                                            Swal.fire({
-                                                icon: "success",
-                                                confirmButtonText: "Submit",
-                                                html: `
+                                    {
+                                        isAdminApproved
+                                            ? <SubmitButton
+                                                type={"button"}
+                                                onClick={()=>{
+                                                    Swal.fire({
+                                                        icon: "success",
+                                                        showCloseButton: true,
+                                                        confirmButtonText: "Submit",
+                                                        html: `
                                                     <div class="save__wrapper">
                                                         <div class="step__wrapper">
                                                             <span class="step__number">1. </span>
-                                                            <span class="step__text">This is first step.</span>
+                                                            <span class="step__text">This is first step to submit.</span>
                                                         </div>
                                                         <div class="step__wrapper">
                                                             <span class="step__number">2. </span>
@@ -254,16 +267,48 @@ function CreateFeed() {
                                                         </div>
                                                     </div>
                                                 `
-                                            }).then((result)=>{
-                                                if(result.isConfirmed){
-                                                    onSubmit(values, true)
-                                                }
-                                            })
-                                        }}
-                                        type={'button'}
-                                    >
-                                        submit
-                                    </SubmitButton>
+                                                    }).then((result)=>{
+                                                        if(result.isConfirmed){
+                                                            onApprove()
+                                                        }
+                                                    })
+                                                }}
+                                            >Approve</SubmitButton>
+                                            : <SubmitButton
+                                                disabled={isVideo || !hasChanged || hasErrors || isSubmitting }
+                                                onClick={()=>{
+                                                    Swal.fire({
+                                                        icon: "success",
+                                                        showCloseButton: true,
+                                                        confirmButtonText: "Submit",
+                                                        html: `
+                                                    <div class="save__wrapper">
+                                                        <div class="step__wrapper">
+                                                            <span class="step__number">1. </span>
+                                                            <span class="step__text">This is first step to submit.</span>
+                                                        </div>
+                                                        <div class="step__wrapper">
+                                                            <span class="step__number">2. </span>
+                                                            <span class="step__text">This is first step.</span>
+                                                        </div>
+                                                        <div class="step__wrapper">
+                                                            <span class="step__number">3. </span>
+                                                            <span class="step__text">This is first step.</span>
+                                                        </div>
+                                                    </div>
+                                                `
+                                                    }).then((result)=>{
+                                                        if(result.isConfirmed){
+                                                            onSubmit(values, true)
+                                                        }
+                                                    })
+                                                }}
+                                                type={'button'}
+                                            >
+                                                submit
+                                            </SubmitButton>
+                                    }
+
                                 </div>
                             </Form>
                         )
