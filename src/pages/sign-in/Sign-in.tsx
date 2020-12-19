@@ -9,14 +9,15 @@ import {db, signInFirebase} from '../../firebase'
 import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import Swal from "sweetalert2";
+// import {firestore} from "firebase";
 
-function SignWrapper() {
+const SignWrapper:React.FC = (props) => {
     return (
         <SignWrapperStyle>
             <Link to={'/'} className={'back'}>
                 <img src="https://www.flaticon.com/svg/static/icons/svg/507/507257.svg" alt="<-"/>
             </Link>
-            <SignIn />
+            {props.children}
         </SignWrapperStyle>
     );
 }
@@ -37,7 +38,7 @@ const initialValue = {
     email: '',
     password: ''
 }
-const SignIn = () => {
+export const SignIn = () => {
     const {dispatch} = useContext(MyContext)
 
     return (
@@ -105,6 +106,67 @@ const SignIn = () => {
                     }}
             </Formik>
             <Link to={'#'} className={'forgot'}>Forgot your password?</Link>
+        </SignInWrapper>
+    )
+}
+
+const validateFormikSignUp = {
+    email: Yup.string()
+        .required('Required'),
+    fullname: Yup.string()
+        .required('Required'),
+    companyName: Yup.string()
+        .required('Required'),
+}
+
+const initialValueSignUp = {
+    email: '',
+    fullname: '',
+    companyName: '',
+    position: ''
+}
+export const SignUp = () => {
+    // const {dispatch} = useContext(MyContext)
+
+    return (
+        <SignInWrapper>
+            <div className={'title'}>
+                Request Contact
+            </div>
+            <Formik
+                initialValues={initialValueSignUp}
+                validationSchema={Yup.object().shape(validateFormikSignUp)}
+                onSubmit={(values)=>{
+                    alert(JSON.stringify(values))
+                    // firestore().collection('mail').add({
+                    //     to: 'een9.aman@gmail.com',
+                    //     message: {
+                    //         subject: 'Hello from Firebase!',
+                    //         html: 'This is an <code>HTML</code> email body.',
+                    //     },
+                    // }).then((res)=>{
+                    //     console.log(res)
+                    //     alert('Success')
+                    // })
+                }}
+            >
+                {
+                    ({
+                         touched,
+                         errors,
+                     }) => {
+                        return (
+                            <Form>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Full Name'} type={'text'} name={'fullname'}/>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Email'} type={'email'} name={'email'}/>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Company name'} type={'text'} name={'companyName'}/>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Position'} type={'text'} name={'position'}/>
+                                <br/>
+                                <YellowButton type={'submit'} className={'fullWidth'}>Submit</YellowButton>
+                            </Form>
+                        )
+                    }}
+            </Formik>
         </SignInWrapper>
     )
 }

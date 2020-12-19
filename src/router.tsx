@@ -7,14 +7,14 @@ import Feed from "./pages/feed/Feed";
 import SettingsPage from "./pages/settings/Settings-page";
 import CreateFeed from "./pages/create(edit)-feed";
 import WelcomePage from "./pages/welocome/Welcome-page";
-import SignIn from "./pages/sign-in/Sign-in";
+import SignWrapper, {SignIn, SignUp} from "./pages/sign-in/Sign-in";
 import Users from './pages/super-admin/users/UsersPage';
 import CompaniesPage from './pages/super-admin/companies/Companies-page';
 import NotificationsPage from "./pages/super-admin/notifications/Notifications-page";
+import {UserType} from "./components/feedComponents/feed";
 // import reducer from "./state/RootReducer";
 // import {getData} from "./App";
 // import {db} from "./firebase";
-import {UserType} from "./components/feedComponents/feed";
 
 
 export const useRoute = (state:any, user:UserType, notifications: any, setPending: (status:boolean)=>void) => {
@@ -70,8 +70,16 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
                 <Route exact path={'/'}>
                     <WelcomePage/>
                 </Route>
-                <Route path={'/sign-in'}>
-                    <SignIn/>
+                <Route exact path={'/sign-in'}>
+                    <SignWrapper>
+                        <SignIn/>
+                    </SignWrapper>
+                </Route>
+                <Route exact path={'/sign-up'}>
+                    <SignWrapper>
+                        <SignUp/>
+                    </SignWrapper>
+                    {/*<SignIn/>*/}
                 </Route>
                 <Redirect to={'/'}/>
             </Switch>
