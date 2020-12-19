@@ -135,16 +135,17 @@ function CreateFeed() {
                          initialValues,
                          isSubmitting,
                      }) => {
-                        let {isPublish, isAdminApproved} = values
+                        let {isPublish, isAdminApproved, isAssetManagerApproved} = values
                         let titleLength = 80
                         titleLength = titleLength - values.title.length
                         let teaserLength = 100
                         teaserLength = teaserLength - values.teaser.length
                         // const hasErrors = Object.keys(errors).length > 0;
-                        const hasChanged = !deepEqual(values, initialValues)
+                        const hasChanged = id ? true : !deepEqual(values, initialValues)
                         const hasErrors = Object.keys(errors).length > 0
                         const editLen = !editor?.getCurrentContent().getPlainText('').length
                         const isVideo = type !== 'video' ? editLen : false
+                        // console.log(isVideo)
                         return (
                             <Form>
                                 <Field disabled={isPublish} as={FeedCreateInput} name={'title'} status={!!titleLength}
@@ -204,7 +205,6 @@ function CreateFeed() {
                                         </>
                                         : null
                                 }
-
                                 <div className={'btn__wrapper'}>
                                     {
                                         isPublish ? <div/> : <SubmitButton
@@ -243,7 +243,11 @@ function CreateFeed() {
                                         </SubmitButton>
                                     }
                                     {
-                                        isAdminApproved
+                                        isPublish && isAdminApproved && isAssetManagerApproved
+                                            ? null
+                                            : !isAssetManagerApproved && !isAdminApproved && isPublish
+                                            ? null
+                                            : isAdminApproved && isPublish
                                             ? <SubmitButton
                                                 type={"button"}
                                                 onClick={()=>{
@@ -308,7 +312,6 @@ function CreateFeed() {
                                                 submit
                                             </SubmitButton>
                                     }
-
                                 </div>
                             </Form>
                         )
