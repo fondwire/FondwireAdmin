@@ -77,29 +77,51 @@ function CreateFeed() {
         }
     }, [id, type])
     const onSubmit = (values: FormikValues, isPublish:boolean) => {
-        db.ref('/feeds').child(`/${type}s`).push({
-            ...values,
-            bodyText: type !== 'video' ? draftToHtml(convertToRaw(editor.getCurrentContent())) : '',
-            issueDate: Date.now(),
-            uid: userData.uid,
-            type: type,
-            isAdminApproved: false,
-            isAssetManagerApproved: false,
-            isPublish: isPublish
-        }).then((res) => {
-            let arr: any = res.toJSON()
-            let newArr = arr.split('/')
+        if(id){
+            console.log(id)
             if(isPublish){
-                db.ref('/notification').child('/feeds').child(`/${type}s`).push({
-                    id: newArr[newArr.length - 1],
-                    issueDate: Date.now()
-                }).then(() => {
+                db.ref('/feeds').child(type+'s').child(id).child('isPublish').set(true)
+                    .then(()=>{
+                        db.ref('/notification').child('/feeds').child(`/${type}s`).push({
+                            id: id,
+                            issueDate: Date.now()
+                        }).then(() => {
+                            history.push('/feed')
+                        })
+                    })
+            }else{
+                db.ref('/feeds').child(type+'s').child(id).set({
+                    issueDate: Date.now(),
+                    ...values
+                }).then(()=>{
                     history.push('/feed')
                 })
-            }else{
-                history.push('/feed')
             }
-        })
+        }else{
+            db.ref('/feeds').child(`/${type}s`).push({
+                ...values,
+                bodyText: type !== 'video' ? draftToHtml(convertToRaw(editor.getCurrentContent())) : '',
+                issueDate: Date.now(),
+                uid: userData.uid,
+                type: type,
+                isAdminApproved: false,
+                isAssetManagerApproved: false,
+                isPublish: isPublish
+            }).then((res) => {
+                let arr: any = res.toJSON()
+                let newArr = arr.split('/')
+                if(isPublish){
+                    db.ref('/notification').child('/feeds').child(`/${type}s`).push({
+                        id: newArr[newArr.length - 1],
+                        issueDate: Date.now()
+                    }).then(() => {
+                        history.push('/feed')
+                    })
+                }else{
+                    history.push('/feed')
+                }
+            })
+        }
     }
     const onApprove = () => {
         db.ref('/feeds')

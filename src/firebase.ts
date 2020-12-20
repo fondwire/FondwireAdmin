@@ -45,7 +45,7 @@ auth().onAuthStateChanged((res:any)=>{
                 ref.orderByChild("email").on("child_added", function (snapshot) {
                     if (snapshot.val().email === data.email) {
                         // console.log(snapshot.key + " : " + snapshot.val().email );
-                        console.log(snapshot.val().verified)
+                        // console.log(snapshot.val().verified)
                         data = {verified: snapshot.val().verified ? snapshot.val().verified : false, ...data}
                         localStorage.setItem('userData', JSON.stringify(data))
                     }
