@@ -35,7 +35,7 @@ export const CompaniesElement:React.FC<CompaniesElementProps> = (
             db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(()=>{
                 // alert('success set and removed')
                 // setPending(true)
-                window.location.reload()
+                window.location.href = '/notifications'
             })
         })
     }

@@ -4,8 +4,8 @@ import * as Yup from "yup";
 import { SignInWrapper, SignWrapperStyle } from './Sign-in-style';
 import AuthInput from "../../components/Auth-input/Auth-input";
 import {YellowButton} from "../../components/Buttons/submit-button";
-import { Link } from 'react-router-dom';
-import {db, signInFirebase} from '../../firebase'
+import { Link, useHistory } from 'react-router-dom';
+import {auth, db, signInFirebase} from '../../firebase'
 import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import Swal from "sweetalert2";
@@ -119,7 +119,7 @@ export const SignIn = () => {
                         )
                     }}
             </Formik>
-            <Link to={'#'} className={'forgot'}>Forgot your password?</Link>
+            <Link to={'/forgot'} className={'forgot'}>Forgot your password?</Link>
         </SignInWrapper>
     )
 }
@@ -176,6 +176,56 @@ export const SignUp = () => {
                                 <Field as={AuthInput} errors={errors} touched={touched} title={'Email'} type={'email'} name={'email'}/>
                                 <Field as={AuthInput} errors={errors} touched={touched} title={'Company name'} type={'text'} name={'companyName'}/>
                                 <Field as={AuthInput} errors={errors} touched={touched} title={'Position'} type={'text'} name={'position'}/>
+                                <br/>
+                                <YellowButton type={'submit'} className={'fullWidth'}>Submit</YellowButton>
+                            </Form>
+                        )
+                    }}
+            </Formik>
+        </SignInWrapper>
+    )
+}
+
+const validateFormikForgot = {
+    email: Yup.string()
+        .required('Required'),
+}
+
+const initialValueForgot = {
+    email: ''
+}
+export const Forgot = () => {
+    // const {dispatch} = useContext(MyContext)
+    const history = useHistory()
+    return (
+        <SignInWrapper>
+            <div className={'title'}>
+                Forgot Password
+            </div>
+            <Formik
+                initialValues={initialValueForgot}
+                validationSchema={Yup.object().shape(validateFormikForgot)}
+                onSubmit={(values)=>{
+                    auth().sendPasswordResetEmail(values.email)
+                        .then(()=>{
+                            Swal.fire({
+                                icon: "success",
+                                title: `<span style="font-family: 'Gotham-Medium', sans-serif;">SENT</span>`,
+                                html: `<span style="font-family: 'Gotham-Medium', sans-serif">We have send a message to your email. Please check.</span>`,
+                            }).then(()=>{
+                                history.push('/sign-in')
+                            })
+                        })
+                }}
+            >
+                {
+                    ({
+                         touched,
+                         errors,
+                     }) => {
+                        return (
+                            <Form>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Email'} type={'email'} name={'email'}/>
                                 <br/>
                                 <YellowButton type={'submit'} className={'fullWidth'}>Submit</YellowButton>
                             </Form>

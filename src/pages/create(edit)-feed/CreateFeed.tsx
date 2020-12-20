@@ -78,7 +78,6 @@ function CreateFeed() {
     }, [id, type])
     const onSubmit = (values: FormikValues, isPublish:boolean) => {
         if(id){
-            console.log(id)
             if(isPublish){
                 db.ref('/feeds').child(type+'s').child(id).child('isPublish').set(true)
                     .then(()=>{
