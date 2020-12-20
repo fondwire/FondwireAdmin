@@ -12,6 +12,7 @@ import Users from './pages/super-admin/users/UsersPage';
 import CompaniesPage from './pages/super-admin/companies/Companies-page';
 import NotificationsPage from "./pages/super-admin/notifications/Notifications-page";
 import {UserType} from "./components/feedComponents/feed";
+import Unverified from "./pages/unverified/Unverified";
 // import reducer from "./state/RootReducer";
 // import {getData} from "./App";
 // import {db} from "./firebase";
@@ -21,7 +22,16 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
     // const [stat] = useReducer(reducer, {
     //     userData: JSON.parse(localStorage.getItem('userData') as string),
     // })
-    if (!!state?.userData) {
+    if(!state?.userData?.isAdmin && state?.userData && !state?.userData?.verified){
+        return <div className={'notLoggedInWrapper'}>
+            <Switch>
+                <Route exact path={'/'}>
+                    <Unverified />
+                </Route>
+                <Redirect to={'/'}/>s
+            </Switch>
+        </div>
+    }else if (!!state?.userData) {
         return <div className={'adminPanelWrapper'}>
             <Navbar notificationLength={notifications} isAdmin={state.userData.isAdmin}/>
             <div className={'contentWrapper'}>

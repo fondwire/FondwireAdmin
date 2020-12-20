@@ -86,7 +86,6 @@ function App() {
             let ii = 0
             let userCount = 0
             if (feedLength) {
-                console.log(feedLength)
                 for (let i in feed) {
                     for (let k in feed[i]) {
                         let fLength = Object.keys(feed[i]).length
@@ -137,7 +136,6 @@ function App() {
                     }
                 }
             } else if (userLength) {
-                console.log(userLength, '2')
                 for (let i in users) {
                     db.ref('/users').child(users[i].id).once('value', function (snapshot) {
                         return snapshot.toJSON()

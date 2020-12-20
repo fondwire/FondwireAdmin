@@ -5,6 +5,7 @@ import logo from '../../images/AdminLogo.png'
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import {MyContext} from "../../App";
 import Swal from "sweetalert2";
+import {Logout} from "../../firebase";
 
 type NavbarProps = {
     isAdmin: boolean
@@ -59,10 +60,12 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
                                     focusConfirm: false,
                                 }).then((result)=>{
                                     if (result.isConfirmed) {
-                                        localStorage.removeItem('userData')
-                                        dispatch({
-                                            type: SIGN_IN_TYPE,
-                                            data: null
+                                        Logout().then(()=>{
+                                            localStorage.removeItem('userData')
+                                            dispatch({
+                                                type: SIGN_IN_TYPE,
+                                                data: null
+                                            })
                                         })
                                     } else if (result.isDenied) {
                                         // Swal.fire('Changes are not saved', '', 'info')

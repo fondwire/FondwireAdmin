@@ -24,6 +24,34 @@ export function Logout() {
     return auth().signOut()
 }
 
-// auth().onAuthStateChanged((user:any)=>{
-//     console.log(user?.toJSON())
-// })
+auth().onAuthStateChanged((res:any)=>{
+    let user:any = res?.toJSON()
+    let data: any = {
+        isAdmin: false,
+        ...res?.toJSON()
+    }
+    if(user) {
+        db.ref('/admins').once('value', function (snapshot) {
+            return snapshot.toJSON()
+        }).then((d) => {
+            let admins = Object.values(d.toJSON() as string)
+            admins.forEach((admin) => {
+                if (admin === user.uid) {
+                    data = {isAdmin: true, ...res.user?.toJSON()}
+                }
+            })
+            if (!data.isAdmin) {
+                let ref = db.ref('/users')
+                ref.orderByChild("email").on("child_added", function (snapshot) {
+                    if (snapshot.val().email === data.email) {
+                        // console.log(snapshot.key + " : " + snapshot.val().email );
+                        console.log(snapshot.val().verified)
+                        data = {verified: snapshot.val().verified ? snapshot.val().verified : false, ...data}
+                        localStorage.setItem('userData', JSON.stringify(data))
+                    }
+                });
+            }
+            localStorage.setItem('userData', JSON.stringify(data))
+        })
+    }
+})

@@ -9,7 +9,8 @@ import {db, signInFirebase} from '../../firebase'
 import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import Swal from "sweetalert2";
-// import {firestore} from "firebase";
+import {firestore} from "firebase";
+
 
 const SignWrapper:React.FC = (props) => {
     return (
@@ -64,6 +65,21 @@ export const SignIn = () => {
                                         data = {isAdmin: true, ...res.user?.toJSON()}
                                     }
                                 })
+                                if(!data.isAdmin){
+                                    let ref = db.ref('/users')
+                                    ref.orderByChild("email").on("child_added", function(snapshot) {
+                                        if(snapshot.val().email === data.email){
+                                            // console.log(snapshot.key + " : " + snapshot.val().email );
+                                            // console.log(snapshot.val().verified)
+                                            data = {verified: snapshot.val().verified ? snapshot.val().verified : false, ...data }
+                                            localStorage.setItem('userData', JSON.stringify(data))
+                                            dispatch({
+                                                type: SIGN_IN_TYPE,
+                                                data: data
+                                            })
+                                        }
+                                    });
+                                }
                                 localStorage.setItem('userData', JSON.stringify(data))
                                 dispatch({
                                     type: SIGN_IN_TYPE,
@@ -83,8 +99,6 @@ export const SignIn = () => {
                                         type: SIGN_IN_TYPE,
                                         data: null
                                     })
-                                } else if (result.isDenied) {
-                                    // Swal.fire('Changes are not saved', '', 'info')
                                 }
                             })
                         })
@@ -127,7 +141,6 @@ const initialValueSignUp = {
 }
 export const SignUp = () => {
     // const {dispatch} = useContext(MyContext)
-
     return (
         <SignInWrapper>
             <div className={'title'}>
@@ -138,16 +151,18 @@ export const SignUp = () => {
                 validationSchema={Yup.object().shape(validateFormikSignUp)}
                 onSubmit={(values)=>{
                     alert(JSON.stringify(values))
-                    // firestore().collection('mail').add({
-                    //     to: 'een9.aman@gmail.com',
-                    //     message: {
-                    //         subject: 'Hello from Firebase!',
-                    //         html: 'This is an <code>HTML</code> email body.',
-                    //     },
-                    // }).then((res)=>{
-                    //     console.log(res)
-                    //     alert('Success')
-                    // })
+                    firestore().collection('mail').add({
+                        to: 'een9.aman@gmail.com',
+                        message: {
+                            subject: 'Hello from Firebase!',
+                            html: 'This is an <code>HTML</code> email body.',
+                        },
+                    }).then((res)=>{
+                        console.log(res)
+                        alert('Success')
+                    }, (error)=>{
+                        console.log(error)
+                    })
                 }}
             >
                 {
