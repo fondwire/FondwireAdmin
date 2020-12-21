@@ -230,7 +230,8 @@ export const Forgot = () => {
                                 <YellowButton type={'submit'} className={'fullWidth'}>Submit</YellowButton>
                             </Form>
                         )
-                    }}
+                    }
+                }
             </Formik>
         </SignInWrapper>
     )

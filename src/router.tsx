@@ -90,11 +90,6 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
                         <Forgot />
                     </SignWrapper>
                 </Route>
-                <Route exact path={'/email'}>
-                    <SignWrapper>
-                        <Forgot />
-                    </SignWrapper>
-                </Route>
                 <Route exact path={'/sign-up'}>
                     <SignWrapper>
                         <SignUp/>
