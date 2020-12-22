@@ -54,7 +54,7 @@
     width: 100%;
 }
 .error{
-    color: red;
+    color: red !important;
 }
 .logout{
      color: #f86969 !important;
@@ -87,4 +87,11 @@
 .step__number{
     font-weight: 700;
     color: black;
+}
+.body__container{
+    margin-top: 3px;
+    background: #eeeded;
+    padding: 15px 10px;
+    border: 1px solid #121e34;
+    border-radius: 2px 2px  0 0;
 }

@@ -132,6 +132,26 @@ function CreateFeed() {
                 history.push('/feed')
             })
     }
+    const MAX_LENGTH = 1000
+    const _handleBeforeInput = () => {
+        const currentContent = editor.getCurrentContent();
+        const currentContentLength = currentContent.getPlainText('').length
+        // console.log(currentContentLength)
+        if (currentContentLength > MAX_LENGTH - 1) {
+            // console.log('you can type max ten characters');
+            return 'handled';
+        }
+    }
+
+    const _handlePastedText = (pastedText:any) => {
+        const currentContent = editor.getCurrentContent();
+        const currentContentLength = currentContent.getPlainText('').length
+
+        if (currentContentLength + pastedText.length > MAX_LENGTH) {
+            // console.log('you can type max ten characters!');
+            return 'handled';
+        }
+    }
     if(pending) return <div className={'preloaderWrapper'}><Preloader/></div>
     return (
         <CreatePageWrapper>
@@ -164,9 +184,10 @@ function CreateFeed() {
                         // const hasErrors = Object.keys(errors).length > 0;
                         const hasChanged = id ? true : !deepEqual(values, initialValues)
                         const hasErrors = Object.keys(errors).length > 0
-                        const editLen = !editor?.getCurrentContent().getPlainText('').length
-                        const isVideo = type !== 'video' ? editLen : false
-                        // console.log(isVideo)
+                        const editLen = editor?.getCurrentContent().getPlainText('').length
+                        const isVideo = type !== 'video' ? !editLen : false
+                        // console.log(editLen)
+
                         return (
                             <Form>
                                 <Field disabled={isPublish} as={FeedCreateInput} name={'title'} status={!!titleLength}
@@ -184,40 +205,51 @@ function CreateFeed() {
                                 {
                                     type !== 'video'
                                         ? <>
-                                            <span className={'bodyText'}>Body text</span>
+                                            <span className={ MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>Body text ({MAX_LENGTH - editLen})</span>
                                             <br/>
-                                            <Editor
-                                                editorState={editor}
-                                                toolbarClassName="toolbarClassName"
-                                                wrapperClassName="wrapperClassName"
-                                                editorClassName={'editor_textarea'}
-                                                onEditorStateChange={(e) => {
-                                                    // console.log(+editor?.getCurrentContent().getPlainText('').length)
-                                                    // if(editor?.getCurrentContent().getPlainText('').length <= 10){
-                                                    setEditor(e)
-                                                    // }
-                                                }}
-                                                toolbar={{
-                                                    inline: {inDropdown: false},
-                                                    // list: { inDropdown: true },
-                                                    // textAlign: { inDropdown: true },
-                                                    // link: { inDropdown: true },
-                                                    // history: { inDropdown: true },
-                                                    fontFamily: {
-                                                        options: ['Gotham Book', 'Gotham-Thin', 'Gotham-Bold', 'Gotham-Medium']
-                                                    },
-                                                    colorPicker: {visible: false, icon: undefined,},
-                                                    image: {
-                                                        uploadCallback: uploadCallback,
-                                                        previewImage: true,
-                                                        alt: {present: true, mandatory: false},
-                                                        inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
-                                                        visible: true,
-                                                        fileUpload: true,
-                                                        url: true,
-                                                    },
-                                                }}
-                                            />
+                                            {
+                                                isPublish || isAdminApproved
+                                                    ? <div
+                                                        className="body__container"
+                                                        dangerouslySetInnerHTML={{__html: draftToHtml(convertToRaw(editor.getCurrentContent()))}}
+                                                    />
+                                                    // stringToHTML(draftToHtml(convertToRaw(editor.getCurrentContent())))
+                                                    : <Editor
+                                                        handleBeforeInput={_handleBeforeInput}
+                                                        // @ts-ignore
+                                                        handlePastedText={_handlePastedText}
+                                                        editorState={editor}
+                                                        toolbarClassName="toolbarClassName"
+                                                        wrapperClassName="wrapperClassName"
+                                                        editorClassName={'editor_textarea'}
+                                                        onEditorStateChange={(e) => {
+                                                            // console.log(+editor?.getCurrentContent().getPlainText('').length)
+                                                            // if(editor?.getCurrentContent().getPlainText('').length <= 10){
+                                                            setEditor(e)
+                                                            // }
+                                                        }}
+                                                        toolbar={{
+                                                            inline: {inDropdown: false},
+                                                            // list: { inDropdown: true },
+                                                            // textAlign: { inDropdown: true },
+                                                            // link: { inDropdown: true },
+                                                            // history: { inDropdown: true },
+                                                            fontFamily: {
+                                                                options: ['Gotham Book', 'Gotham-Thin', 'Gotham-Bold', 'Gotham-Medium']
+                                                            },
+                                                            colorPicker: {visible: false, icon: undefined,},
+                                                            image: {
+                                                                uploadCallback: uploadCallback,
+                                                                previewImage: true,
+                                                                alt: {present: true, mandatory: false},
+                                                                inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                                                                visible: true,
+                                                                fileUpload: true,
+                                                                url: true,
+                                                            },
+                                                        }}
+                                                    />
+                                            }
                                             <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForMessage'}
                                                    title={`Add pimp & proof for $39.50`}/>
                                             <br/>

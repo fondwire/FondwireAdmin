@@ -13,7 +13,6 @@ exports.sendEmailNotification = functions.firestore.document('/mail').onCreate(
         const data = snapshot.data()
         console.log(snapshot.data())
 
-
         const authData = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -31,6 +30,5 @@ exports.sendEmailNotification = functions.firestore.document('/mail').onCreate(
             text: `${data.email}`,
             html: `${data.message.html}`
         }).then(()=> console.log('successfully sent that mail') ).catch((error) => console.log(error))
-
     }
 )
