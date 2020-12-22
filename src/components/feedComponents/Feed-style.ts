@@ -1,15 +1,32 @@
 import styled from "styled-components";
-import { TableStyle } from "../table-style/table-style";
+import {TableStyle} from "../table-style/table-style";
 
 export const FeedWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 80px 140px 140px 110px 95px;
+  grid-template-columns: 1fr 150px 140px 110px 200px 20px;
 `
 
-export const TableComponentWrapper = (props:any) => `
+export const TableComponentWrapper = (props: any) => `
+ &>.title{
+    color: #171616d1;
+    font-weight: 600;
+    font-family: 'Gotham-Bold', sans-serif;    
+    padding-right: 30px;
+ }
  &>div, a{
-    font-weight: 400;
-    font-family: 'Gotham-Medium', sans-serif;
-    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Gotham Book', sans-serif;
+    font-size: 11px;
+    &>.user__image{
+      width: 30px;
+      height: 30px;
+      background: #fbe163;
+      padding: 5px;
+      border-radius: 50%;
+      &>img{
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
   &>.status>span{
     display: flex;
@@ -31,17 +48,29 @@ export const TableComponentWrapper = (props:any) => `
     display: flex;
     justify-content: center;
   }
+  &:hover  div>.action__wrapper {
+     opacity: 1;
+     visibility: visible;
+  }
+  
 `
 
-export const FeedComponentWrapper:any = styled(FeedWrapper)`
-  ${(props:any)=>TableComponentWrapper(props.bg)}
+export const FeedComponentWrapper: any = styled(FeedWrapper)`
+  ${(props: any) => TableComponentWrapper(props.bg)}
+  
+  &:hover + div>.action__wrapper {
+    //color: red !important;
+     opacity: 1;
+     visibility: visible;
+  }
 `
 
 export const ActionWrapper = styled.div`
   border-radius: 50%;
-  background: rgba(47,157, 251, 0.1);
+  //background: rgba(47,157, 251, 0.1);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   padding: 0 5px;
   width: 22px;
@@ -51,9 +80,9 @@ export const ActionWrapper = styled.div`
   
   &>span{
     border-radius: 50%;
-    width: 2px;
-    height: 2px;
-    background: #2f9dfb;
+    width: 3px;
+    height: 3px;
+    background: #000;
   }
 `
 
@@ -67,8 +96,8 @@ export const FeedModal:any = styled.span`
     bottom: 11px;
     z-index: 3;
     right: 70%;
-    visibility: ${(props:any) => props.opacity ? 'visible' : 'hidden'};
-    opacity: ${(props:any) => props.opacity};
+    visibility: ${(props: any) => props.opacity ? 'visible' : 'hidden'};
+    opacity: ${(props: any) => props.opacity};
     transition: visibility 0s , opacity 0.5s linear;
     
     &>div{
@@ -90,7 +119,7 @@ export const CreateNewWrapper = styled.div`
   display: flex;
   align-items: center;
   .plus{
-    //cursor: pointer;
+    cursor: pointer;
     text-decoration:none;
     margin-left: 10px;
     display: flex;
@@ -103,5 +132,38 @@ export const CreateNewWrapper = styled.div`
     border-radius: 50%;
     width: 40px;
     height: 40px;
+    position: relative; 
+    &:hover > .modal{
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal{
+      cursor: auto;
+      text-transform: uppercase;
+      transition: all 0.6s linear;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 20px 35px;
+      background: #121e34;
+      font-size: 14px;
+      z-index: 15;
+      opacity: 0;
+      visibility: hidden;
+      
+      &>div{
+        margin: 10px  0;
+        
+        &>a{
+          text-decoration: none;
+          color: white;
+          font-family: 'Gotham Book', sans-serif;
+          
+          :hover{
+            color: #2f9dfb;
+          }
+        }
+      }
+  }
   }
 `

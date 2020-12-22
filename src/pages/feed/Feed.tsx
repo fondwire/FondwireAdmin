@@ -3,9 +3,9 @@ import {FeedPageWrapper} from "./Feed-page";
 import FeedHeader, {FeedComponent, CreateNew} from "../../components/feedComponents/FeedComponents";
 import SearchInput from '../../components/Search-Input/Search-Input';
 import reducer from "../../state/RootReducer";
-import {db} from "../../firebase";
 import Preloader from "../../utils/preloader/preloader";
 import {FeedType} from "../dashboard/Dashboard";
+import {getData} from "../../App";
 
 
 function Feed() {
@@ -15,20 +15,8 @@ function Feed() {
     const [pending, setPending] = useState(true)
     const [feeds, setFeeds] = useState<any>([])
     useEffect(()=>{
-        const feeds = db.ref('/feeds')
-        feeds.once('value', function(snapshot){
-            return snapshot.toJSON()
-        }).then((data)=>{
-            const fObject:any = data.toJSON()
-            const feeds = {...fObject.article, ...fObject.events,...fObject.videos}
-            const arr:Array<any> = Object.values(feeds)
-                .sort((a:any,b:any)=> a.issueDate - b.issueDate)
-                .filter(({uid}:any)=> state.userData && uid === state.userData.uid )
-
-            setFeeds(arr)
-            setPending(false)
-        })
-    },[state.userData])
+        getData('/feeds', state, setFeeds, setPending)
+    },[state, state.userData, pending])
 
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
@@ -44,15 +32,18 @@ function Feed() {
                 <FeedHeader />
                 {
                     feeds.map(
-                        ({title,type, issueDate}:FeedType)=> {
+                        ({title,type, issueDate, id,isAssetManagerApproved,isAdminApproved,isPublish}:FeedType)=> {
 
                             return <FeedComponent
+                                isPublish={isPublish}
+                                setPending={setPending}
                                 key={issueDate}
                                 title={title}
                                 date={issueDate}
                                 type={type}
-                                status={'active'}
-                                id={'5'}/>
+                                isAssetManagerApprove={isAssetManagerApproved}
+                                isAdminApprove={isAdminApproved}
+                                id={id}/>
                         })
                 }
                 {/*<FeedComponent*/}

@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import { Action } from '../feedComponents/FeedComponents';
 
 const TableWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 0.8fr 1fr 100px 80px;
+  grid-template-columns: 1fr 0.8fr 1fr 120px 30px;
 `
 
 function UsersHeader() {
@@ -16,7 +16,7 @@ function UsersHeader() {
             <div>EMAIL</div>
             <div>COMPANY</div>
             <div>STATUS</div>
-            <div>ACTIONS</div>
+            <div/>
         </TableWrapper>
 
     );
@@ -55,11 +55,17 @@ export const UserElement:React.FC<UserElementProps> = ({id,title, email, company
     }, [Status])
     return (
         <UserElementWrapper bg={background}>
-            <Link to={`feed/create/${id}`}>{title}</Link>
+            <Link to={`user/${id}`} className={'title'}>{title}</Link>
             <div>{email}</div>
             <div>{company}</div>
             <div className={'status'}><span>{Status}</span></div>
-            <div><Action/></div>
+            <div>
+                <Action>
+                    <div>ACTIVATE</div>
+                    <div>DEACTIVATE</div>
+                    <div className={'delete'}>DELETE</div>
+                </Action>
+            </div>
         </UserElementWrapper>
     )
 }

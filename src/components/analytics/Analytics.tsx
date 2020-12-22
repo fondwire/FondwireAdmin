@@ -52,7 +52,7 @@ const ChartBlock = styled.div`
   background: linear-gradient(to bottom, #289afd, #ffffff ) ;
   height: ${(props:chartProps) => props.height + '%'};
   width: 28px;
-  margin: 0 0.5px 8px 0.5px;
+  margin: 0 1px 8px 1px;
   cursor: pointer;
   transition: background 0.5s linear;
   animation: ${(props:chartProps) => heightAnimation(props.height)} 0.8s linear;

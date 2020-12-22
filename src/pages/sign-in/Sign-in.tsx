@@ -4,18 +4,21 @@ import * as Yup from "yup";
 import { SignInWrapper, SignWrapperStyle } from './Sign-in-style';
 import AuthInput from "../../components/Auth-input/Auth-input";
 import {YellowButton} from "../../components/Buttons/submit-button";
-import { Link } from 'react-router-dom';
-import {signInFirebase} from '../../firebase'
+import { Link, useHistory } from 'react-router-dom';
+import {auth, db, signInFirebase} from '../../firebase'
 import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
+import Swal from "sweetalert2";
+import {firestore} from "firebase";
 
-function SignWrapper() {
+
+const SignWrapper:React.FC = (props) => {
     return (
         <SignWrapperStyle>
             <Link to={'/'} className={'back'}>
                 <img src="https://www.flaticon.com/svg/static/icons/svg/507/507257.svg" alt="<-"/>
             </Link>
-            <SignIn />
+            {props.children}
         </SignWrapperStyle>
     );
 }
@@ -29,14 +32,14 @@ const validateFormik = {
         .required('Required'),
     password: Yup.string()
         .required('Required')
-        .min(8)
+        .min(6)
 }
 
 const initialValue = {
     email: '',
     password: ''
 }
-const SignIn = () => {
+export const SignIn = () => {
     const {dispatch} = useContext(MyContext)
 
     return (
@@ -48,17 +51,56 @@ const SignIn = () => {
                 onSubmit={(values)=>{
                     signInFirebase(values.email, values.password)
                         .then((res)=>{
-                            let data = {
-                                isAdmin: true,
+                            let user:any = res.user?.toJSON()
+                            let data: any = {
+                                isAdmin: false,
                                 ...res.user?.toJSON()
                             }
-                            dispatch({
-                                type: SIGN_IN_TYPE,
-                                data: data
+                            db.ref('/admins').once('value', function(snapshot){
+                                return snapshot.toJSON()
+                            }).then((d)=>{
+                                let admins = Object.values(d.toJSON() as string)
+                                admins.forEach((admin) => {
+                                    if(admin === user.uid){
+                                        data = {isAdmin: true, ...res.user?.toJSON()}
+                                    }
+                                })
+                                if(!data.isAdmin){
+                                    let ref = db.ref('/users')
+                                    ref.orderByChild("email").on("child_added", function(snapshot) {
+                                        if(snapshot.val().email === data.email){
+                                            // console.log(snapshot.key + " : " + snapshot.val().email );
+                                            // console.log(snapshot.val().verified)
+                                            data = {verified: snapshot.val().verified ? snapshot.val().verified : false, ...data }
+                                            localStorage.setItem('userData', JSON.stringify(data))
+                                            dispatch({
+                                                type: SIGN_IN_TYPE,
+                                                data: data
+                                            })
+                                        }
+                                    });
+                                }
+                                localStorage.setItem('userData', JSON.stringify(data))
+                                dispatch({
+                                    type: SIGN_IN_TYPE,
+                                    data: data
+                                })
                             })
-                            localStorage.setItem('userData', JSON.stringify(data))
-                        }, () => {
-                            alert('Not correct')
+                        }, (error) => {
+                            console.log(error.message)
+                            Swal.fire({
+                                icon: 'error',
+                                title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Something went wrong.</span>`,
+                                html: `<span style="font-family: 'Gotham-Medium', sans-serif">${error?.message ? error.message : 'You can try later!'}</span>`,
+                            }).then((result)=>{
+                                if (result.isConfirmed) {
+                                    localStorage.removeItem('userData')
+                                    dispatch({
+                                        type: SIGN_IN_TYPE,
+                                        data: null
+                                    })
+                                }
+                            })
                         })
                 }}
             >
@@ -77,7 +119,120 @@ const SignIn = () => {
                         )
                     }}
             </Formik>
-            <Link to={'#'} className={'forgot'}>Forgot your password?</Link>
+            <Link to={'/forgot'} className={'forgot'}>Forgot your password?</Link>
+        </SignInWrapper>
+    )
+}
+
+const validateFormikSignUp = {
+    email: Yup.string()
+        .required('Required'),
+    fullname: Yup.string()
+        .required('Required'),
+    companyName: Yup.string()
+        .required('Required'),
+}
+
+const initialValueSignUp = {
+    email: '',
+    fullname: '',
+    companyName: '',
+    position: ''
+}
+export const SignUp = () => {
+    // const {dispatch} = useContext(MyContext)
+    return (
+        <SignInWrapper>
+            <div className={'title'}>
+                Request Contact
+            </div>
+            <Formik
+                initialValues={initialValueSignUp}
+                validationSchema={Yup.object().shape(validateFormikSignUp)}
+                onSubmit={(values)=>{
+                    alert(JSON.stringify(values))
+                    firestore().collection('mail').add({
+                        to: 'een9.aman@gmail.com',
+                        message: {
+                            subject: 'Hello from Firebase!',
+                            html: 'This is an <code>HTML</code> email body.',
+                        },
+                    }).then((res)=>{
+                        console.log(res)
+                        alert('Success')
+                    }, (error)=>{
+                        console.log(error)
+                    })
+                }}
+            >
+                {
+                    ({
+                         touched,
+                         errors,
+                     }) => {
+                        return (
+                            <Form>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Full Name'} type={'text'} name={'fullname'}/>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Email'} type={'email'} name={'email'}/>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Company name'} type={'text'} name={'companyName'}/>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Position'} type={'text'} name={'position'}/>
+                                <br/>
+                                <YellowButton type={'submit'} className={'fullWidth'}>Submit</YellowButton>
+                            </Form>
+                        )
+                    }}
+            </Formik>
+        </SignInWrapper>
+    )
+}
+
+const validateFormikForgot = {
+    email: Yup.string()
+        .required('Required'),
+}
+
+const initialValueForgot = {
+    email: ''
+}
+export const Forgot = () => {
+    // const {dispatch} = useContext(MyContext)
+    const history = useHistory()
+    return (
+        <SignInWrapper>
+            <div className={'title'}>
+                Forgot Password
+            </div>
+            <Formik
+                initialValues={initialValueForgot}
+                validationSchema={Yup.object().shape(validateFormikForgot)}
+                onSubmit={(values)=>{
+                    auth().sendPasswordResetEmail(values.email)
+                        .then(()=>{
+                            Swal.fire({
+                                icon: "success",
+                                title: `<span style="font-family: 'Gotham-Medium', sans-serif;">SENT</span>`,
+                                html: `<span style="font-family: 'Gotham-Medium', sans-serif">We have send a message to your email. Please check.</span>`,
+                            }).then(()=>{
+                                history.push('/sign-in')
+                            })
+                        })
+                }}
+            >
+                {
+                    ({
+                         touched,
+                         errors,
+                     }) => {
+                        return (
+                            <Form>
+                                <Field as={AuthInput} errors={errors} touched={touched} title={'Email'} type={'email'} name={'email'}/>
+                                <br/>
+                                <YellowButton type={'submit'} className={'fullWidth'}>Submit</YellowButton>
+                            </Form>
+                        )
+                    }
+                }
+            </Formik>
         </SignInWrapper>
     )
 }

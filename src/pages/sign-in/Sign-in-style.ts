@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
 export const SignInWrapper = styled.div`
-  width: 180px;
+  width: 220px;
   display: grid;
   margin: 0 auto;
-  
+  &>form{
+    margin: 0 auto ;
+    width: 180px;  
+  }
   &>.title{
     text-align:center;
     color: white;
@@ -12,6 +15,15 @@ export const SignInWrapper = styled.div`
     font-weight: 500;
     font-family: 'Gotham-Medium', sans-serif;
     margin-bottom: 25px;
+    &>div>span{
+        text-decoration: none;
+        margin: 0;
+        line-height: 10px;
+        font-size: 10px;
+        color: white;
+        text-align:center;
+        font-family: 'Gotham Book', sans-serif;
+    }
   }
   &>.forgot{
     text-decoration: none;

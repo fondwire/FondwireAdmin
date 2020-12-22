@@ -7,7 +7,7 @@ import {Action} from "../feedComponents/FeedComponents";
 
 
 const TableWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 0.8fr 2fr  80px;
+  grid-template-columns: 1fr 0.8fr 2fr  30px;
 `
 
 function CompaniesTableHeader() {
@@ -16,7 +16,7 @@ function CompaniesTableHeader() {
             <div>NAME</div>
             <div>SYMBOL</div>
             <div>MANAGERS</div>
-            <div>ACTIONS</div>
+            <div/>
         </TableWrapper>
     );
 }
@@ -33,11 +33,12 @@ type CompaniesElementProps = {
     symbol: string
     manager: string | number
 }
-export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, id, symbol, manager}) => {
+export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, symbol, manager}) => {
+    const Symbol = symbol.split('').slice(0,3).join('')
     return (
         <CompaniesElementWrapper>
-            <Link to={`feed/create/${id}`}>{title}</Link>
-            <div>{symbol}</div>
+            <Link to={`#`} className={'title'}>{title}</Link>
+            <div>{Symbol}</div>
             <div>{manager}</div>
             <div><Action/></div>
         </CompaniesElementWrapper>
