@@ -13,26 +13,62 @@ function Feed() {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
     const [pending, setPending] = useState(true)
+    const [pend, setPend] = useState(false)
+    const [search, setSearch] = useState('')
     const [feeds, setFeeds] = useState<any>([])
-    useEffect(()=>{
-        getData('/feeds', state, setFeeds, setPending)
-    },[state, state.userData, pending])
-
-    if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
+    const [data, setData] = useState<any>([])
+    useEffect(() => {
+        getData('/feeds', state, (arr)=> {
+            setFeeds(arr)
+            setData(arr)
+        }, () => {
+            setPending(false)
+            setPend(false)
+        })
+    }, [state, state.userData, pending])
+    useEffect(() => {
+        setPend(true)
+        let arr: any = []
+        if (search.length) {
+            feeds.forEach((childSnapshot: any, index: any) => {
+                if (childSnapshot.uid === state.userData.uid) {
+                    let str = childSnapshot.title.slice(0, search.length)
+                    if (str.toLowerCase() === search.toLowerCase()) {
+                        arr.push(childSnapshot)
+                    }
+                }
+                if (index < feeds.length) {
+                    setData([...arr])
+                    setPend(false)
+                }
+            })
+        } else {
+            getData('/feeds', state, (arr)=> {
+                // setFeeds(arr)
+                setData(arr)
+            }, () => {
+                setPending(false)
+                setPend(false)
+            })
+        }
+    }, [feeds, search, state])
+    if (pending) return <div className={'preloaderWrapper'}><Preloader/></div>
     return (
         <FeedPageWrapper>
             <div className={'header'}>
                 <h3>FEEDS</h3>
                 <div>
-                    <SearchInput />
-                    <CreateNew />
+                    <SearchInput value={search} onChange={setSearch}/>
+                    <CreateNew/>
                 </div>
             </div>
             <div>
-                <FeedHeader />
+                <FeedHeader/>
                 {
-                    feeds.map(
-                        ({title,type, issueDate, id,isAssetManagerApproved,isAdminApproved,isPublish}:FeedType)=> {
+                    pend
+                        ? <Preloader/>
+                        : data.map(
+                        ({title, type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish}: FeedType) => {
 
                             return <FeedComponent
                                 isPublish={isPublish}

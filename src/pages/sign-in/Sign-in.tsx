@@ -152,7 +152,7 @@ export const SignUp = () => {
                 onSubmit={(values)=>{
                     alert(JSON.stringify(values))
                     firestore().collection('mail').add({
-                        to: 'een9.aman@gmail.com',
+                        to: 'aman_A00@mail.ru',
                         message: {
                             subject: 'Hello from Firebase!',
                             html: 'This is an <code>HTML</code> email body.',
@@ -214,6 +214,14 @@ export const Forgot = () => {
                                 html: `<span style="font-family: 'Gotham-Medium', sans-serif">We have send a message to your email. Please check.</span>`,
                             }).then(()=>{
                                 history.push('/sign-in')
+                            })
+                        }, (error) => {
+                            Swal.fire({
+                                icon: "error",
+                                title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Error</span>`,
+                                html: `<span style="font-family: 'Gotham-Medium', sans-serif">${error.message}</span>`,
+                            }).then(()=>{
+                                // history.push('/sign-in')
                             })
                         })
                 }}

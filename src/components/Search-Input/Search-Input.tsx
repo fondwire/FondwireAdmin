@@ -25,10 +25,10 @@ const Wrapper = styled.div`
   }
 `
 
-function SearchInput() {
+const SearchInput:React.FC<any> = (props) => {
     return (
         <Wrapper>
-            <input type="text" placeholder={'Search'}/>
+            <input value={props.value} onChange={(e)=>props.onChange(e.target.value)} type="text" placeholder={'Search'}/>
         </Wrapper>
     );
 }
