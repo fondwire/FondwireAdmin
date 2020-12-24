@@ -14,6 +14,8 @@ import {db} from "../../firebase";
 import Swal from "sweetalert2";
 import Preloader from "../../utils/preloader/preloader";
 import htmlToDraft from 'html-to-draftjs'
+import ImageUploader from "../../components/image-uploader/ImageUploader";
+import { storage } from 'firebase';
 
 const validateFormik = {
     title: Yup.string()
@@ -43,7 +45,8 @@ let initialVal = {
     proofForTeaser: false,
     proofForTitle: false,
     proofForMessage: false,
-    proofForImage: false
+    proofForImage: false,
+    file: ''
 }
 function CreateFeed() {
     const {id, type} = useParams()
@@ -60,7 +63,8 @@ function CreateFeed() {
             db.ref('/feeds').child(type+'s').child(id).once('value', (snapshot)=>{
                 return snapshot.toJSON()
             }).then((data)=>{
-                setInitialValue(data.toJSON())
+                // @ts-ignore
+                setInitialValue({file: data.toJSON()?.logo,...data.toJSON()})
                 // @ts-ignore
                 const blocksFromHtml = htmlToDraft(data.toJSON()?.bodyText);
                 const { contentBlocks, entityMap } = blocksFromHtml;
@@ -78,48 +82,139 @@ function CreateFeed() {
     }, [id, type])
     const onSubmit = (values: FormikValues, isPublish:boolean) => {
         if(id){
+            // update the feed
             if(isPublish){
-                db.ref('/feeds').child(type+'s').child(id).child('isPublish').set(true)
-                    .then(()=>{
+                // if i am submitting
+                if(typeof values.file !== "string"){
+                    let file = values.file.target.files[0]
+                    let uploadTask = storage().ref(`FeedsImages/${type+'s'}/${file.name}`).put(file)
+                    uploadTask.on("state_changed", () => {},
+                        () => {},
+                        () => {
+                            storage()
+                                .ref("FeedsImages")
+                                .child(type+'s')
+                                .child(file.name)
+                                .getDownloadURL()
+                                .then(async (url) => {
+                                    db.ref('/feeds').child(type+'s').child(id).child('logo').set(url)
+                                        .then(()=>{
+                                            db.ref('/feeds').child(type+'s').child(id).child('isPublish').set(true)
+                                                .then(()=>{
+                                                    db.ref('/notification').child('/feeds').child(`/${type}s`).push({
+                                                        id: id,
+                                                        issueDate: Date.now()
+                                                    }).then(() => {
+                                                        history.push('/feed')
+                                                    })
+                                                })
+                                        })
+                                })})
+
+                }else{
+                    db.ref('/feeds').child(type+'s').child(id).child('isPublish').set(true)
+                        .then(()=>{
+                            db.ref('/notification').child('/feeds').child(`/${type}s`).push({
+                                id: id,
+                                issueDate: Date.now()
+                            }).then(() => {
+                                history.push('/feed')
+                            })
+                        })
+                }
+
+            }else{
+                // if i am re-saving
+                if(typeof values.file === "string"){
+                    let {file, ...data} = values
+                    db.ref('/feeds').child(type+'s').child(id).set({
+                        issueDate: Date.now(),
+                        url: file,
+                        ...data
+                    }).then(()=>{
+                        history.push('/feed')
+                    })
+                }
+                // db.ref('/feeds').child(type+'s').child(id).set({
+                //     issueDate: Date.now(),
+                //     ...values
+                // }).then(()=>{
+                //     history.push('/feed')
+                // })
+            }
+        }else{
+            // Create feed and save
+            if(values.file){
+                let file = values.file.target.files[0]
+                let uploadTask = storage().ref(`FeedsImages/${type+'s'}/${file.name}`).put(file)
+                uploadTask.on("state_changed", () => {},
+                    () => {},
+                    () => {
+                        storage()
+                            .ref("FeedsImages")
+                            .child(type+'s')
+                            .child(file.name)
+                            .getDownloadURL()
+                            .then(async (url) => {
+                                let {file, ...rest} = values
+                                try {
+                                    await db.ref('/feeds').child(`/${type}s`).push({
+                                        ...rest,
+                                        logo: url,
+                                        bodyText: type !== 'video' ? draftToHtml(convertToRaw(editor.getCurrentContent())) : '',
+                                        issueDate: Date.now(),
+                                        uid: userData.uid,
+                                        type: type,
+                                        isAdminApproved: false,
+                                        isAssetManagerApproved: false,
+                                        isPublish: isPublish
+                                    }).then((res) => {
+                                        let arr: any = res.toJSON()
+                                        let newArr = arr.split('/')
+                                        if(isPublish){
+                                            //create notification
+                                            db.ref('/notification').child('/feeds').child(`/${type}s`).push({
+                                                id: newArr[newArr.length - 1],
+                                                issueDate: Date.now()
+                                            }).then(() => {
+                                                history.push('/feed')
+                                            })
+                                        }else{
+                                            history.push('/feed')
+                                        }
+                                    })
+                                } catch (error) {
+                                    // alert('some error with sending message')
+                                    console.log(error.message)
+                                }
+                            })
+                    })
+            }else{
+                db.ref('/feeds').child(`/${type}s`).push({
+                    ...values,
+                    logo: '',
+                    bodyText: type !== 'video' ? draftToHtml(convertToRaw(editor.getCurrentContent())) : '',
+                    issueDate: Date.now(),
+                    uid: userData.uid,
+                    type: type,
+                    isAdminApproved: false,
+                    isAssetManagerApproved: false,
+                    isPublish: isPublish
+                }).then((res) => {
+                    let arr: any = res.toJSON()
+                    let newArr = arr.split('/')
+                    if(isPublish){
                         db.ref('/notification').child('/feeds').child(`/${type}s`).push({
-                            id: id,
+                            id: newArr[newArr.length - 1],
                             issueDate: Date.now()
                         }).then(() => {
                             history.push('/feed')
                         })
-                    })
-            }else{
-                db.ref('/feeds').child(type+'s').child(id).set({
-                    issueDate: Date.now(),
-                    ...values
-                }).then(()=>{
-                    history.push('/feed')
+                    }else{
+                        history.push('/feed')
+                    }
                 })
             }
-        }else{
-            db.ref('/feeds').child(`/${type}s`).push({
-                ...values,
-                bodyText: type !== 'video' ? draftToHtml(convertToRaw(editor.getCurrentContent())) : '',
-                issueDate: Date.now(),
-                uid: userData.uid,
-                type: type,
-                isAdminApproved: false,
-                isAssetManagerApproved: false,
-                isPublish: isPublish
-            }).then((res) => {
-                let arr: any = res.toJSON()
-                let newArr = arr.split('/')
-                if(isPublish){
-                    db.ref('/notification').child('/feeds').child(`/${type}s`).push({
-                        id: newArr[newArr.length - 1],
-                        issueDate: Date.now()
-                    }).then(() => {
-                        history.push('/feed')
-                    })
-                }else{
-                    history.push('/feed')
-                }
-            })
         }
     }
     const onApprove = () => {
@@ -175,6 +270,7 @@ function CreateFeed() {
                          errors,
                          initialValues,
                          isSubmitting,
+                         setFieldValue
                      }) => {
                         let {isPublish, isAdminApproved, isAssetManagerApproved} = values
                         let titleLength = 80
@@ -243,8 +339,12 @@ function CreateFeed() {
                                                                 previewImage: true,
                                                                 alt: {present: true, mandatory: false},
                                                                 inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
-                                                                visible: true,
-                                                                fileUpload: true,
+                                                                visible: false,
+                                                                icon: undefined,
+                                                                className: "removeImageUploader",
+                                                                component: undefined,
+                                                                popupClassName: undefined,
+                                                                fileUpload: false,
                                                                 url: true,
                                                             },
                                                         }}
@@ -253,8 +353,20 @@ function CreateFeed() {
                                             <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForMessage'}
                                                    title={`Add pimp & proof for $39.50`}/>
                                             <br/>
+                                            <ImageUploader id={id} setImage={()=>setFieldValue('file', '')} image={values.file} />
+                                            {
+                                                isPublish ? null : <label>
+                                                    <ImageUploader btn={true} image={values.file}/>
+                                                    <input id="file" name="file" type="file" onChange={(event) => {
+                                                        setFieldValue("file", event)
+                                                    }}
+                                                           accept="image/x-png,image/gif,image/jpeg"
+                                                           className="input-file"/>
+                                                </label>
+                                            }
                                             <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForImage'}
                                                    title={`Add image select & create service for $14.50`}/>
+
                                         </>
                                         : null
                                 }

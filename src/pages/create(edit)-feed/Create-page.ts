@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 export const CreatePageWrapper = styled.div`
     font-family: 'Gotham-Medium', sans-serif;
+    & .input-file{
+      display: none;
+    }
     & .btn__wrapper{
       display: grid;
       grid-template-columns: 1fr 1fr;
