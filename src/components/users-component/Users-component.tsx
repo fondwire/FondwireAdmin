@@ -32,25 +32,25 @@ type UserElementProps = {
     title: string
     email: string
     company: string
-    status: string
+    status: string | boolean
     id: string | number
 }
 export const UserElement:React.FC<UserElementProps> = ({id,title, email, company, status}) => {
-    const Status = status.toUpperCase()
+    const Status = status
     const [background, setBackground] = useState<string>('#a2a2a2')
 
     useEffect(()=> {
         switch (Status){
-            case 'REJECTED':
-                return setBackground('#a2a2a2')
-            case 'ACTIVE':
-                return setBackground('#51ef63')
-            case 'PENDING':
+            case false:
                 return setBackground('#ffe05d')
-            case 'SUSPENDED':
-                return setBackground('#fd5d5d')
+            case true:
+                return setBackground('#51ef63')
+            // case 'PENDING':
+            //     return setBackground('#ffe05d')
+            // case 'SUSPENDED':
+            //     return setBackground('#fd5d5d')
             default:
-                setBackground('#a2a2a2')
+                setBackground('#ffe05d')
         }
     }, [Status])
     return (
@@ -58,7 +58,7 @@ export const UserElement:React.FC<UserElementProps> = ({id,title, email, company
             <Link to={`user/${id}`} className={'title'}>{title}</Link>
             <div>{email}</div>
             <div>{company}</div>
-            <div className={'status'}><span>{Status}</span></div>
+            <div className={'status'}><span>{Status ? 'Verified' : 'Pending'}</span></div>
             <div>
                 <Action>
                     <div>ACTIVATE</div>

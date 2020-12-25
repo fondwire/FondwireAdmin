@@ -14,7 +14,6 @@ function UsersPage() {
     })
     const [pending, setPending] = useState(true)
     const [users, setUsers] = useState<any>([])
-
     useEffect(()=>{
         getData('/users', state, setUsers, setPending)
     }, [state, state.userData])
@@ -33,7 +32,7 @@ function UsersPage() {
                     title={user.fullname}
                     email={user.email}
                     company={user.companyName}
-                    status={user.status ? user.status : 'pending'}
+                    status={user.verified ? user.verified : false}
                     id={user.id}/>)
             }
             {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'Active'} />*/}

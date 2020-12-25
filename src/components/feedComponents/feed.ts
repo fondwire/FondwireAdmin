@@ -5,4 +5,5 @@ export interface UserType {
     id: string | number
     fullname: string
     status: string
+    verified: boolean
 }

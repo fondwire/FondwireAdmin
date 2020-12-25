@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {useParams, useHistory} from 'react-router-dom';
 import {CreatePageWrapper} from './Create-page';
 import {Formik, Field, Form, FormikValues} from "formik";
@@ -16,6 +16,7 @@ import Preloader from "../../utils/preloader/preloader";
 import htmlToDraft from 'html-to-draftjs'
 import ImageUploader from "../../components/image-uploader/ImageUploader";
 import { storage } from 'firebase';
+import reducer from "../../state/RootReducer";
 
 const validateFormik = {
     title: Yup.string()
@@ -49,7 +50,10 @@ let initialVal = {
     file: ''
 }
 function CreateFeed() {
-    const {id, type} = useParams()
+    const [state] = useReducer(reducer, {
+        userData: JSON.parse(localStorage.getItem('userData') as string),
+    })
+    const {id, type, notificationId} = useParams()
     const history = useHistory()
     const [status, setStatus] = useState('New feed')
     const [editor, setEditor] = useState<any>(EditorState?.createEmpty())
@@ -227,13 +231,51 @@ function CreateFeed() {
                 history.push('/feed')
             })
     }
+    const onAdminApprove = (values:FormikValues) => {
+        let {file, ...value} = values
+        if(typeof file !== 'string'){
+            let uploadTask = storage().ref(`FeedsImages/${type+'s'}/${file.name}`).put(file)
+            uploadTask.on("state_changed", () => {},
+                () => {},
+                () => {
+                    storage()
+                        .ref("FeedsImages")
+                        .child(type+'s')
+                        .child(file.name)
+                        .getDownloadURL()
+                        .then(async (url) => {
+                            let {file, ...rest} = values
+                            db.ref('/feeds').child(type + 's').child(id).set({
+                                url: url,
+                                isAdminApproved: true,
+                                ...rest
+                            }).then(() => {
+                                db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
+                                    // alert('success set and removed')
+                                    // setPending(true)
+                                    window.location.href = '/notifications'
+                                })
+                            })
+                        })})
+        }else {
+            db.ref('/feeds').child(type + 's').child(id).set({
+                url: file,
+                isAdminApproved: true,
+                ...value
+            }).then(() => {
+                db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
+                    // alert('success set and removed')
+                    // setPending(true)
+                    window.location.href = '/notifications'
+                })
+            })
+        }
+    }
     const MAX_LENGTH = 1000
     const _handleBeforeInput = () => {
         const currentContent = editor.getCurrentContent();
         const currentContentLength = currentContent.getPlainText('').length
-        // console.log(currentContentLength)
         if (currentContentLength > MAX_LENGTH - 1) {
-            // console.log('you can type max ten characters');
             return 'handled';
         }
     }
@@ -283,18 +325,18 @@ function CreateFeed() {
                         const editLen = editor?.getCurrentContent().getPlainText('').length
                         const isVideo = type !== 'video' ? !editLen : false
                         // console.log(editLen)
-
+                        const isAdminIsPublish = !state.userData.isAdmin && isPublish
                         return (
                             <Form>
-                                <Field disabled={isPublish} as={FeedCreateInput} name={'title'} status={!!titleLength}
+                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput} name={'title'} status={!!titleLength}
                                        title={`Title (${titleLength})`} maxLength={'80'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTitle'} title={`Add pimp & proof for $14.50`}/>
                                 <br/>
-                                <Field disabled={isPublish} as={FeedCreateInput} name={'teaser'} status={!!teaserLength}
+                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput} name={'teaser'} status={!!teaserLength}
                                        title={`Teaser (${teaserLength})`} maxLength={'100'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'} title={`Add pimp & proof for $14.50`}/>
                                 <br/>
-                                <Field disabled={isPublish} as={FeedCreateInput} name={'link'}
+                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput} name={'link'}
                                        title={'Link to external article (optional)'}/>
                                 <br/>
                                 <br/>
@@ -304,7 +346,7 @@ function CreateFeed() {
                                             <span className={ MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>Body text ({MAX_LENGTH - editLen})</span>
                                             <br/>
                                             {
-                                                isPublish || isAdminApproved
+                                                isAdminIsPublish  || isAdminApproved
                                                     ? <div
                                                         className="body__container"
                                                         dangerouslySetInnerHTML={{__html: draftToHtml(convertToRaw(editor.getCurrentContent()))}}
@@ -355,7 +397,7 @@ function CreateFeed() {
                                             <br/>
                                             <ImageUploader id={id} setImage={()=>setFieldValue('file', '')} image={values.file} />
                                             {
-                                                isPublish ? null : <label>
+                                                isAdminIsPublish ? null : <label>
                                                     <ImageUploader btn={true} image={values.file}/>
                                                     <input id="file" name="file" type="file" onChange={(event) => {
                                                         setFieldValue("file", event)
@@ -372,7 +414,9 @@ function CreateFeed() {
                                 }
                                 <div className={'btn__wrapper'}>
                                     {
-                                        isPublish ? <div/> : <SubmitButton
+                                        isPublish ? <div/>
+                                        // submit by Manager to save feed
+                                        : <SubmitButton
                                             disabled={!hasChanged || hasErrors || isSubmitting || isVideo}
                                             type={'button'}
                                             onClick={()=>{
@@ -408,11 +452,47 @@ function CreateFeed() {
                                         </SubmitButton>
                                     }
                                     {
+                                        state.userData.isAdmin
+                                            ? <SubmitButton
+                                                type={"button"}
+                                                onClick={()=>{
+                                                    Swal.fire({
+                                                        icon: "success",
+                                                        showCloseButton: true,
+                                                        confirmButtonText: "Submit",
+                                                        html: `
+                                                    <div class="save__wrapper">
+                                                        <div class="step__wrapper">
+                                                            <span class="step__number">1. </span>
+                                                            <span class="step__text">This is first step to submit.</span>
+                                                        </div>
+                                                        <div class="step__wrapper">
+                                                            <span class="step__number">2. </span>
+                                                            <span class="step__text">This is first step.</span>
+                                                        </div>
+                                                        <div class="step__wrapper">
+                                                            <span class="step__number">3. </span>
+                                                            <span class="step__text">This is first step.</span>
+                                                        </div>
+                                                    </div>
+                                                `
+                                                    }).then((result)=>{
+                                                        if(result.isConfirmed){
+                                                            onAdminApprove(values)
+                                                        }
+                                                    })
+                                                }}
+                                            >Approve</SubmitButton>
+                                            : null
+                                    }
+                                    {
                                         isPublish && isAdminApproved && isAssetManagerApproved
                                             ? null
                                             : !isAssetManagerApproved && !isAdminApproved && isPublish
+                                            // Approve by Super-Admin
                                             ? null
                                             : isAdminApproved && isPublish
+                                            //    Approve by Asset-Manager
                                             ? <SubmitButton
                                                 type={"button"}
                                                 onClick={()=>{
@@ -443,6 +523,7 @@ function CreateFeed() {
                                                     })
                                                 }}
                                             >Approve</SubmitButton>
+                                            //    onSubmit by Manager to create feed
                                             : <SubmitButton
                                                 disabled={isVideo || !hasChanged || hasErrors || isSubmitting }
                                                 onClick={()=>{
