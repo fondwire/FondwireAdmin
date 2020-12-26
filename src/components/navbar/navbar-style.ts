@@ -17,6 +17,11 @@ export const NavbarWrapper = styled.div`
       height: 100%;
     }
   }
+  &>.language{
+    position: fixed;
+    bottom: 25px;
+    left: 33px;
+  }
 `
 
 export const NavList = styled.div`

@@ -1,0 +1,20 @@
+.language{
+    display: flex;
+    justify-content: space-around;
+    /*border: 2px solid #2f9dfb;*/
+    width: 100px;
+    /*border-radius: 10px;*/
+}
+.lg_change{
+    /*padding: 0 5px;*/
+    height: 30px;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lg_change>img{
+    width: auto;
+    height: 100%;
+}
