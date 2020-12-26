@@ -141,6 +141,7 @@ const initialValueSignUp = {
 }
 export const SignUp = () => {
     // const {dispatch} = useContext(MyContext)
+    const history = useHistory()
     return (
         <SignInWrapper>
             <div className={'title'}>
@@ -150,18 +151,20 @@ export const SignUp = () => {
                 initialValues={initialValueSignUp}
                 validationSchema={Yup.object().shape(validateFormikSignUp)}
                 onSubmit={(values)=>{
-                    alert(JSON.stringify(values))
-                    firestore().collection('mail').add({
-                        to: 'aman_A00@mail.ru',
-                        message: {
-                            subject: 'Hello from Firebase!',
-                            html: 'This is an <code>HTML</code> email body.',
-                        },
-                    }).then((res)=>{
-                        console.log(res)
-                        alert('Success')
+                    firestore().collection('mail').add(values).then(()=>{
+                        Swal.fire({
+                            icon: 'success',
+                            title: `<div class="medium">Message sent.</div>`,
+                            html: ` <div class="save__wrapper"> Some message. </div>  `
+                        }).then(()=>{
+                            history.push('/')
+                        })
                     }, (error)=>{
-                        console.log(error)
+                        Swal.fire({
+                            icon: 'error',
+                            title: '<div class="medium">Something wend wrong, try later.</div>',
+                            html: ` <div class="save__wrapper"> ${error} </div>  `
+                        }).then(()=>{})
                     })
                 }}
             >

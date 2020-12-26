@@ -78,6 +78,9 @@
     opacity: 0;
     visibility: hidden;
 }
+.medium{
+    font-family: 'Gotham-Medium', sans-serif;
+}
 .save__wrapper{
     font-family: 'Gotham Book', sans-serif;
 }
