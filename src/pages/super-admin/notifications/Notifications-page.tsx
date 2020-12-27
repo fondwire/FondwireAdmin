@@ -82,7 +82,7 @@ const NotificationsPage:React.FC<NotificationsPageProps> = (props) => {
             {
                 props.data.map((item:FeedType) => {
                     if(item.isFeed){
-                        return <CompaniesElement notificationId={item.notificationId} type={item.type} key={item.issueDate} id={item.id} title={item.title} manager={'Test Data'} company={5} email={item.type.toUpperCase()} />
+                        return <CompaniesElement notificationId={item.notificationId} type={item.type} key={item.issueDate} id={item.id} title={item.title} manager={item.fullname} company={item.companyName} email={item.type.toUpperCase()} />
                     }else{
                         return <CompaniesElement notificationId={item.notificationId} type={item.type} key={item.id} id={item.id} title={'NEW ACCOUNT REQUEST'} manager={'Aman'} company={5} email={'user'} />
                     }

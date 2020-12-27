@@ -49,7 +49,7 @@ let initialVal = {
     proofForImage: false,
     file: ''
 }
-function CreateFeed() {
+const CreateFeed = React.memo(() => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
@@ -59,6 +59,7 @@ function CreateFeed() {
     const [editor, setEditor] = useState<any>(EditorState?.createEmpty())
     const [pending, setPending] = useState(true)
     const [initialValue, setInitialValue] = useState<any>(initialVal)
+    // console.log(initialValue)
     // console.log(editor?.getCurrentContent().getPlainText('').length)
     const [userData] = useState(JSON.parse(localStorage.getItem('userData') as string))
     useEffect(() => {
@@ -66,10 +67,8 @@ function CreateFeed() {
             setStatus(`Feed id: ${id}`)
             db.ref('/feeds').child(type+'s').child(id).once('value', (snapshot)=>{
                 return snapshot.toJSON()
-            }).then((data)=>{
-                // @ts-ignore
+            }).then((data:any)=>{
                 setInitialValue({file: data.toJSON()?.logo,...data.toJSON()})
-                // @ts-ignore
                 const blocksFromHtml = htmlToDraft(data.toJSON()?.bodyText);
                 const { contentBlocks, entityMap } = blocksFromHtml;
                 const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
@@ -84,7 +83,19 @@ function CreateFeed() {
             }, 1000)
         }
     }, [id, type])
-    const onSubmit = (values: FormikValues, isPublish:boolean) => {
+    const onSubmit = async (values: FormikValues, isPublish:boolean) => {
+        await db.ref('users').child(state.userData.id).once('value', (s) => {
+            return s.toJSON()
+        }).then((res: any) => {
+            let data  = {
+                fullname: res.toJSON()?.fullname,
+                companyName: res.toJSON()?.companyName,
+                ...values
+            }
+            onSub(data, isPublish)
+        })
+    }
+    const onSub = async (values: FormikValues, isPublish:boolean) => {
         if(id){
             // update the feed
             if(isPublish){
@@ -566,7 +577,7 @@ function CreateFeed() {
             </Formik>
         </CreatePageWrapper>
     );
-}
+})
 
 
 export default CreateFeed;

@@ -68,10 +68,15 @@ export const SignIn = () => {
                                 if(!data.isAdmin){
                                     let ref = db.ref('/users')
                                     ref.orderByChild("email").on("child_added", function(snapshot) {
+                                        // console.log(snapshot.key)
                                         if(snapshot.val().email === data.email){
                                             // console.log(snapshot.key + " : " + snapshot.val().email );
                                             // console.log(snapshot.val().verified)
-                                            data = {verified: snapshot.val().verified ? snapshot.val().verified : false, ...data }
+                                            data = {
+                                                verified: snapshot.val().verified ? snapshot.val().verified : false,
+                                                id: snapshot.key,
+                                                ...data
+                                            }
                                             localStorage.setItem('userData', JSON.stringify(data))
                                             dispatch({
                                                 type: SIGN_IN_TYPE,

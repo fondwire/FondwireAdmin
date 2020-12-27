@@ -24,6 +24,8 @@ export type FeedType = {
     isAssetManagerApproved: boolean
     isFeed: boolean
     isPublish: boolean
+    fullname: string
+    companyName: string
 }
 
 type DashboardPropsType = {
