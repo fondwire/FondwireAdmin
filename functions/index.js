@@ -16,8 +16,8 @@ exports.sendEmailNotification = functions.firestore.document('/mail/{mailId}').o
         const data = await snapshot.data()
         const mailOptions = {
             from: '"Fundwire manager request" <info.fundwire@gmail.com>', // Something like: Jane Doe <janedoe@gmail.com>
-            to: "aman_A00@mail.ru",
-            subject: 'Hello from subject', // email subject
+            to: "fintechfondwireapp@gmail.com",
+            subject: `<div>${data.fullname}</div>`, // email subject
             html: `
                 <div>
                     <div> <b>Fullname: </b> <span>${data.fullname}</span> </div>

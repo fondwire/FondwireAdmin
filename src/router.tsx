@@ -38,7 +38,7 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
                 {
                     state.userData.isAdmin
                         ? <Switch>
-                            <Route path={'/users'}>
+                            <Route path={'/managers'}>
                                 <Users />
                             </Route>
                             <Route path={'/companies'}>
@@ -51,7 +51,7 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
                             <Route path={'/notifications'}>
                                 <NotificationsPage setPending={setPending} data={notifications} />
                             </Route>
-                            <Redirect to={'/users'}/>
+                            <Redirect to={'/managers'}/>
                         </Switch>
                         : <Switch>
                             <Route path={'/dashboard'}>

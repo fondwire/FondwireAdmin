@@ -33,7 +33,7 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
                             <NavLink to={'/settings'}>{t("settings")}</NavLink>
                         </>
                         : <>
-                            <NavLink to={'/users'}>Users</NavLink>
+                            <NavLink to={'/managers'}>Managers</NavLink>
                             <NavLink to={'/companies'}>Companies</NavLink>
                             <NavLink to={'/notifications'}>
                                 Notifications

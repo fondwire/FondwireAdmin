@@ -15,7 +15,7 @@ import Swal from "sweetalert2";
 import Preloader from "../../utils/preloader/preloader";
 import htmlToDraft from 'html-to-draftjs'
 import ImageUploader from "../../components/image-uploader/ImageUploader";
-import { storage } from 'firebase';
+import {storage} from 'firebase';
 import reducer from "../../state/RootReducer";
 
 const validateFormik = {
@@ -65,29 +65,44 @@ const CreateFeed = React.memo(() => {
     useEffect(() => {
         if (id) {
             setStatus(`Feed id: ${id}`)
-            db.ref('/feeds').child(type+'s').child(id).once('value', (snapshot)=>{
+            db.ref('/feeds').child(type + 's').child(id).once('value', (snapshot) => {
                 return snapshot.toJSON()
-            }).then((data:any)=>{
-                setInitialValue({file: data.toJSON()?.logo,...data.toJSON()})
-                const blocksFromHtml = htmlToDraft(data.toJSON()?.bodyText);
-                const { contentBlocks, entityMap } = blocksFromHtml;
-                const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-                const editorState = EditorState.createWithContent(contentState);
-                setEditor(editorState)
-                setPending(false)
+            }).then((data: any) => {
+                if (data.toJSON()) {
+                    setInitialValue({file: data.toJSON()?.logo, ...data.toJSON()})
+                    const blocksFromHtml = htmlToDraft(data.toJSON()?.bodyText);
+                    const {contentBlocks, entityMap} = blocksFromHtml;
+                    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+                    const editorState = EditorState.createWithContent(contentState);
+                    setEditor(editorState)
+                    setPending(false)
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        html: `
+                            <div class="save__wrapper">
+                                <div class="step__wrapper">
+                                   Feed is not found.
+                                </div>
+                            </div> 
+                        `
+                    }).then(()=>{
+                        history.goBack()
+                    })
+                }
             })
         } else {
             setStatus('new feed')
-            setTimeout(()=>{
+            setTimeout(() => {
                 setPending(false)
             }, 1000)
         }
-    }, [id, type])
-    const onSubmit = async (values: FormikValues, isPublish:boolean) => {
+    }, [id, type, history])
+    const onSubmit = async (values: FormikValues, isPublish: boolean) => {
         await db.ref('users').child(state.userData.id).once('value', (s) => {
             return s.toJSON()
         }).then((res: any) => {
-            let data  = {
+            let data = {
                 fullname: res.toJSON()?.fullname,
                 companyName: res.toJSON()?.companyName,
                 ...values
@@ -95,27 +110,29 @@ const CreateFeed = React.memo(() => {
             onSub(data, isPublish)
         })
     }
-    const onSub = async (values: FormikValues, isPublish:boolean) => {
-        if(id){
+    const onSub = async (values: FormikValues, isPublish: boolean) => {
+        if (id) {
             // update the feed
-            if(isPublish){
+            if (isPublish) {
                 // if i am submitting
-                if(typeof values.file !== "string"){
+                if (typeof values.file !== "string") {
                     let file = values.file.target.files[0]
-                    let uploadTask = storage().ref(`FeedsImages/${type+'s'}/${file.name}`).put(file)
-                    uploadTask.on("state_changed", () => {},
-                        () => {},
+                    let uploadTask = storage().ref(`FeedsImages/${type + 's'}/${file.name}`).put(file)
+                    uploadTask.on("state_changed", () => {
+                        },
+                        () => {
+                        },
                         () => {
                             storage()
                                 .ref("FeedsImages")
-                                .child(type+'s')
+                                .child(type + 's')
                                 .child(file.name)
                                 .getDownloadURL()
                                 .then(async (url) => {
-                                    db.ref('/feeds').child(type+'s').child(id).child('logo').set(url)
-                                        .then(()=>{
-                                            db.ref('/feeds').child(type+'s').child(id).child('isPublish').set(true)
-                                                .then(()=>{
+                                    db.ref('/feeds').child(type + 's').child(id).child('logo').set(url)
+                                        .then(() => {
+                                            db.ref('/feeds').child(type + 's').child(id).child('isPublish').set(true)
+                                                .then(() => {
                                                     db.ref('/notification').child('/feeds').child(`/${type}s`).push({
                                                         id: id,
                                                         issueDate: Date.now()
@@ -124,11 +141,12 @@ const CreateFeed = React.memo(() => {
                                                     })
                                                 })
                                         })
-                                })})
+                                })
+                        })
 
-                }else{
-                    db.ref('/feeds').child(type+'s').child(id).child('isPublish').set(true)
-                        .then(()=>{
+                } else {
+                    db.ref('/feeds').child(type + 's').child(id).child('isPublish').set(true)
+                        .then(() => {
                             db.ref('/notification').child('/feeds').child(`/${type}s`).push({
                                 id: id,
                                 issueDate: Date.now()
@@ -138,15 +156,15 @@ const CreateFeed = React.memo(() => {
                         })
                 }
 
-            }else{
+            } else {
                 // if i am re-saving
-                if(typeof values.file === "string"){
+                if (typeof values.file === "string") {
                     let {file, ...data} = values
-                    db.ref('/feeds').child(type+'s').child(id).set({
+                    db.ref('/feeds').child(type + 's').child(id).set({
                         issueDate: Date.now(),
                         url: file,
                         ...data
-                    }).then(()=>{
+                    }).then(() => {
                         history.push('/feed')
                     })
                 }
@@ -157,17 +175,19 @@ const CreateFeed = React.memo(() => {
                 //     history.push('/feed')
                 // })
             }
-        }else{
+        } else {
             // Create feed and save
-            if(values.file){
+            if (values.file) {
                 let file = values.file.target.files[0]
-                let uploadTask = storage().ref(`FeedsImages/${type+'s'}/${file.name}`).put(file)
-                uploadTask.on("state_changed", () => {},
-                    () => {},
+                let uploadTask = storage().ref(`FeedsImages/${type + 's'}/${file.name}`).put(file)
+                uploadTask.on("state_changed", () => {
+                    },
+                    () => {
+                    },
                     () => {
                         storage()
                             .ref("FeedsImages")
-                            .child(type+'s')
+                            .child(type + 's')
                             .child(file.name)
                             .getDownloadURL()
                             .then(async (url) => {
@@ -186,7 +206,7 @@ const CreateFeed = React.memo(() => {
                                     }).then((res) => {
                                         let arr: any = res.toJSON()
                                         let newArr = arr.split('/')
-                                        if(isPublish){
+                                        if (isPublish) {
                                             //create notification
                                             db.ref('/notification').child('/feeds').child(`/${type}s`).push({
                                                 id: newArr[newArr.length - 1],
@@ -194,7 +214,7 @@ const CreateFeed = React.memo(() => {
                                             }).then(() => {
                                                 history.push('/feed')
                                             })
-                                        }else{
+                                        } else {
                                             history.push('/feed')
                                         }
                                     })
@@ -204,7 +224,7 @@ const CreateFeed = React.memo(() => {
                                 }
                             })
                     })
-            }else{
+            } else {
                 db.ref('/feeds').child(`/${type}s`).push({
                     ...values,
                     logo: '',
@@ -218,14 +238,14 @@ const CreateFeed = React.memo(() => {
                 }).then((res) => {
                     let arr: any = res.toJSON()
                     let newArr = arr.split('/')
-                    if(isPublish){
+                    if (isPublish) {
                         db.ref('/notification').child('/feeds').child(`/${type}s`).push({
                             id: newArr[newArr.length - 1],
                             issueDate: Date.now()
                         }).then(() => {
                             history.push('/feed')
                         })
-                    }else{
+                    } else {
                         history.push('/feed')
                     }
                 })
@@ -234,24 +254,26 @@ const CreateFeed = React.memo(() => {
     }
     const onApprove = () => {
         db.ref('/feeds')
-            .child(type+'s')
+            .child(type + 's')
             .child(id)
             .child('isAssetManagerApproved')
             .set(true)
-            .then(()=>{
+            .then(() => {
                 history.push('/feed')
             })
     }
-    const onAdminApprove = (values:FormikValues) => {
+    const onAdminApprove = (values: FormikValues) => {
         let {file, ...value} = values
-        if(typeof file !== 'string'){
-            let uploadTask = storage().ref(`FeedsImages/${type+'s'}/${file.name}`).put(file)
-            uploadTask.on("state_changed", () => {},
-                () => {},
+        if (typeof file !== 'string') {
+            let uploadTask = storage().ref(`FeedsImages/${type + 's'}/${file.name}`).put(file)
+            uploadTask.on("state_changed", () => {
+                },
+                () => {
+                },
                 () => {
                     storage()
                         .ref("FeedsImages")
-                        .child(type+'s')
+                        .child(type + 's')
                         .child(file.name)
                         .getDownloadURL()
                         .then(async (url) => {
@@ -267,8 +289,9 @@ const CreateFeed = React.memo(() => {
                                     window.location.href = '/notifications'
                                 })
                             })
-                        })})
-        }else {
+                        })
+                })
+        } else {
             db.ref('/feeds').child(type + 's').child(id).set({
                 url: file,
                 isAdminApproved: true,
@@ -291,7 +314,7 @@ const CreateFeed = React.memo(() => {
         }
     }
 
-    const _handlePastedText = (pastedText:any) => {
+    const _handlePastedText = (pastedText: any) => {
         const currentContent = editor.getCurrentContent();
         const currentContentLength = currentContent.getPlainText('').length
 
@@ -300,7 +323,7 @@ const CreateFeed = React.memo(() => {
             return 'handled';
         }
     }
-    if(pending) return <div className={'preloaderWrapper'}><Preloader/></div>
+    if (pending) return <div className={'preloaderWrapper'}><Preloader/></div>
     return (
         <CreatePageWrapper>
             <div>
@@ -314,7 +337,8 @@ const CreateFeed = React.memo(() => {
             </div>
             <Formik
                 initialValues={initialValue}
-                onSubmit={()=>{}}
+                onSubmit={() => {
+                }}
                 validationSchema={Yup.object().shape(validateFormik)}
             >
                 {
@@ -339,25 +363,30 @@ const CreateFeed = React.memo(() => {
                         const isAdminIsPublish = !state.userData.isAdmin && isPublish
                         return (
                             <Form>
-                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput} name={'title'} status={!!titleLength}
+                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput}
+                                       name={'title'} status={!!titleLength}
                                        title={`Title (${titleLength})`} maxLength={'80'}/>
-                                <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTitle'} title={`Add pimp & proof for $14.50`}/>
+                                <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTitle'}
+                                       title={`Add pimp & proof for $14.50`}/>
                                 <br/>
-                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput} name={'teaser'} status={!!teaserLength}
+                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput}
+                                       name={'teaser'} status={!!teaserLength}
                                        title={`Teaser (${teaserLength})`} maxLength={'100'}/>
-                                <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'} title={`Add pimp & proof for $14.50`}/>
+                                <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'}
+                                       title={`Add pimp & proof for $14.50`}/>
                                 <br/>
-                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput} name={'link'}
+                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput}
+                                       name={'link'}
                                        title={'Link to external article (optional)'}/>
                                 <br/>
                                 <br/>
                                 {
                                     type !== 'video'
                                         ? <>
-                                            <span className={ MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>Body text ({MAX_LENGTH - editLen})</span>
+                                            <span className={MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>Body text ({MAX_LENGTH - editLen})</span>
                                             <br/>
                                             {
-                                                isAdminIsPublish  || isAdminApproved
+                                                isAdminIsPublish || isAdminApproved
                                                     ? <div
                                                         className="body__container"
                                                         dangerouslySetInnerHTML={{__html: draftToHtml(convertToRaw(editor.getCurrentContent()))}}
@@ -406,7 +435,8 @@ const CreateFeed = React.memo(() => {
                                             <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForMessage'}
                                                    title={`Add pimp & proof for $39.50`}/>
                                             <br/>
-                                            <ImageUploader id={id} setImage={()=>setFieldValue('file', '')} image={values.file} />
+                                            <ImageUploader id={id} setImage={() => setFieldValue('file', '')}
+                                                           image={values.file}/>
                                             {
                                                 isAdminIsPublish ? null : <label>
                                                     <ImageUploader btn={true} image={values.file}/>
@@ -426,17 +456,17 @@ const CreateFeed = React.memo(() => {
                                 <div className={'btn__wrapper'}>
                                     {
                                         isPublish ? <div/>
-                                        // submit by Manager to save feed
-                                        : <SubmitButton
-                                            disabled={!hasChanged || hasErrors || isSubmitting || isVideo}
-                                            type={'button'}
-                                            onClick={()=>{
-                                                Swal.fire({
-                                                    icon: "info",
-                                                    showCloseButton: true,
-                                                    confirmButtonText: 'Save',
-                                                    // showDenyButton: true,
-                                                    html: `
+                                            // submit by Manager to save feed
+                                            : <SubmitButton
+                                                disabled={!hasChanged || hasErrors || isSubmitting || isVideo}
+                                                type={'button'}
+                                                onClick={() => {
+                                                    Swal.fire({
+                                                        icon: "info",
+                                                        showCloseButton: true,
+                                                        confirmButtonText: 'Save',
+                                                        // showDenyButton: true,
+                                                        html: `
                                                     <div class="save__wrapper">
                                                         <div class="step__wrapper">
                                                             <span class="step__number">1. </span>
@@ -452,21 +482,21 @@ const CreateFeed = React.memo(() => {
                                                         </div>
                                                     </div>
                                                 `
-                                                }).then((result)=>{
-                                                    if(result.isConfirmed){
-                                                        onSubmit(values, false)
-                                                    }
-                                                })
-                                            }}
-                                        >
-                                            save
-                                        </SubmitButton>
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            onSubmit(values, false)
+                                                        }
+                                                    })
+                                                }}
+                                            >
+                                                save
+                                            </SubmitButton>
                                     }
                                     {
                                         state.userData.isAdmin
                                             ? <SubmitButton
                                                 type={"button"}
-                                                onClick={()=>{
+                                                onClick={() => {
                                                     Swal.fire({
                                                         icon: "success",
                                                         showCloseButton: true,
@@ -487,8 +517,8 @@ const CreateFeed = React.memo(() => {
                                                         </div>
                                                     </div>
                                                 `
-                                                    }).then((result)=>{
-                                                        if(result.isConfirmed){
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
                                                             onAdminApprove(values)
                                                         }
                                                     })
@@ -503,15 +533,15 @@ const CreateFeed = React.memo(() => {
                                             // Approve by Super-Admin
                                             ? null
                                             : isAdminApproved && isPublish
-                                            //    Approve by Asset-Manager
-                                            ? <SubmitButton
-                                                type={"button"}
-                                                onClick={()=>{
-                                                    Swal.fire({
-                                                        icon: "success",
-                                                        showCloseButton: true,
-                                                        confirmButtonText: "Submit",
-                                                        html: `
+                                                //    Approve by Asset-Manager
+                                                ? <SubmitButton
+                                                    type={"button"}
+                                                    onClick={() => {
+                                                        Swal.fire({
+                                                            icon: "success",
+                                                            showCloseButton: true,
+                                                            confirmButtonText: "Submit",
+                                                            html: `
                                                     <div class="save__wrapper">
                                                         <div class="step__wrapper">
                                                             <span class="step__number">1. </span>
@@ -527,22 +557,22 @@ const CreateFeed = React.memo(() => {
                                                         </div>
                                                     </div>
                                                 `
-                                                    }).then((result)=>{
-                                                        if(result.isConfirmed){
-                                                            onApprove()
-                                                        }
-                                                    })
-                                                }}
-                                            >Approve</SubmitButton>
-                                            //    onSubmit by Manager to create feed
-                                            : <SubmitButton
-                                                disabled={isVideo || !hasChanged || hasErrors || isSubmitting }
-                                                onClick={()=>{
-                                                    Swal.fire({
-                                                        icon: "success",
-                                                        showCloseButton: true,
-                                                        confirmButtonText: "Submit",
-                                                        html: `
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                onApprove()
+                                                            }
+                                                        })
+                                                    }}
+                                                >Approve</SubmitButton>
+                                                //    onSubmit by Manager to create feed
+                                                : <SubmitButton
+                                                    disabled={isVideo || !hasChanged || hasErrors || isSubmitting}
+                                                    onClick={() => {
+                                                        Swal.fire({
+                                                            icon: "success",
+                                                            showCloseButton: true,
+                                                            confirmButtonText: "Submit",
+                                                            html: `
                                                     <div class="save__wrapper">
                                                         <div class="step__wrapper">
                                                             <span class="step__number">1. </span>
@@ -558,16 +588,16 @@ const CreateFeed = React.memo(() => {
                                                         </div>
                                                     </div>
                                                 `
-                                                    }).then((result)=>{
-                                                        if(result.isConfirmed){
-                                                            onSubmit(values, true)
-                                                        }
-                                                    })
-                                                }}
-                                                type={'button'}
-                                            >
-                                                submit
-                                            </SubmitButton>
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                onSubmit(values, true)
+                                                            }
+                                                        })
+                                                    }}
+                                                    type={'button'}
+                                                >
+                                                    submit
+                                                </SubmitButton>
                                     }
                                 </div>
                             </Form>

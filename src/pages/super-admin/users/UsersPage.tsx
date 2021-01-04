@@ -21,7 +21,7 @@ function UsersPage() {
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
         <DashboardWrapper>
-            <h3>WELCOME TO ADMIN PANEL</h3>
+            <h3>ADMIN PANEL</h3>
             <div className={'title'}>
                 <h3>USERS</h3>
             </div>
