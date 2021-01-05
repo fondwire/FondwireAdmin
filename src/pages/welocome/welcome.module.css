@@ -1,0 +1,80 @@
+.section1,.section2,.section3, .section4{
+    padding: 90px 8% 0 8%;
+    height: 100%;
+}
+.section1{
+    background: #1c1c1c;
+    display: flex;
+    justify-content: space-between;
+    color: #ffffff;
+}
+.menu{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    height: 90px;
+    width: 100%;
+    display: flex;
+    padding: 0 8%;
+    align-items: center;
+    justify-content: space-between;
+    color: #feff04;
+    font-size: 24px;
+    background: #1c1c1c;
+    font-family: 'Gotham-Bold', sans-serif;
+}
+.nav{
+    display: flex;
+}
+.nav>div, a{
+    color: #feff04;
+    text-decoration: none;
+    margin: 0 20px;
+    cursor: pointer;
+}
+.section2, .section4{
+    background: #ffffff;
+}
+.section3{
+    background: #feff04;
+}
+
+/*First section layout*/
+
+.description{
+    color: #fff;
+}
+.description>.title{
+    margin-top: 105px;
+    margin-bottom: 40px;
+    font-size: 32px;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Gotham Book', sans-serif;
+}
+.description>.title>strong{
+    margin-top: 15px;
+    font-size: 38px;
+}
+.description>.des{
+    width: 700px;
+    font-size: 23px;
+    font-family: 'Gotham Book', sans-serif;
+}
+.downloadWrapper{
+    margin-top: 50px;
+    height: 50px;
+}
+.downloadWrapper>img{
+    height: 100%;
+}
+.phoneWrapper{
+    width: 300px;
+    display: flex;
+    align-items: center;
+}
+.phoneWrapper>img{
+    width: 100%;
+}
+/*First section*/
