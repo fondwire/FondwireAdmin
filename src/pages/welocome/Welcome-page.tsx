@@ -163,7 +163,7 @@ const WelcomePage = () => {
                                 answer={'The answer text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod\n' +
                             'tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et\n' +
                             'accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,. '} id={1} />
-                            <List questions={'hello'} answer={'Hello'} id={1} />
+
 
                         </div>
                         <Footer>

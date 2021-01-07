@@ -13,6 +13,7 @@ import CompaniesPage from './pages/super-admin/companies/Companies-page';
 import NotificationsPage from "./pages/super-admin/notifications/Notifications-page";
 import {UserType} from "./components/feedComponents/feed";
 import Unverified from "./pages/unverified/Unverified";
+import AssetManage from "./pages/asset-manager/AssetManage";
 // import reducer from "./state/RootReducer";
 // import {getData} from "./App";
 // import {db} from "./firebase";
@@ -83,6 +84,9 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
             <Switch>
                 <Route exact path={'/'}>
                     <WelcomePage/>
+                </Route>
+                <Route exact path={'/asset-manager'}>
+                    <AssetManage />
                 </Route>
                 <Route exact path={'/sign-in'}>
                     <SignWrapper>
