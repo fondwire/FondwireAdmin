@@ -41,6 +41,7 @@ const Wrapper = styled.div`
     }
     &>.content{
       &>.description{
+        margin-top: 20px;
         width: 700px;
         font-size: 23px;
         font-family: 'Gotham Book', sans-serif;
@@ -57,6 +58,16 @@ const Wrapper = styled.div`
           font-size: 36px;
           font-family: 'Gotham-Bold', sans-serif;
         }
+      }
+      .contact{
+        margin-top: 30px;
+        display: inline-block;
+        border: 2px solid #000000;
+        padding: 10px 35px;
+        font-size: 24px;
+        font-family: 'Gotham-Bold', sans-serif;
+        border-radius: 20px;
+        cursor: pointer;
       }
     }
   }
@@ -85,7 +96,7 @@ function AssetManage() {
                             aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
                             duo dolores et ea rebum. Stet clita kasd gubergren,.
                         </div>
-                        <div>Contact</div>
+                        <div className={'contact'}>Contact</div>
                     </div>
                     <div className={'phoneWrapper'}>
                         <img
