@@ -24,6 +24,10 @@
     background: #1c1c1c;
     font-family: 'Gotham-Bold', sans-serif;
 }
+.menu>a{
+    color: #feff04;
+    text-decoration: none;
+}
 .nav{
     display: flex;
     align-items: center;
@@ -35,7 +39,7 @@
     padding: 5px 20px;
     border-radius: 30px;
 }
-.nav>div, a{
+.nav>div, .nav>a{
     color: #feff04;
     text-decoration: none;
     margin: 0 20px;

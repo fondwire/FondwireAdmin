@@ -7,7 +7,7 @@ import Feed from "./pages/feed/Feed";
 import SettingsPage from "./pages/settings/Settings-page";
 import CreateFeed from "./pages/create(edit)-feed";
 import WelcomePage from "./pages/welocome/Welcome-page";
-import SignWrapper, {Forgot, SignIn, SignUp} from "./pages/sign-in/Sign-in";
+// import SignWrapper, {Forgot, SignIn, SignUp} from "./pages/sign-in/Sign-in";
 import Users from './pages/super-admin/users/UsersPage';
 import CompaniesPage from './pages/super-admin/companies/Companies-page';
 import NotificationsPage from "./pages/super-admin/notifications/Notifications-page";
@@ -88,22 +88,22 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
                 <Route exact path={'/asset-manager'}>
                     <AssetManage />
                 </Route>
-                <Route exact path={'/sign-in'}>
-                    <SignWrapper>
-                        <SignIn/>
-                    </SignWrapper>
-                </Route>
-                <Route exact path={'/forgot'}>
-                    <SignWrapper>
-                        <Forgot />
-                    </SignWrapper>
-                </Route>
-                <Route exact path={'/sign-up'}>
-                    <SignWrapper>
-                        <SignUp/>
-                    </SignWrapper>
-                    {/*<SignIn/>*/}
-                </Route>
+                {/*<Route exact path={'/sign-in'}>*/}
+                {/*    <SignWrapper>*/}
+                {/*        <SignIn/>*/}
+                {/*    </SignWrapper>*/}
+                {/*</Route>*/}
+                {/*<Route exact path={'/forgot'}>*/}
+                {/*    <SignWrapper>*/}
+                {/*        <Forgot />*/}
+                {/*    </SignWrapper>*/}
+                {/*</Route>*/}
+                {/*<Route exact path={'/sign-up'}>*/}
+                {/*    <SignWrapper>*/}
+                {/*        <SignUp/>*/}
+                {/*    </SignWrapper>*/}
+                {/*    /!*<SignIn/>*!/*/}
+                {/*</Route>*/}
                 <Redirect to={'/'}/>
             </Switch>
         </div>
