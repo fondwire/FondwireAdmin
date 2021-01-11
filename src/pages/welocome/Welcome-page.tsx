@@ -4,6 +4,21 @@ import {SectionsContainer, Section, Header, Footer} from 'react-fullpage';
 import css from './welcome.module.css'
 import {Link} from 'react-router-dom';
 import Footer2 from '../../components/footer/Footer';
+// import Swal from "sweetalert2";
+import {Field, Form, Formik} from "formik";
+import * as Yup from "yup";
+// import {firestore} from "firebase";
+import {Input, TextArea} from "../../components/Auth-input/Auth-input";
+import Modal from "../../components/modal/modal";
+
+const validateFormikSignUp = {
+    email: Yup.string()
+        .required('Required'),
+    name: Yup.string()
+        .required('Required'),
+    phone: Yup.string()
+        .required('Required'),
+}
 
 const WelcomePage = () => {
     let options = {
@@ -15,6 +30,11 @@ const WelcomePage = () => {
         arrowNavigation:      true,
         height:               '100%'
     };
+    const [visible, setVisible] = useState(false)
+    const closeModal = () => {
+        setVisible(false)
+    }
+    // const history = useHistory()
     return (
         <>
             <Header>
@@ -92,7 +112,7 @@ const WelcomePage = () => {
                                 aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
                                 duo dolores et ea rebum. Stet clita kasd gubergren.
                             </div>
-                            <button className={`${css.contactBtn}`}>Open contact form</button>
+                            <button onClick={()=>setVisible(true)} className={`${css.contactBtn}`}>Open contact form</button>
                         </div>
                         <div className={css.phoneWrapper}>
                             <img src="https://cdn.tmobile.com/content/dam/t-mobile/en-p/cell-phones/apple/Apple-iPhone-12/Black/Apple-iPhone-12-Black-frontimage.png" alt=""/>
@@ -119,9 +139,74 @@ const WelcomePage = () => {
                     </div>
                 </Section>
             </SectionsContainer>
+            <Modal visible={visible} width="500" height="530" effect="fadeInUp" onClickAway={closeModal}>
+                <div className="modal-form-wrapper">
+                    <div className="modalTitle">SUPPORT REQUEST</div>
+                    <br/>
+                    <br/>
+                    <Formik
+                        initialValues={{
+                            email: '',
+                            name: '',
+                            phone: '',
+                            message: '',
+                            use: 'no'
+                        }}
+                        validationSchema={Yup.object().shape(validateFormikSignUp)}
+                        onSubmit={(values)=>{
+                            console.log(values)
+                            closeModal()
+                            // firestore().collection('mail').add(values).then(()=>{
+                            //     closeModal()
+                            //     Swal.fire({
+                            //         icon: 'success',
+                            //         title: `<div class="medium">Message sent.</div>`,
+                            //         html: ` <div class="save__wrapper"> Some message. </div>  `
+                            //     }).then(()=>{
+                            //         history.push('/')
+                            //     })
+                            // }, (error)=>{
+                            //     closeModal()
+                            //     Swal.fire({
+                            //         icon: 'error',
+                            //         title: '<div class="medium">Something wend wrong, try later.</div>',
+                            //         html: ` <div class="save__wrapper"> ${error} </div>  `
+                            //     }).then(()=>{})
+                            // })
+                        }}
+                    >
+                        {
+                            ({
+                                 touched,
+                                 errors,
+                             }) => {
+                                return (
+                                    <Form>
+                                        <Field as={Input} placeholder="YOUR NAME" errors={errors} touched={touched} title={'Full Name'} type={'text'} name={'name'}/>
+                                        <Field as={Input} placeholder="EMAIL" errors={errors} touched={touched} title={'Email'} type={'email'} name={'email'}/>
+                                        <Field as={Input} placeholder="PHONE" errors={errors} touched={touched} title={'phone'} type={'text'} name={'phone'}/>
+                                        <div className="use-app">
+                                            <span>Do you use our app already? if yes, which?</span>
+                                            <select name={'use'}>
+                                                <option value="no">No</option>
+                                                <option value="IOS">IOS</option>
+                                                <option value="android">Android</option>
+                                            </select>
+                                        </div>
+                                        <Field as={TextArea} rows={5} style={{maxHeight: '100px'}} placeholder="MESSAGE" errors={errors} touched={touched} title={'Message'} name={'message'}/>
+                                        <br/>
+                                        <button type={'submit'} className="modal-submit">Submit</button>
+                                    </Form>
+                                )
+                            }}
+                    </Formik>
+                </div>
+            </Modal>
         </>
     )
 }
+
+
 
 function useOuterClick(callback: any) {
     const innerRef = useRef();
