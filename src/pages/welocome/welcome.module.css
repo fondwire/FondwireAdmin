@@ -28,6 +28,12 @@
     color: #feff04;
     text-decoration: none;
 }
+.menu>a>div{
+    height: 90px;
+}
+.menu>a>div>img{
+    height: 100%;
+}
 .nav{
     display: flex;
     align-items: center;

@@ -11,7 +11,7 @@ import  {Input, TextArea} from "../../components/Auth-input/Auth-input";
 import {db, signInFirebase} from "../../firebase";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import {MyContext} from "../../App";
-
+import blackLogo from '../../images/darkLogo.png'
 
 const Wrapper = styled.div`
   padding: 0 8%;
@@ -27,6 +27,12 @@ const Wrapper = styled.div`
     color: black;
     font-family: 'Gotham Book', sans-serif;
     &>div{
+      height: 90px;
+      display: flex;
+      align-items: center;
+      &>img{
+        height: 100%;
+      }
       &>.login{
         cursor: pointer;
         border: 2px solid black;
@@ -123,7 +129,7 @@ function AssetManage() {
         <>
             <Wrapper>
                 <div className={'header'}>
-                    <div>LOGO</div>
+                    <div><img src={blackLogo} alt="Fundwire"/></div>
                     <div>
                         <span onClick={()=>setVisibleLogin(true)} className={'login'}>Login</span>
                         <Link to={'/'}>Back Home</Link>

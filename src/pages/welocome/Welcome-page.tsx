@@ -10,6 +10,7 @@ import * as Yup from "yup";
 // import {firestore} from "firebase";
 import {Input, TextArea} from "../../components/Auth-input/Auth-input";
 import Modal from "../../components/modal/modal";
+import yellowLogo from '../../images/yellowLogo.png'
 
 const validateFormikSignUp = {
     email: Yup.string()
@@ -39,7 +40,7 @@ const WelcomePage = () => {
         <>
             <Header>
                 <div className={css.menu}>
-                    <a href={"#sectionOne"}><div>LOGO</div></a>
+                    <a href={"#sectionOne"}><div><img src={yellowLogo} alt="Fundwire"/></div></a>
                     <div className={css.nav}>
                         <a href={"#sectionTwo"}>How it works</a>
                         <a href={"#sectionThree"}>Support</a>
