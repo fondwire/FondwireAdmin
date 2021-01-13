@@ -375,18 +375,18 @@ const CreateFeed = React.memo(() => {
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'}
                                        title={`Add pimp & proof for $14.50`}/>
                                 <br/>
-                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput}
+                                <Field disabled={editLen ? editLen : isPublish && !state.userData.isAdmin} as={FeedCreateInput}
                                        name={'link'}
-                                       title={'Link to external article (optional)'}/>
+                                       title={type === 'video' ? `Link to the video` : `EITHER: link to an external ${type}`}/>
                                 <br/>
                                 <br/>
                                 {
                                     type !== 'video'
                                         ? <>
-                                            <span className={MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>Body text ({MAX_LENGTH - editLen})</span>
+                                            <span className={MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>OR: write here ({MAX_LENGTH - editLen})</span>
                                             <br/>
                                             {
-                                                isAdminIsPublish || isAdminApproved
+                                                isAdminIsPublish || isAdminApproved || values.link
                                                     ? <div
                                                         className="body__container"
                                                         dangerouslySetInnerHTML={{__html: draftToHtml(convertToRaw(editor.getCurrentContent()))}}
@@ -400,18 +400,9 @@ const CreateFeed = React.memo(() => {
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName={'editor_textarea'}
-                                                        onEditorStateChange={(e) => {
-                                                            // console.log(+editor?.getCurrentContent().getPlainText('').length)
-                                                            // if(editor?.getCurrentContent().getPlainText('').length <= 10){
-                                                            setEditor(e)
-                                                            // }
-                                                        }}
+                                                        onEditorStateChange={(e) => setEditor(e)}
                                                         toolbar={{
                                                             inline: {inDropdown: false},
-                                                            // list: { inDropdown: true },
-                                                            // textAlign: { inDropdown: true },
-                                                            // link: { inDropdown: true },
-                                                            // history: { inDropdown: true },
                                                             fontFamily: {
                                                                 options: ['Gotham Book', 'Gotham-Thin', 'Gotham-Bold', 'Gotham-Medium']
                                                             },
@@ -458,7 +449,7 @@ const CreateFeed = React.memo(() => {
                                         isPublish ? <div/>
                                             // submit by Manager to save feed
                                             : <SubmitButton
-                                                disabled={!hasChanged || hasErrors || isSubmitting || isVideo}
+                                                disabled={!values.title}
                                                 type={'button'}
                                                 onClick={() => {
                                                     Swal.fire({

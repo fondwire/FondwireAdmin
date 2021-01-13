@@ -134,7 +134,7 @@ export const CreateNew = () => {
                     <div><Link to={'/feed/create/video'}>video</Link></div>
                     <div><Link to={'/feed/create/event'}>event</Link></div>
                     <div><Link to={'/feed/create/article'}>article</Link></div>
-                    <div><Link to={'/feed/create/podcast'}>podcast</Link></div>
+                    {/*<div><Link to={'/feed/create/podcast'}>podcast</Link></div>*/}
                 </div>
             </div>
         </CreateNewWrapper>
