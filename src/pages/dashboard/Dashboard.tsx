@@ -51,7 +51,7 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
             </div>
             <Analytics />
             <div className={'title feedTitle'}>
-                <h3>FEEDS</h3>
+                <h3>TOP 5 CONTENT PER VIEW</h3>
             </div>
             <FeedHeader />
             {

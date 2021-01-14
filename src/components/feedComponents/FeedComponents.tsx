@@ -9,8 +9,8 @@ const FeedHeader = () => {
             <div>TITLE</div>
             <div>DATE</div>
             <div>TYPE</div>
-            <div>STATUS</div>
-            <div>ID</div>
+            {/*<div>STATUS</div>*/}
+            <div>VIEWS</div>
             <div/>
         </FeedWrapper>
     );
@@ -78,8 +78,8 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
             <Link to={`feed/create/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
             <div>{Time}</div>
             <div>{Type}</div>
-            <div className={'status'}><span>{Status}</span></div>
-            <div>{id}</div>
+            {/*<div className={'status'}><span>{Status}</span></div>*/}
+            <div>1.170</div>
             <div>
                 <Action>
                     <div onClick={onDelete} className={'delete'}>DELETE</div>
