@@ -6,6 +6,8 @@ import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import {MyContext} from "../../App";
 import Swal from "sweetalert2";
 import {Logout} from "../../firebase";
+import Language from "../language/language";
+import {useTranslation} from "react-i18next";
 
 type NavbarProps = {
     isAdmin: boolean
@@ -13,6 +15,7 @@ type NavbarProps = {
 }
 const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
     const {dispatch} = useContext(MyContext)
+    const {t} = useTranslation();
     const length = notificationLength.length
     return (
         <NavbarWrapper>
@@ -24,13 +27,13 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
             <NavList>
                 {
                     !isAdmin ? <>
-                            <NavLink to={'/dashboard'}>Dashboard</NavLink>
-                            <NavLink to={'/feed'}>Feed</NavLink>
-                            <NavLink to={'/analytics'}>Analytics</NavLink>
-                            <NavLink to={'/settings'}>Settings</NavLink>
+                            <NavLink to={'/dashboard'}>{t("dashboard")}</NavLink>
+                            <NavLink to={'/feed'}>{t("feed")}</NavLink>
+                            <NavLink to={'/analytics'}>{t("analytics")}</NavLink>
+                            <NavLink to={'/settings'}>{t("settings")}</NavLink>
                         </>
                         : <>
-                            <NavLink to={'/users'}>Users</NavLink>
+                            <NavLink to={'/managers'}>Managers</NavLink>
                             <NavLink to={'/companies'}>Companies</NavLink>
                             <NavLink to={'/notifications'}>
                                 Notifications
@@ -76,6 +79,9 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
                         </>
                 }
             </NavList>
+            <span className={'language'}>
+                <Language />
+            </span>
         </NavbarWrapper>
     );
 }

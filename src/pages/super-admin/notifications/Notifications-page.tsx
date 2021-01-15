@@ -6,7 +6,6 @@ import {TableComponentWrapper} from "../../../components/feedComponents/Feed-sty
 import {Link} from "react-router-dom";
 import {Action} from "../../../components/feedComponents/FeedComponents";
 import user from '../../../images/user-profile.png'
-import {db} from "../../../firebase";
 import {FeedType} from "../../dashboard/Dashboard";
 // import reducer from "../../../state/RootReducer";
 // import {getData} from "../../../App";
@@ -30,21 +29,22 @@ type CompaniesElementProps = {
 export const CompaniesElement:React.FC<CompaniesElementProps> = (
     {title,type, email, company, manager, id, notificationId}
     ) => {
-    const onApprove = () => {
-        db.ref('/feeds').child(type+'s').child(id).child('isAdminApproved').set(true).then(()=>{
-            db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(()=>{
-                // alert('success set and removed')
-                // setPending(true)
-                window.location.href = '/notifications'
-            })
-        })
-    }
+    // console.log(id, notificationId)
+    // const onApprove = () => {
+    //     db.ref('/feeds').child(type+'s').child(id).child('isAdminApproved').set(true).then(()=>{
+    //         db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(()=>{
+    //             // alert('success set and removed')
+    //             // setPending(true)
+    //             window.location.href = '/notifications'
+    //         })
+    //     })
+    // }
     const onDelete = () => {
         alert(id)
     }
     return (
         <CompaniesElementWrapper>
-            <Link to={`#`} className={'title'}>{title}</Link>
+            <Link to={`/notifications/feed/${type}/${id}/${notificationId}`} className={'title'}>{title}</Link>
             <div>
                 {email === 'user'
                     ? <div className={'user__image'}><img src={user} alt="User"/> </div>
@@ -54,7 +54,7 @@ export const CompaniesElement:React.FC<CompaniesElementProps> = (
             <div>{manager}</div>
             <div>
                 <Action>
-                    <div onClick={onApprove}>APPROVE</div>
+                    {/*<div onClick={onApprove}>APPROVE</div>*/}
                     <div onClick={onDelete} className={'delete'}>DELETE</div>
                 </Action>
             </div>
@@ -82,7 +82,7 @@ const NotificationsPage:React.FC<NotificationsPageProps> = (props) => {
             {
                 props.data.map((item:FeedType) => {
                     if(item.isFeed){
-                        return <CompaniesElement notificationId={item.notificationId} type={item.type} key={item.issueDate} id={item.id} title={'NEW FEED'} manager={'Aman'} company={5} email={item.type.toUpperCase()} />
+                        return <CompaniesElement notificationId={item.notificationId} type={item.type} key={item.issueDate} id={item.id} title={item.title} manager={item.fullname} company={item.companyName} email={item.type.toUpperCase()} />
                     }else{
                         return <CompaniesElement notificationId={item.notificationId} type={item.type} key={item.id} id={item.id} title={'NEW ACCOUNT REQUEST'} manager={'Aman'} company={5} email={'user'} />
                     }

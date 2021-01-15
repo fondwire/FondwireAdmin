@@ -46,7 +46,11 @@ auth().onAuthStateChanged((res:any)=>{
                     if (snapshot.val().email === data.email) {
                         // console.log(snapshot.key + " : " + snapshot.val().email );
                         // console.log(snapshot.val().verified)
-                        data = {verified: snapshot.val().verified ? snapshot.val().verified : false, ...data}
+                        data = {
+                            verified: snapshot.val().verified ? snapshot.val().verified : false,
+                            id: snapshot.key,
+                            ...data
+                        }
                         localStorage.setItem('userData', JSON.stringify(data))
                     }
                 });

@@ -47,3 +47,25 @@ const AuthInput:React.FC<AuthInputProps> = (
 }
 
 export default AuthInput;
+
+export const Input:React.FC<{
+    type: string
+    errors: any
+    touched: any
+    name: string
+}> = ({type, errors, touched, name, ...props}) => {
+        return <input
+            type={type}
+            className={`modal-input ${touched && touched[name] && errors && errors[name] && errors[name] && 'errorInput'}`}
+            name={name} {...props} />
+}
+
+export const TextArea:React.FC<{
+    errors: any
+    touched: any
+    name: string
+}> = ({errors, touched, name, ...props}) => {
+    return <textarea
+        className={`modal-input modal-textarea ${touched && touched[name] && errors && errors[name] && errors[name]}`}
+        name={name} {...props} />
+}

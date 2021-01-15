@@ -6,6 +6,7 @@ import Preloader from "../../utils/preloader/preloader";
 import reducer from '../../state/RootReducer'
 import {getData} from "../../App";
 import {UserType} from "../../components/feedComponents/feed";
+import {useTranslation} from "react-i18next";
 
 
 export type FeedType = {
@@ -23,6 +24,8 @@ export type FeedType = {
     isAssetManagerApproved: boolean
     isFeed: boolean
     isPublish: boolean
+    fullname: string
+    companyName: string
 }
 
 type DashboardPropsType = {
@@ -32,6 +35,7 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
+    const {t} = useTranslation();
     const [pending, setPending] = useState(true)
     const [feeds, setFeeds] = useState<any>([])
     useEffect(()=>{
@@ -41,13 +45,13 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
         <DashboardWrapper>
-            <h3>WELCOME{user && user.fullname ? `, ${user.fullname.toUpperCase()}` : ''}</h3>
+            <h3>{t("welcome").toUpperCase()}{user && user.fullname ? `, ${user.fullname.toUpperCase()}` : ''}</h3>
             <div className={'title'}>
                 <h3>ANALYTICS</h3>
             </div>
             <Analytics />
             <div className={'title feedTitle'}>
-                <h3>FEEDS</h3>
+                <h3>TOP 5 CONTENT PER VIEW</h3>
             </div>
             <FeedHeader />
             {

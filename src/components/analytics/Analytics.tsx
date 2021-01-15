@@ -3,81 +3,90 @@ import { AnalyticsWrapper, ContentWrapper } from './Analytics-style';
 // import chart from './chart.png'
 import './analytics.css'
 import styled, { keyframes } from "styled-components";
-
 const Analytics = () => {
     return (
         <AnalyticsWrapper>
             <ChartWrapper />
-            <Content />
-            <Content />
+            {/*<Content />*/}
+            {/*<Content />*/}
         </AnalyticsWrapper>
     );
 };
 
 const ChartStyleWrapper = styled.div`
+  align-self: flex-start;
   display: flex;
-  align-items: flex-end;
-  min-height: 220px;
-  font-size: 7px;
-  color: #2f9dfb;
+  flex-direction: column;
+  font-size: 11px;
+  font-family: 'Gotham-Medium', sans-serif;
+  color: #000000;
   text-align:center;
   margin-top: 15px;
-  
+  min-width: 450px;
   &>div{
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      //margin: 1px 0;
+      padding: 0 25px;
+      &>span{
+        width: 100px;
+        text-align:left;
+      }
       &>div{
-        height: 200px;
+        width: 100%;
+        height: 28px;
         display: flex;
-        align-items: flex-end;
+        //align-items: flex-end;
       }
   }
 `
 const heightAnimation = (height:string | number) => keyframes`
   from {
-    height: 0;
+    width: 0;
   }
 
   to {
-    height: ${height}%;
+    width: ${height}%;
   }
 `;
 type chartProps = {
-    height: string | number
+    width: string | number
     content: string | number
 }
 const ChartBlock = styled.div`
-  background: linear-gradient(to bottom, #289afd, #ffffff ) ;
-  height: ${(props:chartProps) => props.height + '%'};
-  width: 28px;
+  background: linear-gradient(to left, #289afd, #ffffff ) ;
+  width: ${(props:chartProps) => props.width + '%'};
+  height: 25px;
   margin: 0 1px 8px 1px;
   cursor: pointer;
   transition: background 0.5s linear;
-  animation: ${(props:chartProps) => heightAnimation(props.height)} 0.8s linear;
-  
+  animation: ${(props:chartProps) => heightAnimation(props.width)} 0.8s linear;
+  position:relative;
   &:hover{
     background: #289afd;
   }
-  &:hover:after{
-    content: ${(props:chartProps)=> props.content ? props.content : '15' };
-    color: #ffffff;
+  &::after{
+    content: ${(props:chartProps)=> props.content ? `"${props.content}"` : " " };
+    position: absolute;
+    top: 0;
+    right: -35px;
+    color: #000000;
     font-size: 13px;
+    line-height: 25px;
   }
 `
 
 const ChartWrapper = () => {
     const [maxHeight, setMaxHeight] = useState(0)
     const data = [
-        { name: '10nov', value: 10 },
-        { name: '11nov', value: 20 },
-        { name: '12nov', value: 35 },
-        { name: '13nov', value: 50 },
-        { name: '14nov', value: 40 },
-        { name: '15nov', value: 30 },
-        { name: '16nov', value: 20 },
-        { name: '17nov', value: 10 }
+        { name: 'June', value: 10 },
+        { name: 'July', value: 20 },
+        { name: 'August', value: 35 },
+        { name: 'September', value: 50 },
+        { name: 'October', value: 40 },
+        { name: 'November', value: 30 },
     ]
     useEffect(()=>{
         data.forEach((dataItem) => {
@@ -88,42 +97,40 @@ const ChartWrapper = () => {
     }, [data, maxHeight])
     return (
         <div className={'chart_analytic__wrapper'}>
-            <div className={'chart__content'}>General progress chart</div>
-            <div>
+            <div className={'chart__content'}>VIEWS PER MONTH - LAST 6 MONTH</div>
                 <ChartStyleWrapper>
                     {
                         data.map((el) => (
                             <div key={el.name}>
+                                <span>{el.name}</span>
                                 <div>
-                                    <ChartBlock content={el.value} height={(el.value*100)/maxHeight} />
+                                    <ChartBlock content={el.value} width={(el.value*100)/maxHeight} />
                                 </div>
-                                {el.name}
                             </div>
                         ))
                     }
                 </ChartStyleWrapper>
-            </div>
         </div>
     )
 }
 
-const Content = () => {
-    return (
-        <ContentWrapper>
-            <div className={'chart__content'}>Content views for last 30 days</div>
-            <div className={'content__info'}>30</div>
-            <div className={'chart__content functions'}>
-                <div>
-                    <div>previous</div>
-                    <div>0</div>
-                </div>
-                <div>
-                    <div>change</div>
-                    <div>+30</div>
-                </div>
-            </div>
-        </ContentWrapper>
-    )
-}
+// const Content = () => {
+//     return (
+//         <ContentWrapper>
+//             <div className={'chart__content'}>Content views for last 30 days</div>
+//             <div className={'content__info'}>30</div>
+//             <div className={'chart__content functions'}>
+//                 <div>
+//                     <div>previous</div>
+//                     <div>0</div>
+//                 </div>
+//                 <div>
+//                     <div>change</div>
+//                     <div>+30</div>
+//                 </div>
+//             </div>
+//         </ContentWrapper>
+//     )
+// }
 
 export default Analytics;

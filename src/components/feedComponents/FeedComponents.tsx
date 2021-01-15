@@ -7,10 +7,10 @@ const FeedHeader = () => {
     return (
         <FeedWrapper>
             <div>TITLE</div>
-            <div>DATE</div>
+            <div>CREATION DATE</div>
             <div>TYPE</div>
-            <div>STATUS</div>
-            <div>ID</div>
+            {/*<div>STATUS</div>*/}
+            <div>VIEWS</div>
             <div/>
         </FeedWrapper>
     );
@@ -43,7 +43,7 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
     if(!isPublish){
         Status = 'DRAFT'
     }else if(isAdminApprove && isAssetManagerApprove){
-        Status = 'ACTIVE'
+        Status = 'PUBLISHED'
     }else if(isAdminApprove){
         Status = 'APPROVED'
     }else {
@@ -63,12 +63,12 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
         switch (Status) {
             case 'DRAFT':
                 return setBackground('#a2a2a2')
-            case 'ACTIVE':
-                return setBackground('#51ef63')
+            case 'PUBLISHED':
+                return setBackground('#000000')
             case 'APPROVED':
-                return setBackground('#ffe05d')
+                return setBackground('#51ef63')
             case 'SUBMITTED':
-                return setBackground('#fd5d5d')
+                return setBackground('#ffe05d')
             default:
                 setBackground('#a2a2a2')
         }
@@ -78,8 +78,8 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
             <Link to={`feed/create/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
             <div>{Time}</div>
             <div>{Type}</div>
-            <div className={'status'}><span>{Status}</span></div>
-            <div>{id}</div>
+            {/*<div className={'status'}><span>{Status}</span></div>*/}
+            <div>1.170</div>
             <div>
                 <Action>
                     <div onClick={onDelete} className={'delete'}>DELETE</div>
@@ -134,7 +134,7 @@ export const CreateNew = () => {
                     <div><Link to={'/feed/create/video'}>video</Link></div>
                     <div><Link to={'/feed/create/event'}>event</Link></div>
                     <div><Link to={'/feed/create/article'}>article</Link></div>
-                    <div><Link to={'/feed/create/podcast'}>podcast</Link></div>
+                    {/*<div><Link to={'/feed/create/podcast'}>podcast</Link></div>*/}
                 </div>
             </div>
         </CreateNewWrapper>
