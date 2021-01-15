@@ -2,12 +2,12 @@ import React, {useEffect, useRef, useState} from 'react';
 // @ts-ignore
 import {SectionsContainer, Section, Header, Footer} from 'react-fullpage';
 import css from './welcome.module.css'
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import Footer2 from '../../components/footer/Footer';
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-// import {firestore} from "firebase";
+import {firestore} from "firebase";
 import {Input, TextArea} from "../../components/Auth-input/Auth-input";
 import Modal from "../../components/modal/modal";
 import yellowLogo from '../../images/yellowLogo.png'
@@ -35,7 +35,7 @@ const WelcomePage = () => {
     const closeModal = () => {
         setVisible(false)
     }
-    // const history = useHistory()
+    const history = useHistory()
     return (
         <>
             <Header>
@@ -155,25 +155,25 @@ const WelcomePage = () => {
                         }}
                         validationSchema={Yup.object().shape(validateFormikSignUp)}
                         onSubmit={(values)=>{
-                            console.log(values)
-                            closeModal()
-                            // firestore().collection('mail').add(values).then(()=>{
-                            //     closeModal()
-                            //     Swal.fire({
-                            //         icon: 'success',
-                            //         title: `<div class="medium">Message sent.</div>`,
-                            //         html: ` <div class="save__wrapper"> Some message. </div>  `
-                            //     }).then(()=>{
-                            //         history.push('/')
-                            //     })
-                            // }, (error)=>{
-                            //     closeModal()
-                            //     Swal.fire({
-                            //         icon: 'error',
-                            //         title: '<div class="medium">Something wend wrong, try later.</div>',
-                            //         html: ` <div class="save__wrapper"> ${error} </div>  `
-                            //     }).then(()=>{})
-                            // })
+                            // console.log(values)
+                            // closeModal()
+                            firestore().collection('support').add(values).then(()=>{
+                                closeModal()
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: `<div class="medium">Message sent.</div>`,
+                                    html: ` <div class="save__wrapper"> Thank you for messaging. </div>  `
+                                }).then(()=>{
+                                    history.push('/')
+                                })
+                            }, (error)=>{
+                                closeModal()
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: '<div class="medium">Something wend wrong, try later.</div>',
+                                    html: ` <div class="save__wrapper"> ${error} </div>  `
+                                }).then(()=>{})
+                            })
                         }}
                     >
                         {
