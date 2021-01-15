@@ -7,7 +7,7 @@ const FeedHeader = () => {
     return (
         <FeedWrapper>
             <div>TITLE</div>
-            <div>DATE</div>
+            <div>CREATION DATE</div>
             <div>TYPE</div>
             {/*<div>STATUS</div>*/}
             <div>VIEWS</div>
@@ -43,7 +43,7 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
     if(!isPublish){
         Status = 'DRAFT'
     }else if(isAdminApprove && isAssetManagerApprove){
-        Status = 'ACTIVE'
+        Status = 'PUBLISHED'
     }else if(isAdminApprove){
         Status = 'APPROVED'
     }else {
@@ -63,12 +63,12 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
         switch (Status) {
             case 'DRAFT':
                 return setBackground('#a2a2a2')
-            case 'ACTIVE':
-                return setBackground('#51ef63')
+            case 'PUBLISHED':
+                return setBackground('#000000')
             case 'APPROVED':
-                return setBackground('#ffe05d')
+                return setBackground('#51ef63')
             case 'SUBMITTED':
-                return setBackground('#fd5d5d')
+                return setBackground('#ffe05d')
             default:
                 setBackground('#a2a2a2')
         }

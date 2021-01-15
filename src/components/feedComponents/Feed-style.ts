@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 
 export const FeedWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 150px 180px  160px 20px;
+  grid-template-columns: 1fr 180px 180px  160px 20px;
 `
 
 export const TableComponentWrapper = (props: any) => `
