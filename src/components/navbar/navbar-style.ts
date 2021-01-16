@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const NavbarWrapper = styled.div`
-  background: rgb(18,30,52);
+  background: #1c1c1c;
   color: white;
   padding: 33px 33px;
   height: 100vh;
@@ -12,7 +12,7 @@ export const NavbarWrapper = styled.div`
   &>.logoWrapper>div{
     margin-top: 25px;
     width: 100%;
-    height: 85px;
+    height: 135px;
     &>img{
       height: 100%;
     }
@@ -60,6 +60,6 @@ export const NavList = styled.div`
     }
   }
   &>.active{
-      color: #43b9ea;
+      color: #feff04;
     }
 `

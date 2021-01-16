@@ -145,7 +145,12 @@
     font-size: 16px;
     padding: 5px 10px;
 }
+.modal-submit:hover{
+    color: #feff04;
+    background: #1c1c1c;
+}
 .modal-submit{
+    transition: all 0.7s linear;
     border: 2px solid #000000;
     text-transform: uppercase;
     color: black;
