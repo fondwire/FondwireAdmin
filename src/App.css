@@ -86,16 +86,6 @@
 .medium{
     font-family: 'Gotham-Medium', sans-serif;
 }
-.save__wrapper{
-    font-family: 'Gotham Book', sans-serif;
-}
-.step__wrapper{
-    margin: 10px 0;
-}
-.step__number{
-    font-weight: 700;
-    color: black;
-}
 .body__container{
     margin-top: 3px;
     background: #eeeded;
@@ -161,7 +151,7 @@
     color: black;
     font-size: 20px;
     font-family: 'Gotham-Bold', sans-serif;
-    padding: 8px 15px;
+    padding: 8px 13px;
     background: none;
     width: 230px;
     margin: 10px auto 0 auto;

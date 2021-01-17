@@ -292,10 +292,11 @@ const CreateFeed = React.memo(() => {
                         })
                 })
         } else {
+            let {isAdminApproved, ...rest} = values
             db.ref('/feeds').child(type + 's').child(id).set({
                 url: file,
                 isAdminApproved: true,
-                ...value
+                ...rest
             }).then(() => {
                 db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
                     // alert('success set and removed')
@@ -453,23 +454,17 @@ const CreateFeed = React.memo(() => {
                                                 type={'button'}
                                                 onClick={() => {
                                                     Swal.fire({
-                                                        icon: "info",
                                                         showCloseButton: true,
-                                                        confirmButtonText: 'Save',
-                                                        // showDenyButton: true,
+                                                        showConfirmButton: false,
+                                                        title: `<div class="modalTitle fz30" style="margin: 35px 0;">SAVE REQUEST</div>`,
                                                         html: `
-                                                    <div class="save__wrapper">
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">1. </span>
-                                                            <span class="step__text">This is first step to save.</span>
-                                                        </div>
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">2. </span>
-                                                            <span class="step__text">This is first step.</span>
-                                                        </div>
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">3. </span>
-                                                            <span class="step__text">This is first step.</span>
+                                                    <div>
+                                                        <div class="medium black fz21">Do you really want to save this post?</div>
+                                                        <br>
+                                                        <div class="medium black fz21">You can edit this post later.</div>
+                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, SAVE</button>
                                                         </div>
                                                     </div>
                                                 `
@@ -478,6 +473,10 @@ const CreateFeed = React.memo(() => {
                                                             onSubmit(values, false)
                                                         }
                                                     })
+                                                    const confirmBtn = document.getElementById("yesSave")
+                                                    confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+                                                    const deleteBtn = document.getElementById("noGoBack")
+                                                    deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
                                                 }}
                                             >
                                                 save
@@ -489,22 +488,16 @@ const CreateFeed = React.memo(() => {
                                                 type={"button"}
                                                 onClick={() => {
                                                     Swal.fire({
-                                                        icon: "success",
                                                         showCloseButton: true,
-                                                        confirmButtonText: "Submit",
+                                                        showConfirmButton: false,
+                                                        title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
                                                         html: `
-                                                    <div class="save__wrapper">
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">1. </span>
-                                                            <span class="step__text">This is first step to submit.</span>
-                                                        </div>
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">2. </span>
-                                                            <span class="step__text">This is first step.</span>
-                                                        </div>
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">3. </span>
-                                                            <span class="step__text">This is first step.</span>
+                                                    <div>
+                                                        <div class="medium black fz21">Do you really want to approve this post?</div>
+                                                        <br>
+                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, APPROVE</button>
                                                         </div>
                                                     </div>
                                                 `
@@ -513,6 +506,10 @@ const CreateFeed = React.memo(() => {
                                                             onAdminApprove(values)
                                                         }
                                                     })
+                                                    const confirmBtn = document.getElementById("yesSave")
+                                                    confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+                                                    const deleteBtn = document.getElementById("noGoBack")
+                                                    deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
                                                 }}
                                             >Approve</SubmitButton>
                                             : null
@@ -529,22 +526,16 @@ const CreateFeed = React.memo(() => {
                                                     type={"button"}
                                                     onClick={() => {
                                                         Swal.fire({
-                                                            icon: "success",
                                                             showCloseButton: true,
-                                                            confirmButtonText: "Submit",
+                                                            showConfirmButton: false,
+                                                            title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
                                                             html: `
-                                                    <div class="save__wrapper">
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">1. </span>
-                                                            <span class="step__text">This is first step to submit.</span>
-                                                        </div>
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">2. </span>
-                                                            <span class="step__text">This is first step.</span>
-                                                        </div>
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">3. </span>
-                                                            <span class="step__text">This is first step.</span>
+                                                    <div>
+                                                        <div class="medium black fz21">Do you really want to approve this post?</div>
+                                                        <br>
+                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, APPROVE</button>
                                                         </div>
                                                     </div>
                                                 `
@@ -553,29 +544,30 @@ const CreateFeed = React.memo(() => {
                                                                 onApprove()
                                                             }
                                                         })
+                                                        const confirmBtn = document.getElementById("yesSave")
+                                                        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+                                                        const deleteBtn = document.getElementById("noGoBack")
+                                                        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
                                                     }}
                                                 >Approve</SubmitButton>
                                                 //    onSubmit by Manager to create feed
                                                 : <SubmitButton
-                                                    disabled={isVideo || !hasChanged || hasErrors || isSubmitting}
+                                                    disabled={(values.link.length ? false : isVideo ) || !hasChanged || hasErrors || isSubmitting}
                                                     onClick={() => {
                                                         Swal.fire({
-                                                            icon: "success",
                                                             showCloseButton: true,
-                                                            confirmButtonText: "Submit",
+                                                            showConfirmButton: false,
+                                                            title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
                                                             html: `
-                                                    <div class="save__wrapper">
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">1. </span>
-                                                            <span class="step__text">This is first step to submit.</span>
-                                                        </div>
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">2. </span>
-                                                            <span class="step__text">This is first step.</span>
-                                                        </div>
-                                                        <div class="step__wrapper">
-                                                            <span class="step__number">3. </span>
-                                                            <span class="step__text">This is first step.</span>
+                                                    <div>
+                                                        <div class="medium black fz21">Do you really want to submit this post?</div>
+                                                        <br>
+                                                        <div class="medium black fz21">We will start processing immediately.</div>
+                                                        <br>
+                                                        <div class="medium black fz21">You know and accept our terms</div>
+                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, SUBMIT</button>
                                                         </div>
                                                     </div>
                                                 `
@@ -584,6 +576,10 @@ const CreateFeed = React.memo(() => {
                                                                 onSubmit(values, true)
                                                             }
                                                         })
+                                                        const confirmBtn = document.getElementById("yesSave")
+                                                        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+                                                        const deleteBtn = document.getElementById("noGoBack")
+                                                        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
                                                     }}
                                                     type={'button'}
                                                 >
