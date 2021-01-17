@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FeedWrapper, FeedComponentWrapper, ActionWrapper, CreateNewWrapper, FeedModal} from './Feed-style';
 import {Link} from 'react-router-dom';
 import {db} from "../../firebase";
+import Swal from "sweetalert2";
 
 const FeedHeader = () => {
     return (
@@ -52,12 +53,32 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
     const Type = type.toUpperCase()
     const Time = new Date(date).toLocaleDateString()
     const [background, setBackground] = useState<string>('#a2a2a2')
+
     const onDelete = () => {
-        db.ref('/feeds').child(type + 's').child(id.toString()).remove()
-            .then((res) => {
-                console.log(res)
-                setPending(true)
-            })
+        Swal.fire({
+            showConfirmButton: false,
+            title: `<div class="modalTitle fz30" style="margin: 35px 0;"> DELETE REQUEST </div>`,
+            html: `<div>
+                        <div class="medium black fz21">Do you really want to delete this post?</div>
+                        <br>
+                        <div class="medium black fz21">This process cannot be undone.</div>
+                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                            <button id="noDelete" class="modal-submit">NO, KEEP IT</button>
+                            <button id="yesDelete" class="modal-submit">YES, DELETE</button>
+                        </div>
+                  </div>`,
+        }).then((res)=>{
+            if(res.isConfirmed){
+                db.ref('/feeds').child(type + 's').child(id.toString()).remove()
+                    .then(() => {
+                        setPending(true)
+                    })
+            }
+        })
+        const confirmBtn = document.getElementById("yesDelete")
+        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        const deleteBtn = document.getElementById("noDelete")
+        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
     }
     useEffect(() => {
         switch (Status) {
