@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { AnalyticsWrapper, ContentWrapper } from './Analytics-style';
+import { AnalyticsWrapper } from './Analytics-style';
 // import chart from './chart.png'
 import './analytics.css'
 import styled, { keyframes } from "styled-components";

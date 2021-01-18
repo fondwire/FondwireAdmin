@@ -10,6 +10,9 @@ export const DashboardWrapper = styled.div`
   &>.title{
     margin: 40px 0 25px 20px;
     font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   &>.feedTitle{
     margin: 40px 0 25px 0;

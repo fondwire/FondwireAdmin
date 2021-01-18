@@ -263,7 +263,7 @@ const CreateFeed = React.memo(() => {
             })
     }
     const onAdminApprove = (values: FormikValues) => {
-        let {file, ...value} = values
+        let {file} = values
         if (typeof file !== 'string') {
             let uploadTask = storage().ref(`FeedsImages/${type + 's'}/${file.name}`).put(file)
             uploadTask.on("state_changed", () => {

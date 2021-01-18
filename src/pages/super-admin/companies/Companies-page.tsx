@@ -4,6 +4,8 @@ import CompaniesTableHeader, { CompaniesElement } from "../../../components/Comp
 import reducer from "../../../state/RootReducer";
 import {getData} from "../../../App";
 import Preloader from "../../../utils/preloader/preloader";
+import { CreateNewWrapper } from '../../../components/feedComponents/Feed-style';
+import {Link} from "react-router-dom";
 
 interface CompanyType {
     name: string
@@ -25,9 +27,15 @@ function CompaniesPage() {
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
         <DashboardWrapper>
-            <h3>WELCOME TO ADMIN PANEL</h3>
+            <h3>ADMIN PANEL</h3>
             <div className={'title'}>
                 <h3>COMPANIES</h3>
+                <CreateNewWrapper>
+                    <span>CREATE NEW</span>
+                    <Link to={'/create-company'} className={'plus'}>
+                        +
+                    </Link>
+                </CreateNewWrapper>
             </div>
             <CompaniesTableHeader />
             {
