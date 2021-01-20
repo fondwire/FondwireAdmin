@@ -45,11 +45,11 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
                             <Route exact path={'/companies'}>
                                 <CompaniesPage />
                             </Route>
+                            <Route exact path={'/companies/create-company'}>
+                                New company page
+                            </Route>
                             <Route exact path={'/content'}>
                                 Content page
-                            </Route>
-                            <Route exact path={'/create-company'}>
-                                New company page
                             </Route>
                             <Route path={'/notifications/feed/:type/:id/:notificationId'}>
                                 <CreateFeed/>

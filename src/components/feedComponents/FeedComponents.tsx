@@ -101,10 +101,16 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
             <div>{Type}</div>
             {/*<div className={'status'}><span>{Status}</span></div>*/}
             <div>1.170</div>
-            <div>
-                <Action>
-                    <div onClick={onDelete} className={'delete'}>DELETE</div>
-                </Action>
+            <div className={'action_wrapper'}>
+                <Link to={`feed/create/${Type.toLowerCase()}/${id}`} className={'title'}>
+                    <img  src="https://www.flaticon.com/svg/vstatic/svg/1250/1250615.svg?token=exp=1611172482~hmac=411827c809bb0ede7a39edb12840a3c1" alt="edit   "/>
+                </Link>
+                <div>
+                    <img onClick={onDelete} src="https://www.flaticon.com/svg/vstatic/svg/1214/1214428.svg?token=exp=1611172701~hmac=c1fcc2b476a9a8f0e553c94f581a3012" alt="delete"/>
+                </div>
+                {/*<Action>*/}
+                {/*    <div onClick={onDelete} className={'delete'}>DELETE</div>*/}
+                {/*</Action>*/}
             </div>
         </FeedComponentWrapper>
     )

@@ -32,7 +32,7 @@ function CompaniesPage() {
                 <h3>COMPANIES</h3>
                 <CreateNewWrapper>
                     <span>CREATE NEW</span>
-                    <Link to={'/create-company'} className={'plus'}>
+                    <Link to={'/companies/create-company'} className={'plus'}>
                         +
                     </Link>
                 </CreateNewWrapper>

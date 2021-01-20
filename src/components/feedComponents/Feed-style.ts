@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 
 export const FeedWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 180px 180px  160px 20px;
+  grid-template-columns: 1fr 180px 180px  160px 65px;
 `
 
 export const TableComponentWrapper = (props: any) => `
@@ -58,6 +58,17 @@ export const TableComponentWrapper = (props: any) => `
 export const FeedComponentWrapper: any = styled(FeedWrapper)`
   ${(props: any) => TableComponentWrapper(props.bg)}
   
+  & .action_wrapper{
+    &>a, &>div{
+      height: 20px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+    
+    & img{
+      height: 100%;
+    }
+  }
   &:hover + div>.action__wrapper {
     //color: red !important;
      opacity: 1;
