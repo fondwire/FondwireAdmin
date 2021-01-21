@@ -41,15 +41,15 @@ const FeedHeader: React.FC<{ withSort?: boolean, sortFC?: (a: string, num: numbe
         <FeedWrapper>
             <div className={'header'} onClick={() => sorting('title')}>
                 TITLE
-                <Sort active={active} link={'title'}/>
+                {props.withSort && <Sort active={active} link={'title'}/>}
             </div>
             <div className={'header'} onClick={() => sorting('issueDate')}>
                 CREATION DATE
-                <Sort active={active} link={'issueDate'}/>
+                {props.withSort && <Sort active={active} link={'issueDate'}/>}
             </div>
             <div className={'header'} onClick={() => sorting('type')}>
                 TYPE
-                <Sort active={active} link={'type'}/>
+                {props.withSort && <Sort active={active} link={'type'}/>}
             </div>
             {/*<div>STATUS</div>*/}
             <div className={'header'} onClick={() => sorting('views')}>VIEWS</div>
