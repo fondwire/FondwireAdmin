@@ -8,7 +8,7 @@ import {FeedType} from "../dashboard/Dashboard";
 import {getData} from "../../App";
 
 
-function Feed() {
+const Feed:React.FC<{isAdmin?:boolean}> = (props) => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
@@ -25,19 +25,19 @@ function Feed() {
         }, () => {
             setPending(false)
             setPend(false)
-        })
-    }, [state, state.userData, pending])
+        }, props.isAdmin)
+    }, [state, state.userData, pending, props.isAdmin])
     useEffect(() => {
         setPend(true)
         let arr: any = []
         if (search.length) {
             feeds.forEach((childSnapshot: any, index: any) => {
-                if (childSnapshot.uid === state.userData.uid) {
+                // if (childSnapshot.uid === state.userData.uid) {
                     let str = childSnapshot.title.slice(0, search.length)
                     if (str.toLowerCase() === search.toLowerCase()) {
                         arr.push(childSnapshot)
                     }
-                }
+                // }
                 if (index < feeds.length) {
                     setData([...arr])
                     setPend(false)
@@ -50,9 +50,9 @@ function Feed() {
             }, () => {
                 setPending(false)
                 setPend(false)
-            })
+            }, props.isAdmin)
         }
-    }, [feeds, search, state])
+    }, [feeds, search, state, props.isAdmin])
 
     const sortFeeds = (key: string, num: number) => {
         console.log(key, num)
@@ -82,7 +82,7 @@ function Feed() {
                 <h3>FEEDS</h3>
                 <div>
                     <SearchInput value={search} onChange={setSearch}/>
-                    <CreateNew/>
+                    {!props.isAdmin && <CreateNew/>}
                 </div>
             </div>
             <div>
@@ -92,8 +92,8 @@ function Feed() {
                         ? <Preloader/>
                         : data.map(
                         ({title, type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish}: FeedType) => {
-
                             return <FeedComponent
+                                isAdmin={props.isAdmin}
                                 isPublish={isPublish}
                                 setPending={setPending}
                                 key={issueDate}

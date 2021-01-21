@@ -78,11 +78,11 @@
     letter-spacing: 1px;
     margin-bottom: 10px;
 }
-/*.action__wrapper{*/
-/*    transition: all 0.25s linear;*/
-/*    opacity: 0;*/
-/*    visibility: hidden;*/
-/*}*/
+.action__wrapper{
+    transition: all 0.25s linear;
+    opacity: 0;
+    visibility: hidden;
+}
 
 /*.actions_wrapper{*/
 /*    opacity: 0;*/

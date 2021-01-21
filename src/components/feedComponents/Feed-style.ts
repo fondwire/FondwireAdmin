@@ -99,10 +99,10 @@ export const TableComponentWrapper = (props: any) => `
     }
   }
   
-  // &:hover  div>.action__wrapper {
-  //    opacity: 1;
-  //    visibility: visible;
-  // }
+  &:hover  div>.action__wrapper {
+     opacity: 1;
+     visibility: visible;
+  }
   
 `
 
@@ -113,11 +113,6 @@ export const FeedComponentWrapper: any = styled(FeedWrapper)`
     opacity: 1;
     visibility: visible;
   }
-  //&:hover + div>.action__wrapper {
-  //  //color: red !important;
-  //   opacity: 1;
-  //   visibility: visible;
-  //}
 `
 
 export const ActionWrapper = styled.div`

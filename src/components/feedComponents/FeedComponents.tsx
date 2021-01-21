@@ -69,6 +69,7 @@ export type FeedComponentProps = {
     isAssetManagerApprove: boolean
     isPublish: boolean
     setPending: (status: boolean) => void
+    isAdmin?: boolean
 }
 export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 isAdminApprove,
@@ -78,7 +79,8 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 type,
                                                                 id,
                                                                 isPublish,
-                                                                setPending
+                                                                setPending,
+                                                                isAdmin
                                                             }) => {
     // const Status = status.toUpperCase()
     let Status = 'DRAFT'
@@ -137,13 +139,13 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
     }, [Status])
     return (
         <FeedComponentWrapper bg={background}>
-            <Link to={`feed/create/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
+            <Link to={`${isAdmin ? 'content' : 'feed/create'}/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
             <div>{Time}</div>
             <div>{Type}</div>
             {/*<div className={'status'}><span>{Status}</span></div>*/}
             <div>1.170</div>
             <div className={'actions_wrapper'}>
-                <Link to={`feed/create/${Type.toLowerCase()}/${id}`}>
+                <Link to={`${isAdmin ? 'content' : 'feed/create'}/${Type.toLowerCase()}/${id}`}>
                     <img
                         src="https://www.flaticon.com/svg/vstatic/svg/1250/1250615.svg?token=exp=1611172482~hmac=411827c809bb0ede7a39edb12840a3c1"
                         alt="edit   "/>

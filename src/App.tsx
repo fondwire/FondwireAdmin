@@ -12,7 +12,7 @@ import {UserType} from "./components/feedComponents/feed";
 export const MyContext = React.createContext<any>(null)
 
 
-export const getData = (path:string , state:any, setData:(arr: Array<any>)=>void, setPend:(bool:boolean)=> void) => {
+export const getData = (path:string, state:any, setData:(arr: Array<any>)=>void, setPend:(bool:boolean)=> void, isAdmin?: boolean,) => {
     const feeds = db.ref(path)
     feeds.once('value', function(snapshot){
         return snapshot.toJSON()
@@ -39,8 +39,10 @@ export const getData = (path:string , state:any, setData:(arr: Array<any>)=>void
         if(arr.length && arr[0].issueDate){
             arr = arr.sort((a:any,b:any)=> b.issueDate - a.issueDate)
         }
-        if(path === '/feeds'){
+        if(path === '/feeds' && !isAdmin ){
             arr = arr.filter(({uid}:any)=> state.userData && uid === state.userData.uid )
+        }else if(path === '/feeds' && isAdmin){
+            arr = arr.filter(({isPublish, isAdminApproved}:any)=> isPublish && isAdminApproved)
         }else if(path === '/users'){
             arr.reverse()
         }
