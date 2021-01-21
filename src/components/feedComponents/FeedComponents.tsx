@@ -1,17 +1,58 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {FeedWrapper, FeedComponentWrapper, ActionWrapper, CreateNewWrapper, FeedModal} from './Feed-style';
+import {FeedWrapper, FeedComponentWrapper, ActionWrapper, CreateNewWrapper, FeedModal, SortButton} from './Feed-style';
 import {Link} from 'react-router-dom';
 import {db} from "../../firebase";
 import Swal from "sweetalert2";
 
-const FeedHeader = () => {
+const Sort = ({active, link}: any) => {
+    return <SortButton count={active.link === link ? active.count : ''}>
+        <div className={'first'}/>
+        <div className={'second'}/>
+    </SortButton>
+}
+
+const FeedHeader: React.FC<{ withSort?: boolean, sortFC?: (a: string, num: number) => void }> = (props) => {
+    const [active, setActive] = useState({
+        link: '',
+        count: 0,
+    })
+    const sorting = (type: string) => {
+        if (props.sortFC) {
+            let count
+            if(active.link !== type){
+                count = 1
+            }else if(active.count === 0) {
+                count = 1
+            }else if(active.count === 1){
+                count = 2
+            }else if(active.count === 2){
+                count = 1
+            }else{
+                count = 0
+            }
+            setActive({
+                link: type,
+                count: count
+            })
+            props.sortFC(type, count)
+        }
+    }
     return (
         <FeedWrapper>
-            <div>TITLE</div>
-            <div>CREATION DATE</div>
-            <div>TYPE</div>
+            <div className={'header'} onClick={() => sorting('title')}>
+                TITLE
+                <Sort active={active} link={'title'}/>
+            </div>
+            <div className={'header'} onClick={() => sorting('issueDate')}>
+                CREATION DATE
+                <Sort active={active} link={'issueDate'}/>
+            </div>
+            <div className={'header'} onClick={() => sorting('type')}>
+                TYPE
+                <Sort active={active} link={'type'}/>
+            </div>
             {/*<div>STATUS</div>*/}
-            <div>VIEWS</div>
+            <div className={'header'} onClick={() => sorting('views')}>VIEWS</div>
             <div/>
         </FeedWrapper>
     );
@@ -27,7 +68,7 @@ export type FeedComponentProps = {
     isAdminApprove: boolean
     isAssetManagerApprove: boolean
     isPublish: boolean
-    setPending: (status:boolean)=>void
+    setPending: (status: boolean) => void
 }
 export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 isAdminApprove,
@@ -41,13 +82,13 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                             }) => {
     // const Status = status.toUpperCase()
     let Status = 'DRAFT'
-    if(!isPublish){
+    if (!isPublish) {
         Status = 'DRAFT'
-    }else if(isAdminApprove && isAssetManagerApprove){
+    } else if (isAdminApprove && isAssetManagerApprove) {
         Status = 'PUBLISHED'
-    }else if(isAdminApprove){
+    } else if (isAdminApprove) {
         Status = 'APPROVED'
-    }else {
+    } else {
         Status = 'SUBMITTED'
     }
     const Type = type.toUpperCase()
@@ -67,8 +108,8 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
                             <button id="yesDelete" class="modal-submit">YES, DELETE</button>
                         </div>
                   </div>`,
-        }).then((res)=>{
-            if(res.isConfirmed){
+        }).then((res) => {
+            if (res.isConfirmed) {
                 db.ref('/feeds').child(type + 's').child(id.toString()).remove()
                     .then(() => {
                         setPending(true)
@@ -76,9 +117,9 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
             }
         })
         const confirmBtn = document.getElementById("yesDelete")
-        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        confirmBtn?.addEventListener('click', () => Swal.clickConfirm())
         const deleteBtn = document.getElementById("noDelete")
-        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+        deleteBtn?.addEventListener('click', () => Swal.clickCancel())
     }
     useEffect(() => {
         switch (Status) {
@@ -101,12 +142,16 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
             <div>{Type}</div>
             {/*<div className={'status'}><span>{Status}</span></div>*/}
             <div>1.170</div>
-            <div className={'action_wrapper'}>
-                <Link to={`feed/create/${Type.toLowerCase()}/${id}`} className={'title'}>
-                    <img  src="https://www.flaticon.com/svg/vstatic/svg/1250/1250615.svg?token=exp=1611172482~hmac=411827c809bb0ede7a39edb12840a3c1" alt="edit   "/>
+            <div className={'actions_wrapper'}>
+                <Link to={`feed/create/${Type.toLowerCase()}/${id}`}>
+                    <img
+                        src="https://www.flaticon.com/svg/vstatic/svg/1250/1250615.svg?token=exp=1611172482~hmac=411827c809bb0ede7a39edb12840a3c1"
+                        alt="edit   "/>
                 </Link>
                 <div>
-                    <img onClick={onDelete} src="https://www.flaticon.com/svg/vstatic/svg/1214/1214428.svg?token=exp=1611172701~hmac=c1fcc2b476a9a8f0e553c94f581a3012" alt="delete"/>
+                    <img onClick={onDelete}
+                         src="https://www.flaticon.com/svg/vstatic/svg/1214/1214428.svg?token=exp=1611172701~hmac=c1fcc2b476a9a8f0e553c94f581a3012"
+                         alt="delete"/>
                 </div>
                 {/*<Action>*/}
                 {/*    <div onClick={onDelete} className={'delete'}>DELETE</div>*/}

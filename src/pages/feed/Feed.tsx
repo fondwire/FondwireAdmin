@@ -17,6 +17,7 @@ function Feed() {
     const [search, setSearch] = useState('')
     const [feeds, setFeeds] = useState<any>([])
     const [data, setData] = useState<any>([])
+
     useEffect(() => {
         getData('/feeds', state, (arr)=> {
             setFeeds(arr)
@@ -52,6 +53,28 @@ function Feed() {
             })
         }
     }, [feeds, search, state])
+
+    const sortFeeds = (key: string, num: number) => {
+        console.log(key, num)
+        let newArr = num === 1 ? data.sort(function (a:any, b:any) {
+            if (a[key] > b[key]) {
+                return 1;
+            }
+            if (a[key] < b[key]) {
+                return -1;
+            }
+            return 0;
+        }) : data.sort(function (a:any, b:any) {
+            if (a[key] < b[key]) {
+                return 1;
+            }
+            if (a[key] > b[key]) {
+                return -1;
+            }
+            return 0;
+        })
+        setData([...newArr])
+    }
     if (pending) return <div className={'preloaderWrapper'}><Preloader/></div>
     return (
         <FeedPageWrapper>
@@ -63,7 +86,7 @@ function Feed() {
                 </div>
             </div>
             <div>
-                <FeedHeader/>
+                <FeedHeader sortFC={sortFeeds} withSort={true}/>
                 {
                     pend
                         ? <Preloader/>
