@@ -42,6 +42,9 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
                             <Route path={'/managers'}>
                                 <Users />
                             </Route>
+                            <Route path={'/users'}>
+                                <Users isUser={true} />
+                            </Route>
                             <Route exact path={'/companies'}>
                                 <CompaniesPage />
                             </Route>
