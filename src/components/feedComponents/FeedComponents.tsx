@@ -3,6 +3,8 @@ import {FeedWrapper, FeedComponentWrapper, ActionWrapper, CreateNewWrapper, Feed
 import {Link} from 'react-router-dom';
 import {db} from "../../firebase";
 import Swal from "sweetalert2";
+import pencil from '../../images/pencil.png'
+import trash from '../../images/delete.png'
 
 const Sort = ({active, link}: any) => {
     return <SortButton count={active.link === link ? active.count : ''}>
@@ -11,12 +13,16 @@ const Sort = ({active, link}: any) => {
     </SortButton>
 }
 
-const FeedHeader: React.FC<{ withSort?: boolean, sortFC?: (a: string, num: number) => void }> = (props) => {
+const FeedHeader: React.FC<{
+    withSort?: boolean,
+    sortFC?: (a: string, num: number, option?: string) => void,
+    isAdmin?: boolean
+}> = (props) => {
     const [active, setActive] = useState({
         link: '',
         count: 0,
     })
-    const sorting = (type: string) => {
+    const sorting = (type: string, option?:string) => {
         if (props.sortFC) {
             let count
             if(active.link !== type){
@@ -34,11 +40,12 @@ const FeedHeader: React.FC<{ withSort?: boolean, sortFC?: (a: string, num: numbe
                 link: type,
                 count: count
             })
-            props.sortFC(type, count)
+            props.sortFC(type, count, option)
         }
     }
+
     return (
-        <FeedWrapper>
+        <FeedWrapper withSort={props.withSort} isAdmin={props.isAdmin}>
             <div className={'header'} onClick={() => sorting('title')}>
                 TITLE
                 {props.withSort && <Sort active={active} link={'title'}/>}
@@ -51,8 +58,24 @@ const FeedHeader: React.FC<{ withSort?: boolean, sortFC?: (a: string, num: numbe
                 TYPE
                 {props.withSort && <Sort active={active} link={'type'}/>}
             </div>
-            {/*<div>STATUS</div>*/}
-            <div className={'header'} onClick={() => sorting('views')}>VIEWS</div>
+            {props.isAdmin && <div className={'header'}>
+                <select className={'select-sort'} onChange={(e)=> sorting('companyName', e.target.value)}>
+                    <option value="all">All COMPANIES</option>
+                    <option value="Codex">CODEX</option>
+                </select>
+            </div>}
+            {props.withSort && <div className={'header'}>
+                {/*STATUS*/}
+                <select className={'select-sort'} onChange={(e)=> sorting('status', e.target.value)}>
+                    <option value="all">All STATUS</option>
+                    {!props.isAdmin && <option value="draft">DRAFT</option>}
+                    <option value="submitted">SUBMITTED</option>
+                    <option value="approved">APPROVED</option>
+                    <option value="published">PUBLISHED</option>
+                </select>
+                {/*{props.withSort && <Sort active={active} link={'status'}/>}*/}
+            </div>}
+            {!props.isAdmin && <div className={'header'} onClick={() => sorting('views')}>VIEWS</div>}
             <div/>
         </FeedWrapper>
     );
@@ -70,6 +93,8 @@ export type FeedComponentProps = {
     isPublish: boolean
     setPending: (status: boolean) => void
     isAdmin?: boolean
+    withSort?: boolean
+    companyName?: string
 }
 export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 isAdminApprove,
@@ -80,7 +105,9 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 id,
                                                                 isPublish,
                                                                 setPending,
-                                                                isAdmin
+                                                                isAdmin,
+                                                                withSort,
+                                                                companyName
                                                             }) => {
     // const Status = status.toUpperCase()
     let Status = 'DRAFT'
@@ -138,21 +165,24 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
         }
     }, [Status])
     return (
-        <FeedComponentWrapper bg={background}>
+        <FeedComponentWrapper withSort={withSort} isAdmin={isAdmin} bg={background}>
             <Link to={`${isAdmin ? 'content' : 'feed/create'}/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
             <div>{Time}</div>
             <div>{Type}</div>
-            {/*<div className={'status'}><span>{Status}</span></div>*/}
-            <div>1.170</div>
+            {isAdmin && <div>{companyName ? companyName : ' '}</div>}
+            {withSort && <div className={'status'}><span>{Status}</span></div>}
+            {!isAdmin && <div>1.170</div>}
             <div className={'actions_wrapper'}>
                 <Link to={`${isAdmin ? 'content' : 'feed/create'}/${Type.toLowerCase()}/${id}`}>
                     <img
-                        src="https://www.flaticon.com/svg/vstatic/svg/1250/1250615.svg?token=exp=1611172482~hmac=411827c809bb0ede7a39edb12840a3c1"
-                        alt="edit   "/>
+                        title={'edit'}
+                        src={pencil}
+                        alt="edit"/>
                 </Link>
                 <div>
                     <img onClick={onDelete}
-                         src="https://www.flaticon.com/svg/vstatic/svg/1214/1214428.svg?token=exp=1611172701~hmac=c1fcc2b476a9a8f0e553c94f581a3012"
+                         title={'delete'}
+                         src={trash}
                          alt="delete"/>
                 </div>
                 {/*<Action>*/}

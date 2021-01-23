@@ -17,7 +17,11 @@ const Feed:React.FC<{isAdmin?:boolean}> = (props) => {
     const [search, setSearch] = useState('')
     const [feeds, setFeeds] = useState<any>([])
     const [data, setData] = useState<any>([])
+    const [sortData, setSortData] = useState(feeds)
 
+    useEffect(()=>{
+        setSortData([...feeds])
+    }, [feeds])
     useEffect(() => {
         getData('/feeds', state, (arr)=> {
             setFeeds(arr)
@@ -27,54 +31,79 @@ const Feed:React.FC<{isAdmin?:boolean}> = (props) => {
             setPend(false)
         }, props.isAdmin)
     }, [state, state.userData, pending, props.isAdmin])
+
     useEffect(() => {
         setPend(true)
         let arr: any = []
         if (search.length) {
-            feeds.forEach((childSnapshot: any, index: any) => {
+            sortData.forEach((childSnapshot: any, index: any) => {
                 // if (childSnapshot.uid === state.userData.uid) {
                     let str = childSnapshot.title.slice(0, search.length)
                     if (str.toLowerCase() === search.toLowerCase()) {
                         arr.push(childSnapshot)
                     }
                 // }
-                if (index < feeds.length) {
+                if (index < sortData.length) {
                     setData([...arr])
                     setPend(false)
                 }
             })
         } else {
-            getData('/feeds', state, (arr)=> {
-                // setFeeds(arr)
-                setData(arr)
-            }, () => {
-                setPending(false)
-                setPend(false)
-            }, props.isAdmin)
+            setData([...sortData])
+            setPending(false)
+            setPend(false)
+            // getData('/feeds', state, (arr)=> {
+            //     // setFeeds(arr)
+            //     setData(arr)
+            // }, () => {
+            //     setPending(false)
+            //     setPend(false)
+            // }, props.isAdmin)
         }
-    }, [feeds, search, state, props.isAdmin])
-
-    const sortFeeds = (key: string, num: number) => {
-        console.log(key, num)
-        let newArr = num === 1 ? data.sort(function (a:any, b:any) {
-            if (a[key] > b[key]) {
-                return 1;
-            }
-            if (a[key] < b[key]) {
-                return -1;
-            }
-            return 0;
-        }) : data.sort(function (a:any, b:any) {
-            if (a[key] < b[key]) {
-                return 1;
-            }
-            if (a[key] > b[key]) {
-                return -1;
-            }
-            return 0;
-        })
-        setData([...newArr])
+    }, [sortData, search, state, props.isAdmin])
+    const sortFeeds = (key: string, num: number, option?:string) => {
+        // console.log(key, num, option)
+        let newArr
+        if(key === 'status'){
+            newArr = feeds.filter((i:any) => {
+                let opt = option?.toLocaleLowerCase()
+                return opt === 'all' ? i
+                        : opt === 'draft'
+                        ? !i.isPublish
+                        : opt === 'submitted'
+                        ? i.isPublish && !i.isAdminApproved
+                        : opt === 'approved'
+                            ? i.isAdminApproved && !i.isAssetManagerApproved
+                            : i.isAssetManagerApproved
+            })
+        }else if(option && option !== 'all'){
+            newArr = data.filter((a:any)=> (typeof a[key] === 'string') && a[key].toLowerCase() === option.toLowerCase() )
+        }else if(option === 'all'){
+            newArr = [...sortData]
+        }else {
+            newArr = num === 1 ? data.sort(function (a: any, b: any) {
+                if (a[key] > b[key]) {
+                    return 1;
+                }
+                if (a[key] < b[key]) {
+                    return -1;
+                }
+                return 0;
+            }) : data.sort(function (a: any, b: any) {
+                if (a[key] < b[key]) {
+                    return 1;
+                }
+                if (a[key] > b[key]) {
+                    return -1;
+                }
+                return 0;
+            })
+        }
+        setSortData([...newArr])
     }
+    useEffect(()=>{
+        setData([...sortData])
+    }, [sortData])
     if (pending) return <div className={'preloaderWrapper'}><Preloader/></div>
     return (
         <FeedPageWrapper>
@@ -86,13 +115,15 @@ const Feed:React.FC<{isAdmin?:boolean}> = (props) => {
                 </div>
             </div>
             <div>
-                <FeedHeader sortFC={sortFeeds} withSort={true}/>
+                <FeedHeader isAdmin={props.isAdmin} sortFC={sortFeeds} withSort={true}/>
                 {
                     pend
                         ? <Preloader/>
                         : data.map(
-                        ({title, type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish}: FeedType) => {
+                        ({title, type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish, companyName}: FeedType) => {
                             return <FeedComponent
+                                companyName={typeof companyName === "string" ? companyName : ' '}
+                                withSort={true}
                                 isAdmin={props.isAdmin}
                                 isPublish={isPublish}
                                 setPending={setPending}

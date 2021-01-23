@@ -42,7 +42,10 @@ export const getData = (path:string, state:any, setData:(arr: Array<any>)=>void,
         if(path === '/feeds' && !isAdmin ){
             arr = arr.filter(({uid}:any)=> state.userData && uid === state.userData.uid )
         }else if(path === '/feeds' && isAdmin){
-            arr = arr.filter(({isPublish, isAdminApproved}:any)=> isPublish && isAdminApproved)
+            arr = arr.filter(({isPublish}:any)=> isPublish)
+            arr = arr.map((item: any )=>{
+                return {companyName: db.ref('/users').child(item.uid).child('companyName'), ...item}
+            })
         }else if(path === '/users'){
             arr.reverse()
         }

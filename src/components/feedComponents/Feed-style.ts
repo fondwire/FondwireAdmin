@@ -1,20 +1,40 @@
 import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 
-export const FeedWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 180px 180px  160px 65px;
+export const FeedWrapper: any = styled(TableStyle)`
+  grid-template-columns: 
+                          1fr 
+                          180px
+                          180px 
+                          ${(props:any)=> props.withSort ? '160px' : ''}
+                          ${(props:any)=> props.isAdmin ? '160px' : ''}
+                          ${(props:any)=> !props.isAdmin ? '160px' : ''}
+                          65px;
   
   &>.header{
     cursor:pointer;
     display: flex;
     align-items: center;
-    
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+                                  
+    &>.select-sort{
+        margin: auto 0;
+        text-align: left;
+        font-weight: 600;
+        font-family: 'Gotham-Bold',sans-serif;
+        font-size: 15px;
+        color: rgba(0,0,0,0.5);
+        border: none;
+        
+        &:focus{
+          outline: none;
+        }
+    }
   }
 `
 export const SortButton: any = styled.div`
@@ -23,16 +43,16 @@ export const SortButton: any = styled.div`
     margin: 2px 0;
     width: 0; 
     height: 0; 
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
     
-    border-bottom: 6px solid rgba(78,77,77,0.82);
+    border-bottom: 5px solid rgba(78,77,77,0.82);
   }
   &>.first{
-      border-bottom:  6px solid ${(props: any) => props.count === 1 ? '#000' : 'rgba(78,77,77,0.82)'};
+      border-bottom:  5px solid ${(props: any) => props.count === 1 ? '#000' : 'rgba(78,77,77,0.82)'};
   }
   &>.second{
-    border-bottom:  6px solid ${(props: any) => props.count === 2 ? '#000' : 'rgba(78,77,77,0.82)'};
+    border-bottom:  5px solid ${(props: any) => props.count === 2 ? '#000' : 'rgba(78,77,77,0.82)'};
     transform: rotate(180deg);
   }
 `
@@ -106,7 +126,7 @@ export const TableComponentWrapper = (props: any) => `
   
 `
 
-export const FeedComponentWrapper: any = styled(FeedWrapper)`
+export const FeedComponentWrapper: any = styled( FeedWrapper)`
   ${(props: any) => TableComponentWrapper(props.bg)}
   
   &:hover  .actions_wrapper>a , &:hover .actions_wrapper>div{
