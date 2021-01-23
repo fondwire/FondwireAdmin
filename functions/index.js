@@ -48,10 +48,14 @@ exports.sendEmailSupport = functions.firestore.document('/support/{supportId}').
         const mailOptions = {
             from: '"Fundwire support request" <info.fundwire@gmail.com>', // Something like: Jane Doe <janedoe@gmail.com>
             to: "fintechfondwireapp@gmail.com",
-            subject: `<div>${data.name}</div>`, // email subject
+            subject: `${data.name}`, // email subject
             html: `
                 <div>
-                    ${JSON.stringify(data)}
+                   <div> <b>Name: </b> <span>${data.name}</span> </div>
+                    <div> <b>Email: </b> <span>${data.email}</span> </div>
+                    <div> <b>Phone: </b> <span>${data.phone}</span> </div>
+                    <div> <b>Use App: </b> <span>${data.use}</span> </div>
+                    <div> <b>Message: </b> <span>${data.message}</span> </div>
                 </div>
             ` // email content in HTML
         };
