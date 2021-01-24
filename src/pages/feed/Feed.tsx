@@ -8,7 +8,7 @@ import {FeedType} from "../dashboard/Dashboard";
 import {getData} from "../../App";
 
 
-const Feed:React.FC<{isAdmin?:boolean}> = (props) => {
+const Feed:React.FC<{isAdmin?:boolean, companies?: any}> = (props) => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
@@ -115,7 +115,7 @@ const Feed:React.FC<{isAdmin?:boolean}> = (props) => {
                 </div>
             </div>
             <div>
-                <FeedHeader isAdmin={props.isAdmin} sortFC={sortFeeds} withSort={true}/>
+                <FeedHeader companies={props.companies} isAdmin={props.isAdmin} sortFC={sortFeeds} withSort={true}/>
                 {
                     pend
                         ? <Preloader/>

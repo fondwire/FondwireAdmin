@@ -16,7 +16,8 @@ const Sort = ({active, link}: any) => {
 const FeedHeader: React.FC<{
     withSort?: boolean,
     sortFC?: (a: string, num: number, option?: string) => void,
-    isAdmin?: boolean
+    isAdmin?: boolean,
+    companies?: any
 }> = (props) => {
     const [active, setActive] = useState({
         link: '',
@@ -61,7 +62,9 @@ const FeedHeader: React.FC<{
             {props.isAdmin && <div className={'header'}>
                 <select className={'select-sort'} onChange={(e)=> sorting('companyName', e.target.value)}>
                     <option value="all">All COMPANIES</option>
-                    <option value="Codex">CODEX</option>
+                    {
+                        props.companies.map((item:{name: string, id: string})=> <option value={item.name}>{item.name}</option> )
+                    }
                 </select>
             </div>}
             {props.withSort && <div className={'header'}>

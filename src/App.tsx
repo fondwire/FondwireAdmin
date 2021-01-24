@@ -64,6 +64,10 @@ function App() {
     })
     const [data, setData] = useState<any>([])
     const [notifications, setNotifications] = useState<any>([])
+    const [companies, setCompanies] = useState<any>([])
+    useEffect(()=>{
+        getData('/assets', state, setCompanies, ()=>{})
+    }, [state])
 
     useEffect(()=>{
         getData('/users', state, setUsers, ()=>{})
@@ -79,15 +83,6 @@ function App() {
         }
         // setPending(false)
     }, [users, state])
-    // useEffect(()=>{
-    //     console.log(notifications)
-    //     let arr = notifications.sort((a:any, b:any) => {
-    //         if(a.issueDate < b.issueDate) return 1
-    //         if(a.issueDate > b.issueDate) return -1
-    //         if(a.issueDate === b.issueDate) return 0
-    //     })
-    //     setNotifications(arr)
-    // }, [notifications])
     useEffect(()=>{
         if(state?.userData?.isAdmin) {
             const feed = data.feeds
@@ -186,7 +181,7 @@ function App() {
         }
     }, [ state, state.userData, pending ])
 
-    const route = useRoute(state, user, notifications, setPending)
+    const route = useRoute(state, user, notifications, setPending, companies)
 
     if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>
     return <MyContext.Provider value={{dispatch}}>
