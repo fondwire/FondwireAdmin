@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 
 const SettingsBlockWrapper = styled.div`
-  background: #f1f9ff;
+  background: #fff;
   height: 50px;
   display: flex;
   align-items: center;

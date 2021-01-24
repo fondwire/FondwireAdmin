@@ -8,7 +8,7 @@ import {FeedType} from "../dashboard/Dashboard";
 import {getData} from "../../App";
 
 
-const Feed:React.FC<{isAdmin?:boolean, companies?: any}> = (props) => {
+const Feed: React.FC<{ isAdmin?: boolean, companies?: any }> = (props) => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
@@ -19,11 +19,11 @@ const Feed:React.FC<{isAdmin?:boolean, companies?: any}> = (props) => {
     const [data, setData] = useState<any>([])
     const [sortData, setSortData] = useState(feeds)
 
-    useEffect(()=>{
+    useEffect(() => {
         setSortData([...feeds])
     }, [feeds])
     useEffect(() => {
-        getData('/feeds', state, (arr)=> {
+        getData('/feeds', state, (arr) => {
             setFeeds(arr)
             setData(arr)
         }, () => {
@@ -38,10 +38,10 @@ const Feed:React.FC<{isAdmin?:boolean, companies?: any}> = (props) => {
         if (search.length) {
             sortData.forEach((childSnapshot: any, index: any) => {
                 // if (childSnapshot.uid === state.userData.uid) {
-                    let str = childSnapshot.title.slice(0, search.length)
-                    if (str.toLowerCase() === search.toLowerCase()) {
-                        arr.push(childSnapshot)
-                    }
+                let str = childSnapshot.title.slice(0, search.length)
+                if (str.toLowerCase() === search.toLowerCase()) {
+                    arr.push(childSnapshot)
+                }
                 // }
                 if (index < sortData.length) {
                     setData([...arr])
@@ -61,26 +61,59 @@ const Feed:React.FC<{isAdmin?:boolean, companies?: any}> = (props) => {
             // }, props.isAdmin)
         }
     }, [sortData, search, state, props.isAdmin])
-    const sortFeeds = (key: string, num: number, option?:string) => {
+    // let sortState = {
+    //     status: 'all',
+    //     company: 'all'
+    // }
+    const [sortState, setSortState] = useState({
+        status: 'all',
+        company: 'all'
+    })
+    const sortStatus = (i: any, option: any) => {
+        let opt = option?.toLocaleLowerCase()
+        return opt === 'all' ? i
+            : opt === 'draft'
+                ? !i.isPublish
+                : opt === 'submitted'
+                    ? i.isPublish && !i.isAdminApproved
+                    : opt === 'approved'
+                        ? i.isAdminApproved && !i.isAssetManagerApproved
+                        : i.isAssetManagerApproved
+    }
+    const sortCompany = (a: any, key: any, option: any) => (typeof a[key] === 'string') && a[key].toLowerCase() === option.toLowerCase()
+    const sortFeeds = (key: string, num: number, option?: string) => {
         // console.log(key, num, option)
         let newArr
-        if(key === 'status'){
-            newArr = feeds.filter((i:any) => {
-                let opt = option?.toLocaleLowerCase()
-                return opt === 'all' ? i
-                        : opt === 'draft'
-                        ? !i.isPublish
-                        : opt === 'submitted'
-                        ? i.isPublish && !i.isAdminApproved
-                        : opt === 'approved'
-                            ? i.isAdminApproved && !i.isAssetManagerApproved
-                            : i.isAssetManagerApproved
-            })
-        }else if(option && option !== 'all'){
-            newArr = data.filter((a:any)=> (typeof a[key] === 'string') && a[key].toLowerCase() === option.toLowerCase() )
-        }else if(option === 'all'){
-            newArr = [...sortData]
-        }else {
+        if (key === 'companyName') {
+            setSortState({...sortState, company: option ? option : 'all'})
+        } else if (key === 'status') {
+            setSortState({...sortState, status: option ? option : 'all'})
+        }
+        if (key === 'status') {
+            if (sortState.company !== 'all' && option !== 'all') {
+                newArr = sortData.filter((i: any) => sortStatus(i, option))
+            } else if (sortState.status !== 'all' && sortState.company !== 'all') {
+                newArr = feeds.filter((a: any) => sortCompany(a, 'companyName', sortState.company)).filter((i: any) => sortStatus(i, option))
+            } else {
+                newArr = feeds.filter((i: any) => sortStatus(i, option))
+            }
+        } else if (option && option !== 'all') {
+            if (sortState.status !== 'all' && option !== 'all') {
+                newArr = feeds.filter((i: any) => sortStatus(i, sortState.status)).filter((a: any) => sortCompany(a, key, option))
+            } else if (sortState.company !== 'all' && sortState.status !== 'all') {
+                newArr = feeds.filter((i: any) => sortStatus(i, sortState.status)).filter((a: any) => sortCompany(a, key, option))
+            } else {
+                newArr = feeds.filter((a: any) => sortCompany(a, key, option))
+            }
+        } else if (option === 'all') {
+            if (sortState.status === 'all' && sortState.company === 'all') {
+                newArr = [...feeds]
+            }else if(sortState.status === 'all'){
+                newArr = feeds.filter((a: any) => sortCompany(a, 'companyName', sortState.company))
+            }else{
+                newArr = feeds.filter((i: any) => sortStatus(i, sortState.status))
+            }
+        } else {
             newArr = num === 1 ? data.sort(function (a: any, b: any) {
                 if (a[key] > b[key]) {
                     return 1;
@@ -101,7 +134,7 @@ const Feed:React.FC<{isAdmin?:boolean, companies?: any}> = (props) => {
         }
         setSortData([...newArr])
     }
-    useEffect(()=>{
+    useEffect(() => {
         setData([...sortData])
     }, [sortData])
     if (pending) return <div className={'preloaderWrapper'}><Preloader/></div>
