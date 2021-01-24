@@ -205,10 +205,10 @@ export const Action: React.FC = (props) => {
         }
 
         // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("mouseover", handleClickOutside);
         return () => {
             // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mouseover", handleClickOutside);
         };
     }, [wrapperRef]);
     return (

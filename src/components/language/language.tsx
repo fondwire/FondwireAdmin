@@ -47,7 +47,7 @@ function Language() {
 
             setClick(true);
         }
-    }, [lng])
+    }, [lng, click])
     const changeLang = (lang:any) => {
         setClick(true)
         i18n.changeLanguage(lang);
