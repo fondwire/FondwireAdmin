@@ -79,7 +79,15 @@ function App() {
         }
         // setPending(false)
     }, [users, state])
-
+    // useEffect(()=>{
+    //     console.log(notifications)
+    //     let arr = notifications.sort((a:any, b:any) => {
+    //         if(a.issueDate < b.issueDate) return 1
+    //         if(a.issueDate > b.issueDate) return -1
+    //         if(a.issueDate === b.issueDate) return 0
+    //     })
+    //     setNotifications(arr)
+    // }, [notifications])
     useEffect(()=>{
         if(state?.userData?.isAdmin) {
             const feed = data.feeds
@@ -117,11 +125,13 @@ function App() {
                                                 arr.push({isFeed: false, ...userData.toJSON()})
                                                 if (userCount === userLength) {
                                                     // console.log(userCount)
+                                                    arr.sort((a:any, b:any) => b.issueDate - a.issueDate)
                                                     setNotifications(arr)
                                                     setPending(false)
                                                 }
                                             } else {
                                                 if (userCount === userLength) {
+                                                    arr.sort((a:any, b:any) => b.issueDate - a.issueDate)
                                                     setNotifications(arr)
                                                     setPending(false)
                                                 }
@@ -129,6 +139,7 @@ function App() {
                                         })
                                     }
                                 }
+                                arr.sort((a:any, b:any) => b.issueDate - a.issueDate)
                                 setNotifications([...arr])
                                 if (kk === fLength) {
                                     setPending(false)

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 import {TableComponentWrapper} from "../feedComponents/Feed-style";
 import {Link} from "react-router-dom";
-import {Action} from "../feedComponents/FeedComponents";
+// import {Action} from "../feedComponents/FeedComponents";
 
 
 const TableWrapper = styled(TableStyle)`
@@ -40,7 +40,9 @@ export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, symbol,
             <Link to={`#`} className={'title'}>{title}</Link>
             <div>{Symbol}</div>
             <div>{manager}</div>
-            <div><Action/></div>
+            <div>
+                {/*<Action/>*/}
+            </div>
         </CompaniesElementWrapper>
     )
 }
