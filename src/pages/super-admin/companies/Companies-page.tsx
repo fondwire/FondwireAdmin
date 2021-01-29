@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 interface CompanyType {
     name: string
     managers: Object
+    id: string
 
 }
 
@@ -19,7 +20,6 @@ function CompaniesPage() {
     })
     const [pending, setPending] = useState(true)
     const [companies, setCompanies] = useState<any>([])
-
     useEffect(()=>{
         getData('/assets', state, setCompanies, setPending)
     }, [state, state.userData])
@@ -42,14 +42,11 @@ function CompaniesPage() {
                 companies.map((company:CompanyType)=> <CompaniesElement
                     key={company.name}
                     title={company.name}
-                    id={'5'}
+                    id={company.id}
                     symbol={company.name}
-                    manager={Object.keys(company.managers).length}
+                    manager={Object.keys(company.managers ? company.managers : {}).length}
                 />)
             }
-            {/*<CompaniesElement id={2} title={'Asylbekov Amanbek'} manager={5} symbol={'VNGFNL'} />*/}
-            {/*<CompaniesElement id={2} title={'Asylbekov Amanbek'} manager={5} symbol={'VNGFNL'} />*/}
-            {/*<CompaniesElement id={2} title={'Asylbekov Amanbek'} manager={5} symbol={'VNGFNL'} />*/}
         </DashboardWrapper>
     );
 }

@@ -213,3 +213,9 @@
 .black{
     color: black;
 }
+.d-none{
+    display: none;
+}
+.c_pointer{
+    cursor: pointer;
+}

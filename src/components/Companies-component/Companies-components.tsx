@@ -33,11 +33,11 @@ type CompaniesElementProps = {
     symbol: string
     manager: string | number
 }
-export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, symbol, manager}) => {
+export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, symbol, manager, id}) => {
     const Symbol = symbol.split('').slice(0,3).join('')
     return (
         <CompaniesElementWrapper>
-            <Link to={`#`} className={'title'}>{title}</Link>
+            <Link to={`/companies/create-company/${id}`} className={'title'}>{title}</Link>
             <div>{Symbol}</div>
             <div>{manager}</div>
             <div>

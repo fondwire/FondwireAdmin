@@ -106,9 +106,9 @@ const Feed: React.FC<{ isAdmin?: boolean, companies?: any }> = (props) => {
                 newArr = feeds.filter((a: any) => sortCompany(a, key, option))
             }
         } else if (option === 'all') {
-            if (sortState.status === 'all' && sortState.company === 'all') {
+            if (sortState.status === 'all' && option === 'all') {
                 newArr = [...feeds]
-            }else if(sortState.status === 'all'){
+            }else if(sortState.status === 'all' && sortState.company !== 'all'){
                 newArr = feeds.filter((a: any) => sortCompany(a, 'companyName', sortState.company))
             }else{
                 newArr = feeds.filter((i: any) => sortStatus(i, sortState.status))
