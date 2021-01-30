@@ -8,12 +8,17 @@ import {UserType} from "../../../components/feedComponents/feed";
 
 
 
-function UsersPage() {
+const UsersPage:React.FC<{isUser?: boolean}> = (props) => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
     const [pending, setPending] = useState(true)
     const [users, setUsers] = useState<any>([])
+    const [appUsers, setAppUsers] = useState(users)
+    useEffect(()=>{
+        let newArr = props.isUser ? users.filter((i:any)=> !i.isAssetManager ) :  users.filter((i:any)=> i.isAssetManager )
+        setAppUsers([...newArr])
+    }, [users, props.isUser])
     useEffect(()=>{
         getData('/users', state, setUsers, setPending)
     }, [state, state.userData])
@@ -27,13 +32,23 @@ function UsersPage() {
             </div>
             <UsersHeader />
             {
-                users.map((user:UserType)=> <UserElement
-                    key={user.email}
-                    title={user.fullname}
-                    email={user.email}
-                    company={user.companyName}
-                    status={user.verified ? user.verified : false}
-                    id={user.id}/>)
+                // props.isUser ?
+                    appUsers.map((user:UserType)=>  <UserElement
+                        key={user.email}
+                        title={user.fullname}
+                        email={user.email}
+                        company={user.companyName}
+                        status={user.verified ? user.verified : false}
+                        id={user.id}/>
+                    )
+                    // : users.map((user:UserType)=>  <UserElement
+                    // key={user.email}
+                    // title={user.fullname}
+                    // email={user.email}
+                    // company={user.companyName}
+                    // status={user.verified ? user.verified : false}
+                    // id={user.id}/>
+                    // )
             }
             {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'Active'} />*/}
             {/*<UserElement email={'a@mail.ru'} title={'Asylbekov Aman'} id={1} company={'Tesla'} status={'rejected'} />*/}

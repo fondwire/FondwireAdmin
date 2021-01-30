@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 import {TableComponentWrapper} from "../feedComponents/Feed-style";
 import {Link} from "react-router-dom";
-import {Action} from "../feedComponents/FeedComponents";
+// import {Action} from "../feedComponents/FeedComponents";
 
 
 const TableWrapper = styled(TableStyle)`
@@ -33,14 +33,16 @@ type CompaniesElementProps = {
     symbol: string
     manager: string | number
 }
-export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, symbol, manager}) => {
+export const CompaniesElement:React.FC<CompaniesElementProps> = ({title, symbol, manager, id}) => {
     const Symbol = symbol.split('').slice(0,3).join('')
     return (
         <CompaniesElementWrapper>
-            <Link to={`#`} className={'title'}>{title}</Link>
+            <Link to={`/companies/create-company/${id}`} className={'title'}>{title}</Link>
             <div>{Symbol}</div>
             <div>{manager}</div>
-            <div><Action/></div>
+            <div>
+                {/*<Action/>*/}
+            </div>
         </CompaniesElementWrapper>
     )
 }

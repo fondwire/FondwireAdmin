@@ -12,7 +12,7 @@ import {UserType} from "./components/feedComponents/feed";
 export const MyContext = React.createContext<any>(null)
 
 
-export const getData = (path:string , state:any, setData:(arr: Array<any>)=>void, setPend:(bool:boolean)=> void) => {
+export const getData = (path:string, state:any, setData:(arr: Array<any>)=>void, setPend:(bool:boolean)=> void, isAdmin?: boolean,) => {
     const feeds = db.ref(path)
     feeds.once('value', function(snapshot){
         return snapshot.toJSON()
@@ -39,8 +39,13 @@ export const getData = (path:string , state:any, setData:(arr: Array<any>)=>void
         if(arr.length && arr[0].issueDate){
             arr = arr.sort((a:any,b:any)=> b.issueDate - a.issueDate)
         }
-        if(path === '/feeds'){
+        if(path === '/feeds' && !isAdmin ){
             arr = arr.filter(({uid}:any)=> state.userData && uid === state.userData.uid )
+        }else if(path === '/feeds' && isAdmin){
+            arr = arr.filter(({isPublish}:any)=> isPublish)
+            arr = arr.map((item: any )=>{
+                return {companyName: db.ref('/users').child(item.uid).child('companyName'), ...item}
+            })
         }else if(path === '/users'){
             arr.reverse()
         }
@@ -59,6 +64,10 @@ function App() {
     })
     const [data, setData] = useState<any>([])
     const [notifications, setNotifications] = useState<any>([])
+    const [companies, setCompanies] = useState<any>([])
+    useEffect(()=>{
+        getData('/assets', state, setCompanies, ()=>{})
+    }, [state])
 
     useEffect(()=>{
         getData('/users', state, setUsers, ()=>{})
@@ -74,7 +83,6 @@ function App() {
         }
         // setPending(false)
     }, [users, state])
-
     useEffect(()=>{
         if(state?.userData?.isAdmin) {
             const feed = data.feeds
@@ -112,11 +120,13 @@ function App() {
                                                 arr.push({isFeed: false, ...userData.toJSON()})
                                                 if (userCount === userLength) {
                                                     // console.log(userCount)
+                                                    arr.sort((a:any, b:any) => b.issueDate - a.issueDate)
                                                     setNotifications(arr)
                                                     setPending(false)
                                                 }
                                             } else {
                                                 if (userCount === userLength) {
+                                                    arr.sort((a:any, b:any) => b.issueDate - a.issueDate)
                                                     setNotifications(arr)
                                                     setPending(false)
                                                 }
@@ -124,6 +134,7 @@ function App() {
                                         })
                                     }
                                 }
+                                arr.sort((a:any, b:any) => b.issueDate - a.issueDate)
                                 setNotifications([...arr])
                                 if (kk === fLength) {
                                     setPending(false)
@@ -170,7 +181,7 @@ function App() {
         }
     }, [ state, state.userData, pending ])
 
-    const route = useRoute(state, user, notifications, setPending)
+    const route = useRoute(state, user, notifications, setPending, companies)
 
     if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>
     return <MyContext.Provider value={{dispatch}}>

@@ -1,17 +1,85 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {FeedWrapper, FeedComponentWrapper, ActionWrapper, CreateNewWrapper, FeedModal} from './Feed-style';
+import {FeedWrapper, FeedComponentWrapper, ActionWrapper, CreateNewWrapper, FeedModal, SortButton} from './Feed-style';
 import {Link} from 'react-router-dom';
 import {db} from "../../firebase";
+import Swal from "sweetalert2";
+import pencil from '../../images/pencil.png'
+import trash from '../../images/delete.png'
 
-const FeedHeader = () => {
+const Sort = ({active, link}: any) => {
+    return <SortButton count={active.link === link ? active.count : ''}>
+        <div className={'first'}/>
+        <div className={'second'}/>
+    </SortButton>
+}
+
+const FeedHeader: React.FC<{
+    withSort?: boolean,
+    sortFC?: (a: string, num: number, option?: string) => void,
+    isAdmin?: boolean,
+    companies?: any
+}> = (props) => {
+    const [active, setActive] = useState({
+        link: '',
+        count: 0,
+    })
+    const sorting = (type: string, option?:string) => {
+        if (props.sortFC) {
+            let count
+            if(active.link !== type){
+                count = 1
+            }else if(active.count === 0) {
+                count = 1
+            }else if(active.count === 1){
+                count = 2
+            }else if(active.count === 2){
+                count = 1
+            }else{
+                count = 0
+            }
+            setActive({
+                link: type,
+                count: count
+            })
+            props.sortFC(type, count, option)
+        }
+    }
+
     return (
-        <FeedWrapper>
-            <div>TITLE</div>
-            <div>CREATION DATE</div>
-            <div>TYPE</div>
-            {/*<div>STATUS</div>*/}
-            <div>VIEWS</div>
-            <div/>
+        <FeedWrapper withSort={props.withSort} isAdmin={props.isAdmin}>
+            <div className={'header'} onClick={() => sorting('title')}>
+                TITLE
+                {props.withSort && <Sort active={active} link={'title'}/>}
+            </div>
+            <div className={'header'} onClick={() => sorting('issueDate')}>
+                CREATION DATE
+                {props.withSort && <Sort active={active} link={'issueDate'}/>}
+            </div>
+            <div className={'header'} onClick={() => sorting('type')}>
+                TYPE
+                {props.withSort && <Sort active={active} link={'type'}/>}
+            </div>
+            {props.isAdmin && <div className={'header'}>
+                <select className={'select-sort'} onChange={(e)=> sorting('companyName', e.target.value)}>
+                    <option value="all">All COMPANIES</option>
+                    {
+                        props.companies.map((item:{name: string, id: string})=> <option value={item.name}>{item.name}</option> )
+                    }
+                </select>
+            </div>}
+            {props.withSort && <div className={'header'}>
+                {/*STATUS*/}
+                <select className={'select-sort'} onChange={(e)=> sorting('status', e.target.value)}>
+                    <option value="all">All STATUS</option>
+                    {!props.isAdmin && <option value="draft">DRAFT</option>}
+                    <option value="submitted">SUBMITTED</option>
+                    <option value="approved">APPROVED</option>
+                    <option value="published">PUBLISHED</option>
+                </select>
+                {/*{props.withSort && <Sort active={active} link={'status'}/>}*/}
+            </div>}
+            {!props.isAdmin && <div className={'header'} onClick={() => sorting('views')}>VIEWS</div>}
+            <div>EDIT</div>
         </FeedWrapper>
     );
 };
@@ -26,7 +94,10 @@ export type FeedComponentProps = {
     isAdminApprove: boolean
     isAssetManagerApprove: boolean
     isPublish: boolean
-    setPending: (status:boolean)=>void
+    setPending: (status: boolean) => void
+    isAdmin?: boolean
+    withSort?: boolean
+    companyName?: string
 }
 export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 isAdminApprove,
@@ -36,28 +107,51 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 type,
                                                                 id,
                                                                 isPublish,
-                                                                setPending
+                                                                setPending,
+                                                                isAdmin,
+                                                                withSort,
+                                                                companyName
                                                             }) => {
     // const Status = status.toUpperCase()
     let Status = 'DRAFT'
-    if(!isPublish){
+    if (!isPublish) {
         Status = 'DRAFT'
-    }else if(isAdminApprove && isAssetManagerApprove){
+    } else if (isAdminApprove && isAssetManagerApprove) {
         Status = 'PUBLISHED'
-    }else if(isAdminApprove){
+    } else if (isAdminApprove) {
         Status = 'APPROVED'
-    }else {
+    } else {
         Status = 'SUBMITTED'
     }
     const Type = type.toUpperCase()
     const Time = new Date(date).toLocaleDateString()
     const [background, setBackground] = useState<string>('#a2a2a2')
+
     const onDelete = () => {
-        db.ref('/feeds').child(type + 's').child(id.toString()).remove()
-            .then((res) => {
-                console.log(res)
-                setPending(true)
-            })
+        Swal.fire({
+            showConfirmButton: false,
+            title: `<div class="modalTitle fz30" style="margin: 35px 0;"> DELETE REQUEST </div>`,
+            html: `<div>
+                        <div class="medium black fz21">Do you really want to delete this post?</div>
+                        <br>
+                        <div class="medium black fz21">This process cannot be undone.</div>
+                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                            <button id="noDelete" class="modal-submit">NO, KEEP IT</button>
+                            <button id="yesDelete" class="modal-submit">YES, DELETE</button>
+                        </div>
+                  </div>`,
+        }).then((res) => {
+            if (res.isConfirmed) {
+                db.ref('/feeds').child(type + 's').child(id.toString()).remove()
+                    .then(() => {
+                        setPending(true)
+                    })
+            }
+        })
+        const confirmBtn = document.getElementById("yesDelete")
+        confirmBtn?.addEventListener('click', () => Swal.clickConfirm())
+        const deleteBtn = document.getElementById("noDelete")
+        deleteBtn?.addEventListener('click', () => Swal.clickCancel())
     }
     useEffect(() => {
         switch (Status) {
@@ -74,16 +168,29 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
         }
     }, [Status])
     return (
-        <FeedComponentWrapper bg={background}>
-            <Link to={`feed/create/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
+        <FeedComponentWrapper withSort={withSort} isAdmin={isAdmin} bg={background}>
+            <Link to={`${isAdmin ? 'content' : 'feed/create'}/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
             <div>{Time}</div>
             <div>{Type}</div>
-            {/*<div className={'status'}><span>{Status}</span></div>*/}
-            <div>1.170</div>
-            <div>
-                <Action>
-                    <div onClick={onDelete} className={'delete'}>DELETE</div>
-                </Action>
+            {isAdmin && <div>{companyName ? companyName : ' '}</div>}
+            {withSort && <div className={'status'}><span>{Status}</span></div>}
+            {!isAdmin && <div>1.170</div>}
+            <div className={'actions_wrapper'}>
+                <Link to={`${isAdmin ? 'content' : 'feed/create'}/${Type.toLowerCase()}/${id}`}>
+                    <img
+                        title={'edit'}
+                        src={pencil}
+                        alt="edit"/>
+                </Link>
+                <div>
+                    <img onClick={onDelete}
+                         title={'delete'}
+                         src={trash}
+                         alt="delete"/>
+                </div>
+                {/*<Action>*/}
+                {/*    <div onClick={onDelete} className={'delete'}>DELETE</div>*/}
+                {/*</Action>*/}
             </div>
         </FeedComponentWrapper>
     )
@@ -101,10 +208,10 @@ export const Action: React.FC = (props) => {
         }
 
         // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("mouseover", handleClickOutside);
         return () => {
             // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mouseover", handleClickOutside);
         };
     }, [wrapperRef]);
     return (

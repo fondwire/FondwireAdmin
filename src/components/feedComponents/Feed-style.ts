@@ -1,15 +1,68 @@
 import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 
-export const FeedWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 180px 180px  160px 20px;
+export const FeedWrapper: any = styled(TableStyle)`
+  grid-template-columns: 
+                          1fr 
+                          180px
+                          180px 
+                          ${(props:any)=> props.withSort ? '160px' : ''}
+                          ${(props:any)=> props.isAdmin ? '160px' : ''}
+                          ${(props:any)=> !props.isAdmin ? '160px' : ''}
+                          65px;
+  
+  &>.header{
+    cursor:pointer;
+    display: flex;
+    align-items: center;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+                                  
+    &>.select-sort{
+        margin: auto 0;
+        text-align: left;
+        font-weight: 600;
+        font-family: 'Gotham-Bold',sans-serif;
+        font-size: 15px;
+        color: rgba(0,0,0,0.5);
+        border: none;
+        
+        &:focus{
+          outline: none;
+        }
+    }
+  }
+`
+export const SortButton: any = styled.div`
+  margin-left: 10px;
+  &>.first, &>.second{
+    margin: 2px 0;
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    
+    border-bottom: 5px solid rgba(78,77,77,0.82);
+  }
+  &>.first{
+      border-bottom:  5px solid ${(props: any) => props.count === 1 ? '#000' : 'rgba(78,77,77,0.82)'};
+  }
+  &>.second{
+    border-bottom:  5px solid ${(props: any) => props.count === 2 ? '#000' : 'rgba(78,77,77,0.82)'};
+    transform: rotate(180deg);
+  }
 `
 
 export const TableComponentWrapper = (props: any) => `
  &>.title{
     color: #171616d1;
-    font-weight: 600;
-    font-family: 'Gotham-Bold', sans-serif;    
+    font-weight: 500;
+    font-family: 'Gotham-Medium', sans-serif;    
+    // font-size: 13px;
     padding-right: 30px;
  }
  &>div, a{
@@ -48,6 +101,25 @@ export const TableComponentWrapper = (props: any) => `
     display: flex;
     justify-content: center;
   }
+  
+  & .actions_wrapper{
+    transition: all 0.5s ease-in;
+    display: flex;
+    align-items: center;
+    &>a, &>div{
+      transition: all 0.4s linear;
+      opacity: 0;
+      visibility: hidden;
+      height: 20px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+    
+    & img{
+      height: 100%;
+    }
+  }
+  
   &:hover  div>.action__wrapper {
      opacity: 1;
      visibility: visible;
@@ -55,13 +127,12 @@ export const TableComponentWrapper = (props: any) => `
   
 `
 
-export const FeedComponentWrapper: any = styled(FeedWrapper)`
+export const FeedComponentWrapper: any = styled( FeedWrapper)`
   ${(props: any) => TableComponentWrapper(props.bg)}
   
-  &:hover + div>.action__wrapper {
-    //color: red !important;
-     opacity: 1;
-     visibility: visible;
+  &:hover  .actions_wrapper>a , &:hover .actions_wrapper>div{
+    opacity: 1;
+    visibility: visible;
   }
 `
 
@@ -86,7 +157,7 @@ export const ActionWrapper = styled.div`
   }
 `
 
-export const FeedModal:any = styled.span`
+export const FeedModal: any = styled.span`
     cursor:default;
     color: white;
     min-width: 80px;

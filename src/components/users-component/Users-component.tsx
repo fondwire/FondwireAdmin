@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import { Action } from '../feedComponents/FeedComponents';
 
 const TableWrapper = styled(TableStyle)`
-  grid-template-columns: 1fr 0.8fr 1fr 120px 30px;
+  grid-template-columns: 1fr 0.8fr 1fr 120px 50px;
 `
 
 function UsersHeader() {
@@ -16,7 +16,7 @@ function UsersHeader() {
             <div>EMAIL</div>
             <div>COMPANY</div>
             <div>STATUS</div>
-            <div/>
+            <div>EDIT</div>
         </TableWrapper>
 
     );

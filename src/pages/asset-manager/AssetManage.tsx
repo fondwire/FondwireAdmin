@@ -252,7 +252,7 @@ function AssetManage() {
                                     fullname: '',
                                     companyName: '',
                                     phone: '',
-                                    regarding: '',
+                                    regarding: 'Regarding',
                                     message: ''
                                 }}
                                 validationSchema={Yup.object().shape(validateFormikSignUp)}
@@ -288,7 +288,7 @@ function AssetManage() {
                                                 <Field as={Input} placeholder="COMPANY" errors={errors} touched={touched} title={'Company name'} type={'text'} name={'companyName'}/>
                                                 <Field as={Input} placeholder="PHONE" errors={errors} touched={touched} title={'Phone'} type={'text'} name={'phone'}/>
                                                 <select name="regarding" className={'modal-input'}>
-                                                    <option value=" ">Regarding</option>
+                                                    <option value="Regarding">Regarding</option>
                                                     <option value="Business inquiry">Business inquiry</option>
                                                     <option value="Support request">Support request</option>
                                                     <option value="Complaint">Complaint</option>

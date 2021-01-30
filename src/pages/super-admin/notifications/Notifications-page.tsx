@@ -4,7 +4,7 @@ import styled from "styled-components";
 import {TableStyle} from "../../../components/table-style/table-style";
 import {TableComponentWrapper} from "../../../components/feedComponents/Feed-style";
 import {Link} from "react-router-dom";
-import {Action} from "../../../components/feedComponents/FeedComponents";
+// import {Action} from "../../../components/feedComponents/FeedComponents";
 import user from '../../../images/user-profile.png'
 import {FeedType} from "../../dashboard/Dashboard";
 // import reducer from "../../../state/RootReducer";
@@ -39,9 +39,9 @@ export const CompaniesElement:React.FC<CompaniesElementProps> = (
     //         })
     //     })
     // }
-    const onDelete = () => {
-        alert(id)
-    }
+    // const onDelete = () => {
+    //     alert(id)
+    // }
     return (
         <CompaniesElementWrapper>
             <Link to={`/notifications/feed/${type}/${id}/${notificationId}`} className={'title'}>{title}</Link>
@@ -53,10 +53,10 @@ export const CompaniesElement:React.FC<CompaniesElementProps> = (
             <div>{company}</div>
             <div>{manager}</div>
             <div>
-                <Action>
-                    {/*<div onClick={onApprove}>APPROVE</div>*/}
-                    <div onClick={onDelete} className={'delete'}>DELETE</div>
-                </Action>
+                {/*<Action>*/}
+                {/*    /!*<div onClick={onApprove}>APPROVE</div>*!/*/}
+                {/*    <div onClick={onDelete} className={'delete'}>DELETE</div>*/}
+                {/*</Action>*/}
             </div>
         </CompaniesElementWrapper>
     )

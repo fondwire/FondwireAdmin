@@ -14,12 +14,13 @@ import NotificationsPage from "./pages/super-admin/notifications/Notifications-p
 import {UserType} from "./components/feedComponents/feed";
 import Unverified from "./pages/unverified/Unverified";
 import AssetManage from "./pages/asset-manager/AssetManage";
+import CreateCompany from "./pages/create-company(edit)/CreateCompany";
 // import reducer from "./state/RootReducer";
 // import {getData} from "./App";
 // import {db} from "./firebase";
 
 
-export const useRoute = (state:any, user:UserType, notifications: any, setPending: (status:boolean)=>void) => {
+export const useRoute = (state:any, user:UserType, notifications: any, setPending: (status:boolean)=>void, companies: any) => {
     // const [stat] = useReducer(reducer, {
     //     userData: JSON.parse(localStorage.getItem('userData') as string),
     // })
@@ -42,8 +43,23 @@ export const useRoute = (state:any, user:UserType, notifications: any, setPendin
                             <Route path={'/managers'}>
                                 <Users />
                             </Route>
-                            <Route path={'/companies'}>
+                            <Route path={'/users'}>
+                                <Users isUser={true} />
+                            </Route>
+                            <Route exact path={'/companies'}>
                                 <CompaniesPage />
+                            </Route>
+                            <Route path={'/companies/create-company/:id'}>
+                                <CreateCompany />
+                            </Route>
+                            <Route path={'/companies/create-company'}>
+                                <CreateCompany />
+                            </Route>
+                            <Route exact path={'/content'}>
+                                <Feed companies={companies} isAdmin={true}/>
+                            </Route>
+                            <Route exact path={'/content/:type/:id'}>
+                                <CreateFeed/>
                             </Route>
                             <Route path={'/notifications/feed/:type/:id/:notificationId'}>
                                 <CreateFeed/>

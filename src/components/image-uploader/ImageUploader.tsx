@@ -74,3 +74,33 @@ const ImageUploader:React.FC<ImageUploaderProps> = (props) => {
 }
 
 export default ImageUploader;
+
+// const CompanyLogoUploaderWrapper = styled.div`
+//   text-transform: uppercase;
+//   font-size: 12px;
+//   font-weight: 600;
+//   color: rgba(0,0,0,0.6);
+//   letter-spacing: 1px;
+//
+// `
+// export const CompanyImageUploader:React.FC<ImageUploaderProps> = (props) => {
+//     const [image, setImage] = useState('')
+//     useEffect(()=>{
+//         const reader = new FileReader()
+//         if(props.image?.target?.files?.length) {
+//             reader.readAsDataURL(props.image?.target.files[0]);
+//             reader.onload = (e: any) => {
+//                 const newUrl = e.target.result
+//                 setImage( newUrl)
+//             }
+//         }else if(props.id){
+//             setImage( props.image)
+//         }else{
+//             setImage('')
+//         }
+//     }, [props.image, props.id])
+//     return <CompanyLogoUploaderWrapper>
+//         <div>LOGO</div>
+//         <div></div>
+//     </CompanyLogoUploaderWrapper>
+// }
