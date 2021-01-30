@@ -60,8 +60,9 @@ export const SortButton: any = styled.div`
 export const TableComponentWrapper = (props: any) => `
  &>.title{
     color: #171616d1;
-    font-weight: 600;
-    font-family: 'Gotham-Bold', sans-serif;    
+    font-weight: 500;
+    font-family: 'Gotham-Medium', sans-serif;    
+    // font-size: 13px;
     padding-right: 30px;
  }
  &>div, a{

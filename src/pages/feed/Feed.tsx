@@ -141,7 +141,7 @@ const Feed: React.FC<{ isAdmin?: boolean, companies?: any }> = (props) => {
     return (
         <FeedPageWrapper>
             <div className={'header'}>
-                <h3>FEEDS</h3>
+                <h3>CONTENT</h3>
                 <div>
                     <SearchInput value={search} onChange={setSearch}/>
                     {!props.isAdmin && <CreateNew/>}

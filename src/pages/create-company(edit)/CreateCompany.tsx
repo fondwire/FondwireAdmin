@@ -4,7 +4,7 @@ import {Field, Formik, FormikValues} from "formik";
 import * as Yup from "yup";
 import FeedCreateInput from "../../components/FeedCreateInput/FeedCreateInput";
 import {SubmitButton} from "../../components/Buttons/submit-button";
-import {useParams, Redirect, useHistory} from 'react-router-dom';
+import {useParams, useHistory} from 'react-router-dom';
 import Managers from "./Managers";
 import {getData} from "../../App";
 import reducer from "../../state/RootReducer";
@@ -75,7 +75,7 @@ const CreateCompany = () => {
             return url
         })
     const redirect = () => history.push('/companies')
-    const submit = (values: FormikValues, {setSubmitting}: FormikValues) => {
+    const submit = (values: FormikValues) => {
         let {logo2, logo, contact: {portrait, portrait2, ...contactVal}, ...value} = values
         // If admin uploaded logo of the company
         if (logo) {

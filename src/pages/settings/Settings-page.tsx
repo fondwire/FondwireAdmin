@@ -35,14 +35,18 @@ const SettingsPage:React.FC<SettingsPagePropsType> = ({user}) => {
                 <SettingsBlock>
                     <div className={'logout'} onClick={()=>{
                         Swal.fire({
-                            icon: 'error',
+                            // icon: 'error',
                             title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Logout from your Account</span>`,
                             // text: 'Are you sure you want to log out ?',
-                            html: `<span style="font-family: 'Gotham-Medium', sans-serif">Are you sure you want to log out ?</span>`,
-                            showDenyButton: true,
-                            denyButtonText: 'No',
-                            showConfirmButton: true,
-                            confirmButtonText: 'Yes',
+                            html: `<div>
+                                        <span style="font-family: 'Gotham-Medium', sans-serif">Are you sure you want to log out ?</span>
+                                        <div class="modal-two-buttons-wrapper" style="margin: 20px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, LOGOUT</button>
+                                        </div>
+                                    </div>`,
+                            showDenyButton: false,
+                            showConfirmButton: false,
                             // confirmButtonColor: 'green',
                             focusConfirm: false,
                         }).then((result)=>{
@@ -65,6 +69,10 @@ const SettingsPage:React.FC<SettingsPagePropsType> = ({user}) => {
                         //         data: null
                         //     })
                         // })
+                        const confirmBtn = document.getElementById("yesSave")
+                        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+                        const deleteBtn = document.getElementById("noGoBack")
+                        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
                     }}>
                         {/*<img src={question} alt="?"/>*/}
                         Logout</div>

@@ -79,7 +79,7 @@ const FeedHeader: React.FC<{
                 {/*{props.withSort && <Sort active={active} link={'status'}/>}*/}
             </div>}
             {!props.isAdmin && <div className={'header'} onClick={() => sorting('views')}>VIEWS</div>}
-            <div/>
+            <div>EDIT</div>
         </FeedWrapper>
     );
 };

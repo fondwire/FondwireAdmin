@@ -17,6 +17,40 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
     const {dispatch} = useContext(MyContext)
     const {t} = useTranslation();
     const length = notificationLength.length
+    const onLogoutModal = ()=>{
+        Swal.fire({
+            // icon: 'error',
+            title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Logout from your Account</span>`,
+            // text: 'Are you sure you want to log out ?',
+            html: `<div>
+                                        <span style="font-family: 'Gotham-Medium', sans-serif">Are you sure you want to log out ?</span>
+                                        <div class="modal-two-buttons-wrapper" style="margin: 20px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, LOGOUT</button>
+                                        </div>
+                                    </div>`,
+            showDenyButton: false,
+            showConfirmButton: false,
+            // confirmButtonColor: 'green',
+            focusConfirm: false,
+        }).then((result)=>{
+            if (result.isConfirmed) {
+                Logout().then(()=>{
+                    localStorage.removeItem('userData')
+                    dispatch({
+                        type: SIGN_IN_TYPE,
+                        data: null
+                    })
+                })
+            } else if (result.isDenied) {
+                // Swal.fire('Changes are not saved', '', 'info')
+            }
+        })
+        const confirmBtn = document.getElementById("yesSave")
+        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        const deleteBtn = document.getElementById("noGoBack")
+        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+    }
     return (
         <NavbarWrapper>
             <Link to={`${isAdmin ? '/dashboard' : '/users'}`} className={'logoWrapper'}>
@@ -31,6 +65,7 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
                             <NavLink to={'/feed'}>{t("feed")}</NavLink>
                             <NavLink to={'/analytics'}>{t("analytics")}</NavLink>
                             <NavLink to={'/settings'}>{t("settings")}</NavLink>
+                            <span className={'logout'} onClick={onLogoutModal}>Logout</span>
                         </>
                         : <>
                             <NavLink to={'/managers'}>Managers</NavLink>
@@ -51,33 +86,7 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
                                         : null
                                 }
                             </NavLink>
-                            <span className={'logout'} onClick={()=>{
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Logout from your Account</span>`,
-                                    // text: 'Are you sure you want to log out ?',
-                                    html: `<span style="font-family: 'Gotham-Medium', sans-serif">Are you sure you want to log out ?</span>`,
-                                    showDenyButton: true,
-                                    denyButtonText: 'No',
-                                    showConfirmButton: true,
-                                    confirmButtonText: 'Yes',
-                                    // confirmButtonColor: 'green',
-                                    focusConfirm: false,
-                                }).then((result)=>{
-                                    if (result.isConfirmed) {
-                                        Logout().then(()=>{
-                                            localStorage.removeItem('userData')
-                                            dispatch({
-                                                type: SIGN_IN_TYPE,
-                                                data: null
-                                            })
-                                        })
-                                    } else if (result.isDenied) {
-                                        // Swal.fire('Changes are not saved', '', 'info')
-                                    }
-                                })
-
-                            }}>Logout</span>
+                            <span className={'logout'} onClick={onLogoutModal}>Logout</span>
                         </>
                 }
             </NavList>
