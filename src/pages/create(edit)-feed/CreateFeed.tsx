@@ -54,13 +54,12 @@ const CreateFeed = React.memo(() => {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
     const {id, type, notificationId} = useParams()
+    console.log(type, id , notificationId)
     const history = useHistory()
     const [status, setStatus] = useState('New feed')
     const [editor, setEditor] = useState<any>(EditorState?.createEmpty())
     const [pending, setPending] = useState(true)
     const [initialValue, setInitialValue] = useState<any>(initialVal)
-    // console.log(initialValue)
-    // console.log(editor?.getCurrentContent().getPlainText('').length)
     const [userData] = useState(JSON.parse(localStorage.getItem('userData') as string))
     useEffect(() => {
         if (id) {
@@ -283,11 +282,25 @@ const CreateFeed = React.memo(() => {
                                 isAdminApproved: true,
                                 ...rest
                             }).then(() => {
-                                db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
-                                    // alert('success set and removed')
-                                    // setPending(true)
-                                    window.location.href = '/notifications'
-                                })
+                                if(notificationId) {
+                                    db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
+                                        window.location.href = '/notifications'
+                                    })
+                                }else{
+                                    db.ref('/notification').child('feeds').child(type + 's').once('value', function(snapshot){
+                                        return snapshot.toJSON()
+                                    }).then((data)=>{
+                                        const fObject:any = data.toJSON()
+                                        for (let key in fObject){
+                                            if(fObject[key].id === id){
+                                                db.ref('/notification').child('/feeds').child(type + 's').child(key).remove().then(() => {
+                                                    window.location.href = '/content'
+                                                })
+                                            }
+                                        }
+                                        // window.location.href = '/content'
+                                    })
+                                }
                             })
                         })
                 })
@@ -298,11 +311,25 @@ const CreateFeed = React.memo(() => {
                 isAdminApproved: true,
                 ...rest
             }).then(() => {
-                db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
-                    // alert('success set and removed')
-                    // setPending(true)
-                    window.location.href = '/notifications'
-                })
+                if(notificationId) {
+                    db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
+                        window.location.href = '/notifications'
+                    })
+                }else{
+                    db.ref('/notification').child('feeds').child(type + 's').once('value', function(snapshot){
+                        return snapshot.toJSON()
+                    }).then((data)=>{
+                        const fObject:any = data.toJSON()
+                        for (let key in fObject){
+                            if(fObject[key].id === id){
+                                db.ref('/notification').child('/feeds').child(type + 's').child(key).remove().then(() => {
+                                    window.location.href = '/content'
+                                })
+                            }
+                        }
+                        // window.location.href = '/content'
+                    })
+                }
             })
         }
     }
@@ -324,6 +351,111 @@ const CreateFeed = React.memo(() => {
             return 'handled';
         }
     }
+    const onManagerSaveModel = (values:FormikValues) => {
+        Swal.fire({
+            showCloseButton: true,
+            showConfirmButton: false,
+            title: `<div class="modalTitle fz30" style="margin: 35px 0;">SAVE CONFIRMATION</div>`,
+            html: `
+                                                    <div>
+                                                        <div class="medium black fz21">Do you really want to save this post?</div>
+                                                        <br>
+                                                        <div class="medium black fz21">You can edit this post later.</div>
+                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, SAVE</button>
+                                                        </div>
+                                                    </div>
+                                                `
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onSubmit(values, false)
+            }
+        })
+        const confirmBtn = document.getElementById("yesSave")
+        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        const deleteBtn = document.getElementById("noGoBack")
+        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+    }
+    const onAdminApproveModal = (values:FormikValues) => {
+        Swal.fire({
+            showCloseButton: true,
+            showConfirmButton: false,
+            title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
+            html: `
+                                                    <div>
+                                                        <div class="medium black fz21">Do you really want to approve this post?</div>
+                                                        <br>
+                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, APPROVE</button>
+                                                        </div>
+                                                    </div>
+                                                `
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onAdminApprove(values)
+            }
+        })
+        const confirmBtn = document.getElementById("yesSave")
+        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        const deleteBtn = document.getElementById("noGoBack")
+        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+    }
+    const onAssetManagerModal = () => {
+        Swal.fire({
+            showCloseButton: true,
+            showConfirmButton: false,
+            title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
+            html: `
+                                                    <div>
+                                                        <div class="medium black fz21">Do you really want to approve this post?</div>
+                                                        <br>
+                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, APPROVE</button>
+                                                        </div>
+                                                    </div>
+                                                `
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onApprove()
+            }
+        })
+        const confirmBtn = document.getElementById("yesSave")
+        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        const deleteBtn = document.getElementById("noGoBack")
+        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+    }
+    const onManagerSubmitModal = (values:FormikValues) => {
+        Swal.fire({
+            showCloseButton: true,
+            showConfirmButton: false,
+            title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
+            html: `
+                                                    <div>
+                                                        <div class="medium black fz21">Do you really want to submit this post?</div>
+                                                        <br>
+                                                        <div class="medium black fz21">We will start processing immediately.</div>
+                                                        <br>
+                                                        <div class="medium black fz21">You know and accept our terms</div>
+                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                                                            <button id="yesSave" class="modal-submit">YES, SUBMIT</button>
+                                                        </div>
+                                                    </div>
+                                                `
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onSubmit(values, true)
+            }
+        })
+        const confirmBtn = document.getElementById("yesSave")
+        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        const deleteBtn = document.getElementById("noGoBack")
+        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+    }
+
     if (pending) return <div className={'preloaderWrapper'}><Preloader/></div>
     return (
         <CreatePageWrapper>
@@ -447,70 +579,21 @@ const CreateFeed = React.memo(() => {
                                 }
                                 <div className={'btn__wrapper'}>
                                     {
-                                        isPublish ? <div/>
+                                        isPublish  ? <div/>
                                             // submit by Manager to save feed
                                             : <SubmitButton
                                                 disabled={!values.title}
                                                 type={'button'}
-                                                onClick={() => {
-                                                    Swal.fire({
-                                                        showCloseButton: true,
-                                                        showConfirmButton: false,
-                                                        title: `<div class="modalTitle fz30" style="margin: 35px 0;">SAVE REQUEST</div>`,
-                                                        html: `
-                                                    <div>
-                                                        <div class="medium black fz21">Do you really want to save this post?</div>
-                                                        <br>
-                                                        <div class="medium black fz21">You can edit this post later.</div>
-                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
-                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
-                                                            <button id="yesSave" class="modal-submit">YES, SAVE</button>
-                                                        </div>
-                                                    </div>
-                                                `
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            onSubmit(values, false)
-                                                        }
-                                                    })
-                                                    const confirmBtn = document.getElementById("yesSave")
-                                                    confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
-                                                    const deleteBtn = document.getElementById("noGoBack")
-                                                    deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
-                                                }}
+                                                onClick={()=>onManagerSaveModel(values)}
                                             >
                                                 save
                                             </SubmitButton>
                                     }
                                     {
-                                        state.userData.isAdmin
+                                        state.userData.isAdmin && !isAdminApproved
                                             ? <SubmitButton
                                                 type={"button"}
-                                                onClick={() => {
-                                                    Swal.fire({
-                                                        showCloseButton: true,
-                                                        showConfirmButton: false,
-                                                        title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
-                                                        html: `
-                                                    <div>
-                                                        <div class="medium black fz21">Do you really want to approve this post?</div>
-                                                        <br>
-                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
-                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
-                                                            <button id="yesSave" class="modal-submit">YES, APPROVE</button>
-                                                        </div>
-                                                    </div>
-                                                `
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            onAdminApprove(values)
-                                                        }
-                                                    })
-                                                    const confirmBtn = document.getElementById("yesSave")
-                                                    confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
-                                                    const deleteBtn = document.getElementById("noGoBack")
-                                                    deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
-                                                }}
+                                                onClick={() => onAdminApproveModal(values)}
                                             >Approve</SubmitButton>
                                             : null
                                     }
@@ -520,71 +603,20 @@ const CreateFeed = React.memo(() => {
                                             : !isAssetManagerApproved && !isAdminApproved && isPublish
                                             // Approve by Super-Admin
                                             ? null
-                                            : isAdminApproved && isPublish
+                                            : isAdminApproved && isPublish && !state.userData.isAdmin
                                                 //    Approve by Asset-Manager
                                                 ? <SubmitButton
                                                     type={"button"}
-                                                    onClick={() => {
-                                                        Swal.fire({
-                                                            showCloseButton: true,
-                                                            showConfirmButton: false,
-                                                            title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
-                                                            html: `
-                                                    <div>
-                                                        <div class="medium black fz21">Do you really want to approve this post?</div>
-                                                        <br>
-                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
-                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
-                                                            <button id="yesSave" class="modal-submit">YES, APPROVE</button>
-                                                        </div>
-                                                    </div>
-                                                `
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                onApprove()
-                                                            }
-                                                        })
-                                                        const confirmBtn = document.getElementById("yesSave")
-                                                        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
-                                                        const deleteBtn = document.getElementById("noGoBack")
-                                                        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
-                                                    }}
+                                                    onClick={() => onAssetManagerModal()}
                                                 >Approve</SubmitButton>
                                                 //    onSubmit by Manager to create feed
-                                                : <SubmitButton
+                                                : !state.userData.isAdmin ? <SubmitButton
                                                     disabled={(values.link.length ? false : isVideo ) || !hasChanged || hasErrors || isSubmitting}
-                                                    onClick={() => {
-                                                        Swal.fire({
-                                                            showCloseButton: true,
-                                                            showConfirmButton: false,
-                                                            title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
-                                                            html: `
-                                                    <div>
-                                                        <div class="medium black fz21">Do you really want to submit this post?</div>
-                                                        <br>
-                                                        <div class="medium black fz21">We will start processing immediately.</div>
-                                                        <br>
-                                                        <div class="medium black fz21">You know and accept our terms</div>
-                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
-                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
-                                                            <button id="yesSave" class="modal-submit">YES, SUBMIT</button>
-                                                        </div>
-                                                    </div>
-                                                `
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                onSubmit(values, true)
-                                                            }
-                                                        })
-                                                        const confirmBtn = document.getElementById("yesSave")
-                                                        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
-                                                        const deleteBtn = document.getElementById("noGoBack")
-                                                        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
-                                                    }}
+                                                    onClick={() => onManagerSubmitModal(values)}
                                                     type={'button'}
                                                 >
                                                     submit
-                                                </SubmitButton>
+                                                </SubmitButton> : null
                                     }
                                 </div>
                             </Form>
