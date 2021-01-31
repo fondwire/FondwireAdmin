@@ -54,7 +54,6 @@ const CreateFeed = React.memo(() => {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
     const {id, type, notificationId} = useParams()
-    console.log(type, id , notificationId)
     const history = useHistory()
     const [status, setStatus] = useState('New feed')
     const [editor, setEditor] = useState<any>(EditorState?.createEmpty())

@@ -65,7 +65,7 @@ const ImageUploader:React.FC<ImageUploaderProps> = (props) => {
             }
             {
                 props.btn && image
-                    ? <div className={'addImage'}> + Update </div>
+                    ? <div className={'addImage'}> Delete and change </div>
                     : props.btn ? <div className={'addImage'}> + Add image </div>
                     : <img src={image} alt="#"/>
             }
