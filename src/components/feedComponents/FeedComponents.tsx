@@ -5,6 +5,7 @@ import {db} from "../../firebase";
 import Swal from "sweetalert2";
 import pencil from '../../images/pencil.png'
 import trash from '../../images/delete.png'
+import {useTranslation} from "react-i18next";
 
 const Sort = ({active, link}: any) => {
     return <SortButton count={active.link === link ? active.count : ''}>
@@ -23,6 +24,7 @@ const FeedHeader: React.FC<{
         link: '',
         count: 0,
     })
+    const {t} = useTranslation()
     const sorting = (type: string, option?:string) => {
         if (props.sortFC) {
             let count
@@ -48,20 +50,20 @@ const FeedHeader: React.FC<{
     return (
         <FeedWrapper withSort={props.withSort} isAdmin={props.isAdmin}>
             <div className={'header'} onClick={() => sorting('title')}>
-                TITLE
+                {t("assetManagerHomeScreen.title").toUpperCase()}
                 {props.withSort && <Sort active={active} link={'title'}/>}
             </div>
             <div className={'header'} onClick={() => sorting('issueDate')}>
-                CREATION DATE
+                {t("assetManagerHomeScreen.date")}
                 {props.withSort && <Sort active={active} link={'issueDate'}/>}
             </div>
             <div className={'header'} onClick={() => sorting('type')}>
-                TYPE
+                {t("assetManagerHomeScreen.type")}
                 {props.withSort && <Sort active={active} link={'type'}/>}
             </div>
             {props.isAdmin && <div className={'header'}>
                 <select className={'select-sort'} onChange={(e)=> sorting('companyName', e.target.value)}>
-                    <option value="all">All COMPANIES</option>
+                    <option value="all">{t("assetManagerHomeScreen.allCompanies").toUpperCase()}</option>
                     {
                         props.companies.map((item:{name: string, id: string})=> <option value={item.name}>{item.name}</option> )
                     }
@@ -70,7 +72,7 @@ const FeedHeader: React.FC<{
             {props.withSort && <div className={'header'}>
                 {/*STATUS*/}
                 <select className={'select-sort'} onChange={(e)=> sorting('status', e.target.value)}>
-                    <option value="all">All STATUS</option>
+                    <option value="all">{t("assetManagerHomeScreen.allStatus").toUpperCase()}</option>
                     {!props.isAdmin && <option value="draft">DRAFT</option>}
                     <option value="submitted">SUBMITTED</option>
                     <option value="approved">APPROVED</option>
@@ -78,8 +80,8 @@ const FeedHeader: React.FC<{
                 </select>
                 {/*{props.withSort && <Sort active={active} link={'status'}/>}*/}
             </div>}
-            {!props.isAdmin && <div className={'header'} onClick={() => sorting('views')}>VIEWS</div>}
-            <div>EDIT</div>
+            {!props.isAdmin && <div className={'header'} onClick={() => sorting('views')}>{t("assetManagerHomeScreen.views")}</div>}
+            <div>{t("assetManagerHomeScreen.edit")}</div>
         </FeedWrapper>
     );
 };

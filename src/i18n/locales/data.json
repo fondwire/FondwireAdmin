@@ -27,7 +27,15 @@
         "companies": "companies",
         "managers": "managers",
         "appUsers": "app users",
-        "notifications": "notifications"
+        "notifications": "notifications",
+        "topContent": "TOP 5 CONTENT PER VIEW",
+        "title": "title",
+        "date": "CREATION DATE",
+        "type": "TYPE",
+        "allCompanies": "All COMPANIES",
+        "allStatus": "All STATUS",
+        "views": "VIEWS",
+        "edit": "EDIT"
       },
       "content": {
         "feedLabel": "Content"
@@ -49,10 +57,15 @@
         "companies": "Unternehmen",
         "managers": "Manager",
         "appUsers": "App-Benutzer",
-        "notifications": "Mitteilungen"
-      },
-      "content": {
-        "feedLabel": "Beiträge"
+        "notifications": "Mitteilungen",
+        "topContent": "<UPDATE ME>",
+        "title": "Titel",
+        "date": "ERSTELLUNGSDATUM",
+        "type": "Typ",
+        "allCompanies": "Alle UNTERNEHMEN",
+        "allStatus": "Alle STATUS",
+        "views": "ANSICHTEN",
+        "edit": "EDIT"
       }
     }
   }
