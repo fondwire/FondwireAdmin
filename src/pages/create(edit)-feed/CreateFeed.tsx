@@ -17,6 +17,7 @@ import htmlToDraft from 'html-to-draftjs'
 import ImageUploader from "../../components/image-uploader/ImageUploader";
 import {storage} from 'firebase';
 import reducer from "../../state/RootReducer";
+import {useTranslation} from "react-i18next";
 
 const validateFormik = {
     title: Yup.string()
@@ -53,17 +54,17 @@ const CreateFeed = React.memo(() => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
+    const {t} = useTranslation()
     const {id, type, notificationId} = useParams()
-    console.log(type, id , notificationId)
     const history = useHistory()
-    const [status, setStatus] = useState('New feed')
+    const [status, setStatus] = useState(t("assetManagerHomeScreen.newContent"))
     const [editor, setEditor] = useState<any>(EditorState?.createEmpty())
     const [pending, setPending] = useState(true)
     const [initialValue, setInitialValue] = useState<any>(initialVal)
     const [userData] = useState(JSON.parse(localStorage.getItem('userData') as string))
     useEffect(() => {
         if (id) {
-            setStatus(`Feed id: ${id}`)
+            setStatus(`${t("assetManagerHomeScreen.feedLabel")} id: ${id}`)
             db.ref('/feeds').child(type + 's').child(id).once('value', (snapshot) => {
                 return snapshot.toJSON()
             }).then((data: any) => {
@@ -91,12 +92,12 @@ const CreateFeed = React.memo(() => {
                 }
             })
         } else {
-            setStatus('new feed')
+            setStatus(t("assetManagerHomeScreen.newContent"))
             setTimeout(() => {
                 setPending(false)
             }, 1000)
         }
-    }, [id, type, history])
+    }, [id, type, history, t])
     const onSubmit = async (values: FormikValues, isPublish: boolean) => {
         await db.ref('users').child(state.userData.id).once('value', (s) => {
             return s.toJSON()
@@ -498,25 +499,25 @@ const CreateFeed = React.memo(() => {
                             <Form>
                                 <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput}
                                        name={'title'} status={!!titleLength}
-                                       title={`Title (${titleLength})`} maxLength={'80'}/>
+                                       title={`${t("assetManagerHomeScreen.title")} (${titleLength})`} maxLength={'80'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTitle'}
-                                       title={`Add pimp & proof for $14.50`}/>
+                                       title={`${t("assetManagerHomeScreen.addPimp")} $14.50`}/>
                                 <br/>
                                 <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput}
                                        name={'teaser'} status={!!teaserLength}
-                                       title={`Teaser (${teaserLength})`} maxLength={'100'}/>
+                                       title={`${t("assetManagerHomeScreen.teaser")} (${teaserLength})`} maxLength={'100'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'}
-                                       title={`Add pimp & proof for $14.50`}/>
+                                       title={`${t("assetManagerHomeScreen.addPimp")} $14.50`}/>
                                 <br/>
                                 <Field disabled={editLen ? editLen : isPublish && !state.userData.isAdmin} as={FeedCreateInput}
                                        name={'link'}
-                                       title={type === 'video' ? `Link to the video` : `EITHER: link to an external ${type}`}/>
+                                       title={type === 'video' ? t("assetManagerHomeScreen.videoLink") : `${t("assetManagerHomeScreen.eitherLink")} ${t('assetManagerHomeScreen.'+type)}`}/>
                                 <br/>
                                 <br/>
                                 {
                                     type !== 'video'
                                         ? <>
-                                            <span className={MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>OR: write here ({MAX_LENGTH - editLen})</span>
+                                            <span className={MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>{t("assetManagerHomeScreen.writeHere")} ({MAX_LENGTH - editLen})</span>
                                             <br/>
                                             {
                                                 isAdminIsPublish || isAdminApproved || values.link
@@ -557,7 +558,7 @@ const CreateFeed = React.memo(() => {
                                                     />
                                             }
                                             <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForMessage'}
-                                                   title={`Add pimp & proof for $39.50`}/>
+                                                   title={`${t("assetManagerHomeScreen.addPimp")} $39.50`}/>
                                             <br/>
                                             <ImageUploader id={id} setImage={() => setFieldValue('file', '')}
                                                            image={values.file}/>
@@ -572,7 +573,7 @@ const CreateFeed = React.memo(() => {
                                                 </label>
                                             }
                                             <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForImage'}
-                                                   title={`Add image select & create service for $14.50`}/>
+                                                   title={`${t("assetManagerHomeScreen.addPimpImage")} $14.50`}/>
 
                                         </>
                                         : null
@@ -586,7 +587,7 @@ const CreateFeed = React.memo(() => {
                                                 type={'button'}
                                                 onClick={()=>onManagerSaveModel(values)}
                                             >
-                                                save
+                                                {t("assetManagerHomeScreen.saveBtn")}
                                             </SubmitButton>
                                     }
                                     {
@@ -594,7 +595,7 @@ const CreateFeed = React.memo(() => {
                                             ? <SubmitButton
                                                 type={"button"}
                                                 onClick={() => onAdminApproveModal(values)}
-                                            >Approve</SubmitButton>
+                                            >{t("assetManagerHomeScreen.approveBtn")}</SubmitButton>
                                             : null
                                     }
                                     {
@@ -608,14 +609,14 @@ const CreateFeed = React.memo(() => {
                                                 ? <SubmitButton
                                                     type={"button"}
                                                     onClick={() => onAssetManagerModal()}
-                                                >Approve</SubmitButton>
+                                                >{t("assetManagerHomeScreen.approveBtn")}</SubmitButton>
                                                 //    onSubmit by Manager to create feed
                                                 : !state.userData.isAdmin ? <SubmitButton
                                                     disabled={(values.link.length ? false : isVideo ) || !hasChanged || hasErrors || isSubmitting}
                                                     onClick={() => onManagerSubmitModal(values)}
                                                     type={'button'}
                                                 >
-                                                    submit
+                                                    {t("assetManagerHomeScreen.submit")}
                                                 </SubmitButton> : null
                                     }
                                 </div>

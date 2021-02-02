@@ -45,13 +45,13 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
         <DashboardWrapper>
-            <h3>{t("welcome").toUpperCase()}{user && user.fullname ? `, ${user.fullname.toUpperCase()}` : ''}</h3>
+            <h3>{t("assetManagerHomeScreen.welcomeLabel").toUpperCase()}{user && user.fullname ? `, ${user.fullname.toUpperCase()}` : ''}</h3>
             <div className={'title'}>
-                <h3>ANALYTICS</h3>
+                <h3>{t("assetManagerHomeScreen.analyticsLabel").toUpperCase()}</h3>
             </div>
             <Analytics />
             <div className={'title feedTitle'}>
-                <h3>TOP 5 CONTENT PER VIEW</h3>
+                <h3>{t("assetManagerHomeScreen.topContent")}</h3>
             </div>
             <FeedHeader />
             {

@@ -1,6 +1,7 @@
 import React from 'react';
 import Analytics from "../../components/analytics/Analytics";
 import styled from "styled-components";
+import {useTranslation} from "react-i18next";
 const Wrapper = styled.div`
   &>h3{
     font-size: 17px;
@@ -9,9 +10,10 @@ const Wrapper = styled.div`
   }
 `
 function AnalyticsPage() {
+    const {t} = useTranslation()
     return (
         <Wrapper>
-            <h3>ANALYTICS</h3>
+            <h3>{t("assetManagerHomeScreen.analyticsLabel").toUpperCase()}</h3>
             <Analytics />
         </Wrapper>
     );

@@ -68,7 +68,6 @@ function App() {
     useEffect(()=>{
         getData('/assets', state, setCompanies, ()=>{})
     }, [state])
-
     useEffect(()=>{
         getData('/users', state, setUsers, ()=>{})
     }, [state])

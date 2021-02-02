@@ -61,19 +61,19 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
             <NavList>
                 {
                     !isAdmin ? <>
-                            <NavLink to={'/dashboard'}>{t("dashboard")}</NavLink>
-                            <NavLink to={'/feed'}>{t("feed")}</NavLink>
-                            <NavLink to={'/analytics'}>{t("analytics")}</NavLink>
-                            <NavLink to={'/settings'}>{t("settings")}</NavLink>
-                            <span className={'logout'} onClick={onLogoutModal}>Logout</span>
+                            <NavLink to={'/dashboard'}>{t("assetManagerHomeScreen.dashboardLabel")}</NavLink>
+                            <NavLink to={'/feed'}>{t("assetManagerHomeScreen.feedLabel")}</NavLink>
+                            <NavLink to={'/analytics'}>{t("assetManagerHomeScreen.analyticsLabel")}</NavLink>
+                            <NavLink to={'/settings'}>{t("assetManagerHomeScreen.settingsLabel")}</NavLink>
+                            <span className={'logout'} onClick={onLogoutModal}>{t("assetManagerHomeScreen.logoutLabel")}</span>
                         </>
                         : <>
-                            <NavLink to={'/managers'}>Managers</NavLink>
-                            <NavLink to={'/companies'}>Companies</NavLink>
-                            <NavLink to={'/content'}>Content</NavLink>
-                            <NavLink to={'/users'}>App users</NavLink>
+                            <NavLink to={'/managers'}>{t("assetManagerHomeScreen.managers")}</NavLink>
+                            <NavLink to={'/companies'}>{t("assetManagerHomeScreen.companies")}</NavLink>
+                            <NavLink to={'/content'}>{t("assetManagerHomeScreen.feedLabel")}</NavLink>
+                            <NavLink to={'/users'}>{t("assetManagerHomeScreen.appUsers")}</NavLink>
                             <NavLink to={'/notifications'}>
-                                Notifications
+                                {t("assetManagerHomeScreen.notifications")}
                                 {
                                     length ?
                                         <span className={
@@ -86,7 +86,7 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
                                         : null
                                 }
                             </NavLink>
-                            <span className={'logout'} onClick={onLogoutModal}>Logout</span>
+                            <span className={'logout'} onClick={onLogoutModal}>{t("assetManagerHomeScreen.logoutLabel")}</span>
                         </>
                 }
             </NavList>

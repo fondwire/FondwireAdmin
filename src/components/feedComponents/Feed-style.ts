@@ -6,7 +6,7 @@ export const FeedWrapper: any = styled(TableStyle)`
                           1fr 
                           180px
                           180px 
-                          ${(props:any)=> props.withSort ? '160px' : ''}
+                          ${(props:any)=> props.withSort ? '180px' : ''}
                           ${(props:any)=> props.isAdmin ? '160px' : ''}
                           ${(props:any)=> !props.isAdmin ? '160px' : ''}
                           65px;
