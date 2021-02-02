@@ -10,26 +10,28 @@ import {MyContext} from "../../App";
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import {UserType} from "../../components/feedComponents/feed";
 import Swal from "sweetalert2";
+import {useTranslation} from "react-i18next";
 
 type SettingsPagePropsType = {
     user: UserType
 }
 const SettingsPage:React.FC<SettingsPagePropsType> = ({user}) => {
     const {dispatch} = useContext(MyContext)
+    const {t} = useTranslation()
     return (
         <SettingsPageWrapper>
-            <h3>SETTINGS</h3>
+            <h3>{t("assetManagerHomeScreen.settings").toUpperCase()}</h3>
             <div>
                 <SettingsBlock>
-                    <div><img src={pen} alt="Pen"/> Me</div>
+                    <div><img src={pen} alt="Pen"/> {t("assetManagerHomeScreen.me")}</div>
                     <div>{user && user.fullname ? `${user.fullname}` : 'Manager'}</div>
                 </SettingsBlock>
                 <SettingsBlock>
-                    <div><img src={bell} alt="Bell"/> Notifications</div>
+                    <div><img src={bell} alt="Bell"/> {t("assetManagerHomeScreen.notifications")}</div>
                     <div>All</div>
                 </SettingsBlock>
                 <SettingsBlock>
-                    <div><img src={lock} alt="lock"/> Privacy</div>
+                    <div><img src={lock} alt="lock"/> {t("assetManagerHomeScreen.privacy")}</div>
                     <div>Only me</div>
                 </SettingsBlock>
                 <SettingsBlock>
@@ -75,7 +77,7 @@ const SettingsPage:React.FC<SettingsPagePropsType> = ({user}) => {
                         deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
                     }}>
                         {/*<img src={question} alt="?"/>*/}
-                        Logout</div>
+                        {t("assetManagerHomeScreen.logoutLabel")}</div>
                     <div />
                 </SettingsBlock>
             </div>

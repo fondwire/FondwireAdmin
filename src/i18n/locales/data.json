@@ -35,7 +35,27 @@
         "allCompanies": "All COMPANIES",
         "allStatus": "All STATUS",
         "views": "VIEWS",
-        "edit": "EDIT"
+        "edit": "EDIT",
+        "search": "search",
+        "createNew": "Create new",
+        "video": "video",
+        "event": "event",
+        "article": "article",
+        "podcast": "podcast",
+        "settings": "settings",
+        "me": "me",
+        "privacy": "Privacy",
+        "newContent": "NEW CONTENT",
+        "addPimp": "ADD: PIMP & PROOF READING FOR  ",
+        "addImage": "ADD TITLE IMAGE",
+        "addPimpImage": "ADD SELECT & CREATE SERVICE FOR  ",
+        "teaser": "Teaser",
+        "saveBtn": "SAVE",
+        "approveBtn": "Approve",
+        "submit": "Submit",
+        "videoLink": "Link to the video",
+        "eitherLink": "EITHER: link to an external",
+        "writeHere": "OR: write here"
       },
       "content": {
         "feedLabel": "Content"
@@ -65,7 +85,27 @@
         "allCompanies": "Alle UNTERNEHMEN",
         "allStatus": "Alle STATUS",
         "views": "ANSICHTEN",
-        "edit": "EDIT"
+        "edit": "EDIT",
+        "search": "Suche",
+        "createNew": "Neu erstellen",
+        "video": "video",
+        "event": "event",
+        "article": "Artikel",
+        "podcast": "Podcast",
+        "settings": "Einstellungen",
+        "me": "Über mich",
+        "privacy": "Datenschutz",
+        "newContent": "NEU BEITRAG",
+        "addPimp": "BUCHE: LEKTORAT & KORREKTURLESEN FÜR ",
+        "addImage": "TITELBILD HINZUFÜGEN",
+        "addPimpImage": "BUCHE: BILDAUSWAHL & -ERSTELLLUNG FÜR ",
+        "teaser": "EINLEITUNG",
+        "saveBtn": "SPEICHERN",
+        "approveBtn": "genehmigen",
+        "submit": "EINREICHEN",
+        "videoLink": "Link zum Video",
+        "eitherLink": "Entweder: Link zu einem externen",
+        "writeHere": "ODER: hier schreiben"
       }
     }
   }

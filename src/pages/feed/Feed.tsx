@@ -6,12 +6,14 @@ import reducer from "../../state/RootReducer";
 import Preloader from "../../utils/preloader/preloader";
 import {FeedType} from "../dashboard/Dashboard";
 import {getData} from "../../App";
+import {useTranslation} from "react-i18next";
 
 
 const Feed: React.FC<{ isAdmin?: boolean, companies?: any }> = (props) => {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
+    const {t} = useTranslation()
     const [pending, setPending] = useState(true)
     const [pend, setPend] = useState(false)
     const [search, setSearch] = useState('')
@@ -141,7 +143,7 @@ const Feed: React.FC<{ isAdmin?: boolean, companies?: any }> = (props) => {
     return (
         <FeedPageWrapper>
             <div className={'header'}>
-                <h3>CONTENT</h3>
+                <h3>{t("assetManagerHomeScreen.feedLabel")}</h3>
                 <div>
                     <SearchInput value={search} onChange={setSearch}/>
                     {!props.isAdmin && <CreateNew/>}

@@ -234,15 +234,16 @@ export const Action: React.FC = (props) => {
 }
 
 export const CreateNew = () => {
+    const {t} = useTranslation()
     return (
         <CreateNewWrapper>
-            <span>CREATE NEW</span>
+            <span>{t("assetManagerHomeScreen.createNew").toUpperCase()}</span>
             <div className={'plus'}>
                 +
                 <div className={'modal'}>
-                    <div><Link to={'/feed/create/video'}>video</Link></div>
-                    <div><Link to={'/feed/create/event'}>event</Link></div>
-                    <div><Link to={'/feed/create/article'}>article</Link></div>
+                    <div><Link to={'/feed/create/video'}>{t("assetManagerHomeScreen.video")}</Link></div>
+                    <div><Link to={'/feed/create/event'}>{t("assetManagerHomeScreen.event")}</Link></div>
+                    <div><Link to={'/feed/create/article'}>{t("assetManagerHomeScreen.article")}</Link></div>
                     {/*<div><Link to={'/feed/create/podcast'}>podcast</Link></div>*/}
                 </div>
             </div>

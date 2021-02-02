@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
+import {useTranslation} from "react-i18next";
 
 const ImageUploaderWrapper:any = styled.div`
   width: 100%;
@@ -41,6 +42,7 @@ interface ImageUploaderProps {
 }
 const ImageUploader:React.FC<ImageUploaderProps> = (props) => {
     // console.log(props)
+    const {t} = useTranslation()
     const [image, setImage] = useState('')
     useEffect(()=>{
         const reader = new FileReader()
@@ -66,7 +68,7 @@ const ImageUploader:React.FC<ImageUploaderProps> = (props) => {
             {
                 props.btn && image
                     ? <div className={'addImage'}> Delete and change </div>
-                    : props.btn ? <div className={'addImage'}> + Add image </div>
+                    : props.btn ? <div className={'addImage'}> + {t("assetManagerHomeScreen.addImage")} </div>
                     : <img src={image} alt="#"/>
             }
         </ImageUploaderWrapper>
