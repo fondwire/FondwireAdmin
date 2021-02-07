@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 // import {Action} from "../../../components/feedComponents/FeedComponents";
 import user from '../../../images/user-profile.png'
 import {FeedType} from "../../dashboard/Dashboard";
+import {useTranslation} from "react-i18next";
 // import reducer from "../../../state/RootReducer";
 // import {getData} from "../../../App";
 // import Preloader from "../../../utils/preloader/preloader";
@@ -66,17 +67,18 @@ type NotificationsPageProps = {
     setPending: (status:boolean) => void
 }
 const NotificationsPage:React.FC<NotificationsPageProps> = (props) => {
+    const {t} = useTranslation()
     return (
         <DashboardWrapper>
-            <h3>WELCOME TO ADMIN PANEL</h3>
+            <h3>{t("assetManagerHomeScreen.adminPanel").toUpperCase()}</h3>
             <div className={'title'}>
-                <h3>NOTIFICATIONS</h3>
+                <h3>{t("assetManagerHomeScreen.notifications").toUpperCase()}</h3>
             </div>
             <TableWrapper>
-                <div>TITLE</div>
-                <div>TYPE</div>
-                <div>COMPANY</div>
-                <div>MANAGER</div>
+                <div>{t("assetManagerHomeScreen.title").toUpperCase()}</div>
+                <div>{t("assetManagerHomeScreen.type").toUpperCase()}</div>
+                <div>{t("assetManagerHomeScreen.company").toUpperCase()}</div>
+                <div>{t("assetManagerHomeScreen.manager").toUpperCase()}</div>
                 <div/>
             </TableWrapper>
             {

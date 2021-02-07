@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 import {TableComponentWrapper} from "../feedComponents/Feed-style";
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 // import {Action} from "../feedComponents/FeedComponents";
 
 
@@ -11,11 +12,12 @@ const TableWrapper = styled(TableStyle)`
 `
 
 function CompaniesTableHeader() {
+    const {t} = useTranslation()
     return (
         <TableWrapper>
-            <div>NAME</div>
-            <div>SYMBOL</div>
-            <div>MANAGERS</div>
+            <div>{t("assetManagerHomeScreen.name").toUpperCase()}</div>
+            <div>{t("assetManagerHomeScreen.symbol").toUpperCase()}</div>
+            <div>{t("assetManagerHomeScreen.managers").toUpperCase()}</div>
             <div/>
         </TableWrapper>
     );

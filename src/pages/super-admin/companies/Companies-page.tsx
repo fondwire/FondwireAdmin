@@ -6,6 +6,7 @@ import {getData} from "../../../App";
 import Preloader from "../../../utils/preloader/preloader";
 import { CreateNewWrapper } from '../../../components/feedComponents/Feed-style';
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 interface CompanyType {
     name: string
@@ -18,6 +19,7 @@ function CompaniesPage() {
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
+    const {t} = useTranslation()
     const [pending, setPending] = useState(true)
     const [companies, setCompanies] = useState<any>([])
     useEffect(()=>{
@@ -27,11 +29,11 @@ function CompaniesPage() {
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
         <DashboardWrapper>
-            <h3>ADMIN PANEL</h3>
+            <h3>{t("assetManagerHomeScreen.adminPanel").toUpperCase()}</h3>
             <div className={'title'}>
-                <h3>COMPANIES</h3>
+                <h3>{t("assetManagerHomeScreen.companies").toUpperCase()}</h3>
                 <CreateNewWrapper>
-                    <span>CREATE NEW</span>
+                    <span>{t("assetManagerHomeScreen.createNew").toUpperCase()}</span>
                     <Link to={'/companies/create-company'} className={'plus'}>
                         +
                     </Link>

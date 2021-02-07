@@ -20,13 +20,13 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
     const onLogoutModal = ()=>{
         Swal.fire({
             // icon: 'error',
-            title: `<span style="font-family: 'Gotham-Medium', sans-serif;">Logout from your Account</span>`,
+            title: `<span style="font-family: 'Gotham-Medium', sans-serif;">${t("assetManagerHomeScreen.logoutFromAcc")}</span>`,
             // text: 'Are you sure you want to log out ?',
             html: `<div>
-                                        <span style="font-family: 'Gotham-Medium', sans-serif">Are you sure you want to log out ?</span>
+                                        <span style="font-family: 'Gotham-Medium', sans-serif">${t("assetManagerHomeScreen.areYouSure")}</span>
                                         <div class="modal-two-buttons-wrapper" style="margin: 20px 0;">
-                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
-                                                            <button id="yesSave" class="modal-submit">YES, LOGOUT</button>
+                                                            <button id="noGoBack" class="modal-submit">${t("assetManagerHomeScreen.noGoBack").toUpperCase()}</button>
+                                                            <button id="yesSave" class="modal-submit">${t("assetManagerHomeScreen.yesLogout").toUpperCase()}</button>
                                         </div>
                                     </div>`,
             showDenyButton: false,

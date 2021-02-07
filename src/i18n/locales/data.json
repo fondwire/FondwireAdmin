@@ -25,7 +25,9 @@
         "settingsLabel": "Settings",
         "logoutLabel": "Logout",
         "companies": "companies",
+        "company": "company",
         "managers": "managers",
+        "manager": "manager",
         "appUsers": "app users",
         "notifications": "notifications",
         "topContent": "TOP 5 CONTENT PER VIEW",
@@ -55,7 +57,17 @@
         "submit": "Submit",
         "videoLink": "Link to the video",
         "eitherLink": "EITHER: link to an external",
-        "writeHere": "OR: write here"
+        "writeHere": "OR: write here",
+        "adminPanel": "ADMIN PANEL",
+        "users": "Users",
+        "name": "Name",
+        "email": "Email",
+        "status": "Status",
+        "symbol": "Symbol",
+        "logoutFromAcc": "Logout from your Account",
+        "areYouSure": "Are you sure you want to log out ?",
+        "noGoBack": "NO, GO BACK",
+        "yesLogout": "YES, LOGOUT"
       },
       "content": {
         "feedLabel": "Content"
@@ -74,8 +86,10 @@
         "analyticsLabel": "Analytik",
         "settingsLabel": "Einstellung",
         "logoutLabel": "Ausloggen",
-        "companies": "Unternehmen",
+        "companies": "Firmas",
+        "company": "Firma",
         "managers": "Manager",
+        "manager": "Manager",
         "appUsers": "App-Benutzer",
         "notifications": "Mitteilungen",
         "topContent": "<UPDATE ME>",
@@ -105,7 +119,17 @@
         "submit": "EINREICHEN",
         "videoLink": "Link zum Video",
         "eitherLink": "Entweder: Link zu einem externen",
-        "writeHere": "ODER: hier schreiben"
+        "writeHere": "ODER: hier schreiben",
+        "adminPanel": "Admin-Zugang",
+        "users": "Anwender",
+        "name": "Name",
+        "email": "E-Mail",
+        "status": "Status",
+        "symbol": "Symbol",
+        "logoutFromAcc": "Vom Konto abmelden",
+        "areYouSure": "Möchten Sie sich wirklich abmelden?",
+        "noGoBack": "Nein, zurück.",
+        "yesLogout": "Ja, abmelden"
       }
     }
   }
