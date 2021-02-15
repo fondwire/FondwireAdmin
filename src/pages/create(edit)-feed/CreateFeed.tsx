@@ -495,21 +495,23 @@ const CreateFeed = React.memo(() => {
                         const isVideo = type !== 'video' ? !editLen : false
                         // console.log(editLen)
                         const isAdminIsPublish = !state.userData.isAdmin && isPublish
+                        const isFeedApproved =  isAdminApproved && isAssetManagerApproved
+                        const dis = (isPublish && !state.userData.isAdmin) || isFeedApproved || (state.userData.isAdmin && isAdminApproved)
                         return (
                             <Form>
-                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput}
+                                <Field disabled={dis} as={FeedCreateInput}
                                        name={'title'} status={!!titleLength}
                                        title={`${t("assetManagerHomeScreen.title")} (${titleLength})`} maxLength={'80'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTitle'}
                                        title={`${t("assetManagerHomeScreen.addPimp")} $14.50`}/>
                                 <br/>
-                                <Field disabled={isPublish && !state.userData.isAdmin} as={FeedCreateInput}
+                                <Field disabled={dis} as={FeedCreateInput}
                                        name={'teaser'} status={!!teaserLength}
                                        title={`${t("assetManagerHomeScreen.teaser")} (${teaserLength})`} maxLength={'100'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'}
                                        title={`${t("assetManagerHomeScreen.addPimp")} $14.50`}/>
                                 <br/>
-                                <Field disabled={editLen ? editLen : isPublish && !state.userData.isAdmin} as={FeedCreateInput}
+                                <Field disabled={editLen ? editLen : dis} as={FeedCreateInput}
                                        name={'link'}
                                        title={type === 'video' ? t("assetManagerHomeScreen.videoLink") : `${t("assetManagerHomeScreen.eitherLink")} ${t('assetManagerHomeScreen.'+type)}`}/>
                                 <br/>
@@ -563,7 +565,7 @@ const CreateFeed = React.memo(() => {
                                             <ImageUploader id={id} setImage={() => setFieldValue('file', '')}
                                                            image={values.file}/>
                                             {
-                                                isAdminIsPublish ? null : <label>
+                                                isAdminIsPublish || isAdminApproved ? null : <label>
                                                     <ImageUploader btn={true} image={values.file}/>
                                                     <input id="file" name="file" type="file" onChange={(event) => {
                                                         setFieldValue("file", event)

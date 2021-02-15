@@ -38,7 +38,7 @@ type UserElementProps = {
     id: string
     del: (id:string) => void
 }
-export const UserElement:React.FC<UserElementProps> = ({id,title, email, company, status}) => {
+export const UserElement:React.FC<UserElementProps> = ({title, email, company, status}) => {
     const Status = status
     const [background, setBackground] = useState<string>('#a2a2a2')
     useEffect(()=> {
@@ -57,7 +57,7 @@ export const UserElement:React.FC<UserElementProps> = ({id,title, email, company
     }, [Status])
     return (
         <UserElementWrapper bg={background}>
-            <Link to={`user/${id}`} className={'title'}>{title}</Link>
+            <div className={'title'}>{title}</div>
             <div>{email}</div>
             <div>{company}</div>
             <div className={'status'}><span>{Status ? 'Verified' : 'Pending'}</span></div>
