@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {TableStyle} from "../table-style/table-style";
 import { TableComponentWrapper} from '../feedComponents/Feed-style';
-import {Link} from "react-router-dom";
+// import {Link} from "react-router-dom";
 // import { Action } from '../feedComponents/FeedComponents';
 import {useTranslation} from "react-i18next";
 
