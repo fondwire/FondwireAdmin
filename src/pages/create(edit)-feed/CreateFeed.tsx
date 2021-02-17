@@ -48,7 +48,8 @@ let initialVal = {
     proofForTitle: false,
     proofForMessage: false,
     proofForImage: false,
-    file: ''
+    file: '',
+    views: 0
 }
 const CreateFeed = React.memo(() => {
     const [state] = useReducer(reducer, {

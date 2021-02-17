@@ -80,7 +80,10 @@ const FeedHeader: React.FC<{
                 </select>
                 {/*{props.withSort && <Sort active={active} link={'status'}/>}*/}
             </div>}
-            {!props.isAdmin && <div className={'header'} onClick={() => sorting('views')}>{t("assetManagerHomeScreen.views")}</div>}
+            {!props.isAdmin && <div className={'header'} onClick={() => sorting('views')}>
+                {t("assetManagerHomeScreen.views")}
+                {props.withSort && <Sort active={active} link={'views'}/>}
+            </div>}
             <div>{t("assetManagerHomeScreen.edit")}</div>
         </FeedWrapper>
     );
@@ -100,6 +103,7 @@ export type FeedComponentProps = {
     isAdmin?: boolean
     withSort?: boolean
     companyName?: string
+    views: number
 }
 export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 isAdminApprove,
@@ -112,7 +116,8 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
                                                                 setPending,
                                                                 isAdmin,
                                                                 withSort,
-                                                                companyName
+                                                                companyName,
+                                                                views
                                                             }) => {
     // const Status = status.toUpperCase()
     let Status = 'DRAFT'
@@ -176,7 +181,7 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
             <div>{Type}</div>
             {isAdmin && <div>{companyName ? companyName : ' '}</div>}
             {withSort && <div className={'status'}><span>{Status}</span></div>}
-            {!isAdmin && <div>1.170</div>}
+            {!isAdmin && <div>{views}</div>}
             <div className={'actions_wrapper'}>
                 <Link to={`${isAdmin ? 'content' : 'feed/create'}/${Type.toLowerCase()}/${id}`}>
                     <img

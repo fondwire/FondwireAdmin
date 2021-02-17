@@ -26,6 +26,7 @@ export type FeedType = {
     isPublish: boolean
     fullname: string
     companyName: string
+    views: number
 }
 
 type DashboardPropsType = {
@@ -38,6 +39,11 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
     const {t} = useTranslation();
     const [pending, setPending] = useState(true)
     const [feeds, setFeeds] = useState<any>([])
+    const [feedsData, setFeedsData] = useState<any>([])
+    useEffect(()=>{
+        let arr = feeds.sort((a:FeedType , b:FeedType) => b.views - a.views).slice(0, 5)
+        setFeedsData(arr)
+    }, [feeds])
     useEffect(()=>{
         getData('/feeds', state, setFeeds, setPending)
     },[state, state.userData, pending])
@@ -55,9 +61,10 @@ const Dashboard:React.FC<DashboardPropsType> = ({user}) => {
             </div>
             <FeedHeader />
             {
-                feeds.map(
-                    ({title,type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish}:FeedType)=> {
+                feedsData.map(
+                    ({title,type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish, views}:FeedType)=> {
                         return <FeedComponent
+                            views={views}
                             isPublish={isPublish}
                             setPending={setPending}
                             key={issueDate}

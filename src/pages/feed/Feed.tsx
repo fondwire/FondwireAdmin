@@ -155,8 +155,9 @@ const Feed: React.FC<{ isAdmin?: boolean, companies?: any }> = (props) => {
                     pend
                         ? <Preloader/>
                         : data.map(
-                        ({title, type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish, companyName}: FeedType) => {
+                        ({title, type, issueDate, id, isAssetManagerApproved, isAdminApproved, isPublish, companyName, views}: FeedType) => {
                             return <FeedComponent
+                                views={views}
                                 companyName={typeof companyName === "string" ? companyName : ' '}
                                 withSort={true}
                                 isAdmin={props.isAdmin}
