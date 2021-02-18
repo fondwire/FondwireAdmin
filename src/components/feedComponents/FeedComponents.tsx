@@ -58,7 +58,7 @@ const FeedHeader: React.FC<{
                 {props.withSort && <Sort active={active} link={'issueDate'}/>}
             </div>
             <div className={'header'} onClick={() => sorting('type')}>
-                {t("assetManagerHomeScreen.type")}
+                {t("assetManagerHomeScreen.type").toUpperCase()}
                 {props.withSort && <Sort active={active} link={'type'}/>}
             </div>
             {props.isAdmin && <div className={'header'}>
