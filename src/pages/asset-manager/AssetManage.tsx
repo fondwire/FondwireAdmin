@@ -165,6 +165,7 @@ function AssetManage() {
                                 onSubmit={(values)=>{
                                     signInFirebase(values.email, values.password)
                                         .then((res)=>{
+                                            history.push('/')
                                             let user:any = res.user?.toJSON()
                                             let data: any = {
                                                 isAdmin: false,

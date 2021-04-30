@@ -2,7 +2,7 @@ import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
 import Preloader from "./utils/preloader/preloader";
 import {useRoute} from "./router";
-import {BrowserRouter as Router} from "react-router-dom";
+import {HashRouter as Router} from "react-router-dom";
 import reducer from './state/RootReducer'
 import {db} from "./firebase";
 import {FeedComponentProps} from "./components/feedComponents/FeedComponents";
@@ -183,9 +183,9 @@ function App() {
 
     if (pending) return <div className={'mainPreloaderWrapper'}><Preloader/></div>
     return <MyContext.Provider value={{dispatch}}>
-        <Router>
+        {/*<Router>*/}
             <div className="App">{route}</div>
-        </Router>
+        {/*</Router>*/}
     </MyContext.Provider>
 }
 

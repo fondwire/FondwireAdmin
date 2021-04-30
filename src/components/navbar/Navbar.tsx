@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {NavbarWrapper, NavList} from './navbar-style';
-import {Link, NavLink} from 'react-router-dom';
+import {Link, NavLink, useHistory} from 'react-router-dom';
 import logo from '../../images/yellowLogo.png'
 import {SIGN_IN_TYPE} from "../../state/RootReducer";
 import {MyContext} from "../../App";
@@ -36,6 +36,7 @@ const Navbar:React.FC<NavbarProps> = ({isAdmin, notificationLength}) => {
         }).then((result)=>{
             if (result.isConfirmed) {
                 Logout().then(()=>{
+                    window.location.reload()
                     localStorage.removeItem('userData')
                     dispatch({
                         type: SIGN_IN_TYPE,

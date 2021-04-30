@@ -36,15 +36,18 @@ const WelcomePage = () => {
         setVisible(false)
     }
     const history = useHistory()
+    useEffect(()=>{
+        history.push('')
+    })
     return (
         <>
             <Header>
                 <div className={css.menu}>
                     <a href={"#sectionOne"}><div><img src={yellowLogo} alt="Fundwire"/></div></a>
                     <div className={css.nav}>
-                        <a href={"#sectionTwo"}>How it works</a>
-                        <a href={"#sectionThree"}>Support</a>
-                        <a href={"#sectionFour"}>FAQ</a>
+                        <a href={"/#sectionTwo"}>How it works</a>
+                        <a href={"/#sectionThree"}>Support</a>
+                        <a href={"/#sectionFour"}>FAQ</a>
                         <Link to={'/asset-manager'} className={css.manager}>Asset Manager</Link>
                     </div>
                 </div>

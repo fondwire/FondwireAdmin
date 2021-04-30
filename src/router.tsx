@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route, Redirect} from 'react-router-dom';
+import {Switch, Route, Redirect, BrowserRouter, HashRouter} from 'react-router-dom';
 import Navbar from "./components/navbar/Navbar";
 import Dashboard from "./pages/dashboard/Dashboard";
 import AnalyticsPage from "./pages/analytics/Analytics-page";
@@ -20,109 +20,115 @@ import CreateCompany from "./pages/create-company(edit)/CreateCompany";
 // import {db} from "./firebase";
 
 
-export const useRoute = (state:any, user:UserType, notifications: any, setPending: (status:boolean)=>void, companies: any) => {
+export const useRoute = (state: any, user: UserType, notifications: any, setPending: (status: boolean) => void, companies: any) => {
     // const [stat] = useReducer(reducer, {
     //     userData: JSON.parse(localStorage.getItem('userData') as string),
     // })
-    if(!state?.userData?.isAdmin && state?.userData && !state?.userData?.verified){
-        return <div className={'notLoggedInWrapper'}>
-            <Switch>
-                <Route exact path={'/'}>
-                    <Unverified />
-                </Route>
-                <Redirect to={'/'}/>s
-            </Switch>
-        </div>
-    }else if (!!state?.userData) {
-        return <div className={'adminPanelWrapper'}>
-            <Navbar notificationLength={notifications} isAdmin={state.userData.isAdmin}/>
-            <div className={'contentWrapper'}>
-                {
-                    state.userData.isAdmin
-                        ? <Switch>
-                            <Route path={'/managers'}>
-                                <Users />
-                            </Route>
-                            <Route path={'/users'}>
-                                <Users isUser={true} />
-                            </Route>
-                            <Route exact path={'/companies'}>
-                                <CompaniesPage />
-                            </Route>
-                            <Route path={'/companies/create-company/:id'}>
-                                <CreateCompany />
-                            </Route>
-                            <Route path={'/companies/create-company'}>
-                                <CreateCompany />
-                            </Route>
-                            <Route exact path={'/content'}>
-                                <Feed companies={companies} isAdmin={true}/>
-                            </Route>
-                            <Route exact path={'/content/:type/:id'}>
-                                <CreateFeed/>
-                            </Route>
-                            <Route path={'/notifications/feed/:type/:id/:notificationId'}>
-                                <CreateFeed/>
-                                {/*<NotificationsPage setPending={setPending} data={notifications} />*/}
-                            </Route>
-                            <Route path={'/notifications'}>
-                                <NotificationsPage setPending={setPending} data={notifications} />
-                            </Route>
-                            <Redirect to={'/managers'}/>
-                        </Switch>
-                        : <Switch>
-                            <Route path={'/dashboard'}>
-                                <Dashboard user={user}/>
-                            </Route>
-                            <Route path={'/feed/create/:type/:id'}>
-                                <CreateFeed/>
-                            </Route>
-                            <Route path={'/feed/create/:type'}>
-                                <CreateFeed/>
-                            </Route>
-                            <Route path={'/feed'}>
-                                <Feed/>
-                            </Route>
-                            <Route path={'/analytics'}>
-                                <AnalyticsPage/>
-                            </Route>
-                            <Route path={'/settings'}>
-                                <SettingsPage user={user}/>
-                            </Route>
-                            <Redirect to={'/dashboard'}/>
-                        </Switch>
-                }
-
+    if (!state?.userData?.isAdmin && state?.userData && !state?.userData?.verified) {
+        return <HashRouter>
+            <div className={'notLoggedInWrapper'}>
+                <Switch>
+                    <Route exact path={'/'}>
+                        <Unverified/>
+                    </Route>
+                    <Redirect to={'/'}/>s
+                </Switch>
             </div>
-        </div>
+        </HashRouter>
+    } else if (!!state?.userData) {
+        return <HashRouter>
+            <div className={'adminPanelWrapper'}>
+                <Navbar notificationLength={notifications} isAdmin={state.userData.isAdmin}/>
+                <div className={'contentWrapper'}>
+                    {
+                        state.userData.isAdmin
+                            ? <Switch>
+                                <Route path={'/managers'}>
+                                    <Users/>
+                                </Route>
+                                <Route path={'/users'}>
+                                    <Users isUser={true}/>
+                                </Route>
+                                <Route exact path={'/companies'}>
+                                    <CompaniesPage/>
+                                </Route>
+                                <Route path={'/companies/create-company/:id'}>
+                                    <CreateCompany/>
+                                </Route>
+                                <Route path={'/companies/create-company'}>
+                                    <CreateCompany/>
+                                </Route>
+                                <Route exact path={'/content'}>
+                                    <Feed companies={companies} isAdmin={true}/>
+                                </Route>
+                                <Route exact path={'/content/:type/:id'}>
+                                    <CreateFeed/>
+                                </Route>
+                                <Route path={'/notifications/feed/:type/:id/:notificationId'}>
+                                    <CreateFeed/>
+                                    {/*<NotificationsPage setPending={setPending} data={notifications} />*/}
+                                </Route>
+                                <Route path={'/notifications'}>
+                                    <NotificationsPage setPending={setPending} data={notifications}/>
+                                </Route>
+                                <Redirect to={'/managers'}/>
+                            </Switch>
+                            : <Switch>
+                                <Route path={'/dashboard'}>
+                                    <Dashboard user={user}/>
+                                </Route>
+                                <Route path={'/feed/create/:type/:id'}>
+                                    <CreateFeed/>
+                                </Route>
+                                <Route path={'/feed/create/:type'}>
+                                    <CreateFeed/>
+                                </Route>
+                                <Route path={'/feed'}>
+                                    <Feed/>
+                                </Route>
+                                <Route path={'/analytics'}>
+                                    <AnalyticsPage/>
+                                </Route>
+                                <Route path={'/settings'}>
+                                    <SettingsPage user={user}/>
+                                </Route>
+                                <Redirect to={'/dashboard'}/>
+                            </Switch>
+                    }
+
+                </div>
+            </div>
+        </HashRouter>
     } else {
-        return <div className={'notLoggedInWrapper'}>
-            <Switch>
-                <Route exact path={'/'}>
-                    <WelcomePage/>
-                </Route>
-                <Route exact path={'/asset-manager'}>
-                    <AssetManage />
-                </Route>
-                {/*<Route exact path={'/sign-in'}>*/}
-                {/*    <SignWrapper>*/}
-                {/*        <SignIn/>*/}
-                {/*    </SignWrapper>*/}
-                {/*</Route>*/}
-                {/*<Route exact path={'/forgot'}>*/}
-                {/*    <SignWrapper>*/}
-                {/*        <Forgot />*/}
-                {/*    </SignWrapper>*/}
-                {/*</Route>*/}
-                {/*<Route exact path={'/sign-up'}>*/}
-                {/*    <SignWrapper>*/}
-                {/*        <SignUp/>*/}
-                {/*    </SignWrapper>*/}
-                {/*    /!*<SignIn/>*!/*/}
-                {/*</Route>*/}
-                <Redirect to={'/'}/>
-            </Switch>
-        </div>
+        return <BrowserRouter basename="/">
+            <div className={'notLoggedInWrapper'}>
+                <Switch>
+                    <Route exact path={'/'}>
+                        <WelcomePage/>
+                    </Route>
+                    <Route exact path={'/asset-manager'}>
+                        <AssetManage/>
+                    </Route>
+                    {/*<Route exact path={'/sign-in'}>*/}
+                    {/*    <SignWrapper>*/}
+                    {/*        <SignIn/>*/}
+                    {/*    </SignWrapper>*/}
+                    {/*</Route>*/}
+                    {/*<Route exact path={'/forgot'}>*/}
+                    {/*    <SignWrapper>*/}
+                    {/*        <Forgot />*/}
+                    {/*    </SignWrapper>*/}
+                    {/*</Route>*/}
+                    {/*<Route exact path={'/sign-up'}>*/}
+                    {/*    <SignWrapper>*/}
+                    {/*        <SignUp/>*/}
+                    {/*    </SignWrapper>*/}
+                    {/*    /!*<SignIn/>*!/*/}
+                    {/*</Route>*/}
+                    <Redirect to={'/'}/>
+                </Switch>
+            </div>
+        </BrowserRouter>
     }
 };
 
