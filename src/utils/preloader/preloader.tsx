@@ -1,6 +1,6 @@
 import React from 'react'
 import css from './preloader.module.css'
-import favicon from '../../images/yellowLogo.png'
+import favicon from '../../images/darkLogo.png'
 
 
 const Preloader = () => {

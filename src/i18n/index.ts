@@ -7,11 +7,11 @@ import data from './locales/data.json'
 
 const options:any = {
     resources: {
-        en: {
-            common: data.languages.en,
-        },
         de: {
             common: data.languages.de,
+        },
+        en: {
+            common: data.languages.en,
         },
     },
 
@@ -22,7 +22,7 @@ const options:any = {
     defaultNS: "common",
 
     react: {
-        lng: 'en',
+        lng: 'de',
         wait: false,
         bindI18n: "languageChanged loaded",
         bindStore: "added removed",
@@ -31,10 +31,10 @@ const options:any = {
 };
 
 i18n.use(LanguageDetector).use(initReactI18next).init(options).then(()=>{
-    let lng = localStorage.getItem('i18nextLng')
-    if(lng && lng === 'ru-RU'){
-        localStorage.setItem('i18nextLng', 'en')
-    }
+    // let lng = localStorage.getItem('i18nextLng')
+    // if(lng && lng === 'ru-RU'){
+        localStorage.setItem('i18nextLng', 'de')
+    // }
 })
 
 export default i18n;

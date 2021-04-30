@@ -131,9 +131,13 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
         Status = 'SUBMITTED'
     }
     const Type = type.toUpperCase()
-    const Time = new Date(date).toLocaleDateString()
+    const Time = new Date(date)
     const [background, setBackground] = useState<string>('#a2a2a2')
-
+    const addZero = (date:number) => {
+        let newDate = date.toString()
+        if(newDate.length > 1) return date
+        return '0' + newDate
+    }
     const onDelete = () => {
         Swal.fire({
             showConfirmButton: false,
@@ -174,10 +178,11 @@ export const FeedComponent: React.FC<FeedComponentProps> = ({
                 setBackground('#a2a2a2')
         }
     }, [Status])
+    const issueDate = `${addZero(Time.getDate())}.${addZero(Time.getMonth() + 1)}.${Time.getFullYear()}`
     return (
         <FeedComponentWrapper withSort={withSort} isAdmin={isAdmin} bg={background}>
             <Link to={`${isAdmin ? 'content' : 'feed/create'}/${Type.toLowerCase()}/${id}`} className={'title'}>{title}</Link>
-            <div>{Time}</div>
+            <div>{issueDate}</div>
             <div>{Type}</div>
             {isAdmin && <div>{companyName ? companyName : ' '}</div>}
             {withSort && <div className={'status'}><span>{Status}</span></div>}

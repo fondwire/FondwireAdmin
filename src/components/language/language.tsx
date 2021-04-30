@@ -14,12 +14,12 @@ function Language() {
         const rus:any = document.getElementById("rus"); // en
 
         if (lng === 'de') {
-            kg.style.backgroundColor = "#feff04";
+            kg.style.backgroundColor = "";
             kg.style.color = "#fff";
             kg.disabled = true;
             kg.style.transition = "1s";
             kg.style.transitionTimingFunction = "ease";
-            kg.style.boxShadow = "0px 0px 20px rgba(50, 180, 130, 0.25)";
+            // kg.style.boxShadow = "0px 0px 20px rgba(50, 180, 130, 0.25)";
 
             rus.style.backgroundColor = "#CCCCCC";
             rus.style.color = "#000";
@@ -32,11 +32,11 @@ function Language() {
         }
 
         if (lng === 'en') {
-            rus.style.backgroundColor = "#feff04";
+            rus.style.backgroundColor = "";
             rus.disabled = true;
             rus.style.transition = "1s";
             rus.style.transitionTimingFunction = "ease";
-            rus.style.boxShadow = "0px 0px 20px rgba(50, 180, 130, 0.25)";
+            // rus.style.boxShadow = "0px 0px 20px rgba(50, 180, 130, 0.25)";
 
             kg.style.backgroundColor = '#CCCCCC';
             kg.style.color = "#000";

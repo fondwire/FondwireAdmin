@@ -1,9 +1,8 @@
-/* eslint-disable no-loop-func */
 import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
 import Preloader from "./utils/preloader/preloader";
 import {useRoute} from "./router";
-import {HashRouter as Router} from "react-router-dom";
+import {BrowserRouter as Router} from "react-router-dom";
 import reducer from './state/RootReducer'
 import {db} from "./firebase";
 import {FeedComponentProps} from "./components/feedComponents/FeedComponents";
