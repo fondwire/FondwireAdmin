@@ -4,7 +4,7 @@ import {Field, Formik, FormikValues} from "formik";
 import * as Yup from "yup";
 import FeedCreateInput from "../../components/FeedCreateInput/FeedCreateInput";
 import {SubmitButton} from "../../components/Buttons/submit-button";
-import {useParams, useHistory} from 'react-router-dom';
+import {useParams, useHistory, useLocation} from 'react-router-dom';
 import Managers from "./Managers";
 import {getData} from "../../App";
 import reducer from "../../state/RootReducer";
@@ -38,6 +38,12 @@ const initial = {
 
 const CreateCompany = () => {
     const {id} = useParams()
+    const search = useLocation().search;
+    const useQuery = () => {
+        return new URLSearchParams(search)
+    };
+    const query = useQuery();
+    const status = query.get('edit');
     const [state] = useReducer(reducer, {
         userData: JSON.parse(localStorage.getItem('userData') as string),
     })
@@ -75,41 +81,62 @@ const CreateCompany = () => {
             return url
         })
     const redirect = () => history.push('/companies')
+    const update = (values: FormikValues) => {
+        console.log(values)
+        let {logo2, logo, contact: {portrait, portrait2, ...contactVal}, ...value} = values;
+        db.ref('/assets').child(values.fullCompanyName).set({
+            profileImageURL: logo2 && typeof logo2 === 'string' ? logo2 : logo ,
+            contact: {
+                portrait: portrait2 && typeof portrait2 === 'string' ? portrait2 : portrait,
+                ...contactVal
+            },
+            ...value
+        }).then(redirect)
+    }
     const submit = (values: FormikValues) => {
-        let {logo2, logo, contact: {portrait, portrait2, ...contactVal}, ...value} = values
+        let {logo2, logo, contact: {portrait, portrait2, ...contactVal}, ...value} = values;
+        console.log(values)
         // If admin uploaded logo of the company
-        if (logo) {
+        if (logo &&  typeof logo !== 'string' ) {
             let file = logo.target.files[0]
             let uploadTask = upload(file)
             uploadTask.on("state_changed", () => {}, () => {},
                 () => {
                     getUrl(file.name).then((logoUrl)=>{
                         // if admin upload the portrait of the user
-                        if (portrait) {
+                        if (portrait && typeof portrait !== 'string') {
                             let portrait = values.contact.portrait.target.files[0]
                             let uploadPortrait = upload(portrait)
                             uploadPortrait.on("state_changed", () => {}, () => {},
                                 () => {
                                     getUrl(portrait.name).then((portraitUrl)=>{
-                                        db.ref('/assets').child(values.fullCompanyName).set({
-                                            profileImageURL: logoUrl,
-                                            contact: {
-                                                portrait: portraitUrl,
-                                                ...contactVal
-                                            },
-                                            ...value
-                                        }).then(redirect)
+                                        if(status){
+                                            update({logo:logoUrl, contact: {portrait: portraitUrl, ...contactVal} ,...values})
+                                        }else{
+                                            db.ref('/assets').child(values.fullCompanyName).set({
+                                                profileImageURL: logoUrl,
+                                                contact: {
+                                                    portrait: portraitUrl,
+                                                    ...contactVal
+                                                },
+                                                ...value
+                                            }).then(redirect)
+                                        }
                                     })
                                 })
                         } else {
-                            db.ref('/assets').child(values.fullCompanyName).set({
-                                profileImageURL: logoUrl,
-                                contact: {
-                                    portrait: '',
-                                    ...contactVal
-                                },
-                                ...value
-                            }).then(redirect)
+                            if(status){
+                                update({logo:logoUrl ,...values})
+                            }else{
+                                db.ref('/assets').child(values.fullCompanyName).set({
+                                    profileImageURL: logoUrl,
+                                    contact: {
+                                        portrait: '',
+                                        ...contactVal
+                                    },
+                                    ...value
+                                }).then(redirect)
+                            }
                         }
                     })
                 }
@@ -122,25 +149,33 @@ const CreateCompany = () => {
                 uploadPortrait.on("state_changed", () => {}, () => {},
                     () => {
                         getUrl(portrait.name).then((portraitUrl)=>{
-                            db.ref('/assets').child(values.fullCompanyName).set({
-                                profileImageURL: '',
-                                contact: {
-                                    portrait: portraitUrl,
-                                    ...contactVal
-                                },
-                                ...value
-                            }).then(redirect)
+                            if(status){
+                                update({contact: {portrait:portraitUrl,...contactVal},...values})
+                            }else{
+                                db.ref('/assets').child(values.fullCompanyName).set({
+                                    profileImageURL: '',
+                                    contact: {
+                                        portrait: portraitUrl,
+                                        ...contactVal
+                                    },
+                                    ...value
+                                }).then(redirect)
+                            }
                         })
                     })
             }else{
-                db.ref('/assets').child(values.fullCompanyName).set({
-                    profileImageURL: '',
-                    contact: {
-                        portrait: '',
-                        ...contactVal
-                    },
-                    ...value
-                }).then(redirect)
+                if(status){
+                    update(values)
+                }else{
+                    db.ref('/assets').child(values.fullCompanyName).set({
+                        profileImageURL: '',
+                        contact: {
+                            portrait: '',
+                            ...contactVal
+                        },
+                        ...value
+                    }).then(redirect)
+                }
             }
         }
     }
@@ -166,12 +201,13 @@ const CreateCompany = () => {
               }) => {
                 const hasErrors = Object.keys(errors).length > 0
                 const hasChanged = id ? true : !deepEqual(values, initialValue)
+                const isDisabled = id && status ? false : id ? true : false
                 return (
                     <form onSubmit={handleSubmit}>
-                        <Field disabled={id} as={FeedCreateInput} name={'fullCompanyName'} title={`FULL COMPANY NAME`}/>
-                        <Field disabled={id} as={FeedCreateInput} name={'shortCompanyName'}
+                        <Field disabled={isDisabled} as={FeedCreateInput} name={'fullCompanyName'} title={`FULL COMPANY NAME`}/>
+                        <Field disabled={isDisabled} as={FeedCreateInput} name={'shortCompanyName'}
                                title={`SHORT COMPANY NAME (FOR APP DISPLAY)`}/>
-                        <Field disabled={id} as={FeedCreateInput} name={'websiteLink'} title={`WEBSITE LINK`}/>
+                        <Field disabled={isDisabled} as={FeedCreateInput} name={'websiteLink'} title={`WEBSITE LINK`}/>
                         <div className={'logoTitle'}>LOGO</div>
                         <div className={'uploader'}>
                             <LogoWrapper>
@@ -183,7 +219,7 @@ const CreateCompany = () => {
                             </LogoWrapper>
                             <div className={'buttons'}>
                                 {
-                                    !values.logo && !id ?
+                                    !values.logo && !isDisabled ?
                                         <label className={'c_pointer'}>
                                             <span>UPLOAD NEW LOGO</span>
                                             <input id="file" name="logo" type="file" onChange={(event) => {
@@ -201,17 +237,17 @@ const CreateCompany = () => {
                                                    className="input-file d-none"/>
                                         </label>
                                         :
-                                        id ? null :
+                                        isDisabled ? null :
                                             <span className={'c_pointer'} onClick={() => setFieldValue('logo', '')}>DELETE EXISTING LOGO</span>
                                 }
                             </div>
                         </div>
-                        <Field disabled={id} as={FeedCreateInput} name={'contact.name'} title={`CONTACT PERSON NAME`}/>
-                        <Field disabled={id} as={FeedCreateInput} name={'contact.position'}
+                        <Field disabled={isDisabled} as={FeedCreateInput} name={'contact.name'} title={`CONTACT PERSON NAME`}/>
+                        <Field disabled={isDisabled} as={FeedCreateInput} name={'contact.position'}
                                title={`CONTACT PERSON POSITION`}/>
-                        <Field disabled={id} as={FeedCreateInput} name={'contact.phone'}
+                        <Field disabled={isDisabled} as={FeedCreateInput} name={'contact.phone'}
                                title={`CONTACT PERSON PHONE`}/>
-                        <Field disabled={id} as={FeedCreateInput} name={'contact.email'}
+                        <Field disabled={isDisabled} as={FeedCreateInput} name={'contact.email'}
                                title={`CONTACT PERSON EMAIL`}/>
                         <div className={'uploader'}>
                             <LogoWrapper circle={true}>
@@ -224,7 +260,7 @@ const CreateCompany = () => {
                             </LogoWrapper>
                             <div className={'buttons'}>
                                 {
-                                    !values.contact?.portrait && !id ?
+                                    !values.contact?.portrait && !isDisabled ?
                                         <label className={'c_pointer'}>
                                             <span>CONTACT PERSON PORTRAIT</span>
                                             <input id="file" name="portrait" type="file" onChange={(event) => {
@@ -242,7 +278,7 @@ const CreateCompany = () => {
                                                    className="input-file d-none"/>
                                         </label>
                                         :
-                                        id ? null :
+                                        isDisabled ? null :
                                             <span className={'c_pointer'}
                                                   onClick={() => setFieldValue('contact.portrait', '')}>DELETE EXISTING LOGO</span>
                                 }
@@ -250,7 +286,7 @@ const CreateCompany = () => {
                         </div>
                         {/*{errors.email && touched.email && errors.email}*/}
                         {
-                            !id ?
+                            !isDisabled ?
                                 <SubmitButton type="submit" disabled={!hasChanged || hasErrors || isSubmitting}>
                                     Submit
                                 </SubmitButton>

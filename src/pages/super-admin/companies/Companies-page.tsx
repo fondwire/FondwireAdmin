@@ -24,7 +24,7 @@ function CompaniesPage() {
     const [companies, setCompanies] = useState<any>([])
     useEffect(()=>{
         getData('/assets', state, setCompanies, setPending)
-    }, [state, state.userData])
+    }, [state, state.userData, pending])
 
     if(pending) return <div className={'preloaderWrapper'}><Preloader /></div>
     return (
@@ -47,6 +47,7 @@ function CompaniesPage() {
                     id={company.id}
                     symbol={company.name}
                     manager={Object.keys(company.managers ? company.managers : {}).length}
+                    setPending={setPending}
                 />)
             }
         </DashboardWrapper>

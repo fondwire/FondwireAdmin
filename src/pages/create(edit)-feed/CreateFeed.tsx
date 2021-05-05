@@ -335,7 +335,7 @@ const CreateFeed = React.memo(() => {
             })
         }
     }
-    const MAX_LENGTH = 1000
+    const MAX_LENGTH = 3500
     const _handleBeforeInput = () => {
         const currentContent = editor.getCurrentContent();
         const currentContentLength = currentContent.getPlainText('').length
@@ -485,9 +485,9 @@ const CreateFeed = React.memo(() => {
                          setFieldValue
                      }) => {
                         let {isPublish, isAdminApproved, isAssetManagerApproved} = values
-                        let titleLength = 80
+                        let titleLength = 250
                         titleLength = titleLength - values.title.length
-                        let teaserLength = 100
+                        let teaserLength = 500
                         teaserLength = teaserLength - values.teaser.length
                         // const hasErrors = Object.keys(errors).length > 0;
                         const hasChanged = id ? true : !deepEqual(values, initialValues)
@@ -502,13 +502,13 @@ const CreateFeed = React.memo(() => {
                             <Form>
                                 <Field disabled={dis} as={FeedCreateInput}
                                        name={'title'} status={!!titleLength}
-                                       title={`${t("assetManagerHomeScreen.title")} (${titleLength})`} maxLength={'80'}/>
+                                       title={`${t("assetManagerHomeScreen.title")} (${titleLength})`} maxLength={'250'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTitle'}
                                        title={`${t("assetManagerHomeScreen.addPimp")} $14.50`}/>
                                 <br/>
                                 <Field disabled={dis} as={FeedCreateInput}
                                        name={'teaser'} status={!!teaserLength}
-                                       title={`${t("assetManagerHomeScreen.teaser")} (${teaserLength})`} maxLength={'100'}/>
+                                       title={`${t("assetManagerHomeScreen.teaser")} (${teaserLength})`} maxLength={'500'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'}
                                        title={`${t("assetManagerHomeScreen.addPimp")} $14.50`}/>
                                 <br/>
