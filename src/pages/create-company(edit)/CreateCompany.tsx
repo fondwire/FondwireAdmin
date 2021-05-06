@@ -204,7 +204,7 @@ const CreateCompany = () => {
                 const isDisabled = id && status ? false : id ? true : false
                 return (
                     <form onSubmit={handleSubmit}>
-                        <Field disabled={isDisabled} as={FeedCreateInput} name={'fullCompanyName'} title={`FULL COMPANY NAME`}/>
+                        <Field disabled={id} as={FeedCreateInput} name={'fullCompanyName'} title={`FULL COMPANY NAME`}/>
                         <Field disabled={isDisabled} as={FeedCreateInput} name={'shortCompanyName'}
                                title={`SHORT COMPANY NAME (FOR APP DISPLAY)`}/>
                         <Field disabled={isDisabled} as={FeedCreateInput} name={'websiteLink'} title={`WEBSITE LINK`}/>

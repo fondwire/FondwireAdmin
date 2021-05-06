@@ -87,7 +87,7 @@ const CreateFeed = React.memo(() => {
                                 </div>
                             </div> 
                         `
-                    }).then(()=>{
+                    }).then(() => {
                         history.goBack()
                     })
                 }
@@ -263,6 +263,16 @@ const CreateFeed = React.memo(() => {
                 history.push('/feed')
             })
     }
+    const onDisabled = () => {
+        db.ref('/feeds')
+            .child(type + 's')
+            .child(id)
+            .child('isPublish')
+            .set(false)
+            .then(() => {
+                history.push('/feed')
+            })
+    }
     const onAdminApprove = (values: FormikValues) => {
         let {file} = values
         if (typeof file !== 'string') {
@@ -284,17 +294,17 @@ const CreateFeed = React.memo(() => {
                                 isAdminApproved: true,
                                 ...rest
                             }).then(() => {
-                                if(notificationId) {
+                                if (notificationId) {
                                     db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
                                         window.location.href = '/notifications'
                                     })
-                                }else{
-                                    db.ref('/notification').child('feeds').child(type + 's').once('value', function(snapshot){
+                                } else {
+                                    db.ref('/notification').child('feeds').child(type + 's').once('value', function (snapshot) {
                                         return snapshot.toJSON()
-                                    }).then((data)=>{
-                                        const fObject:any = data.toJSON()
-                                        for (let key in fObject){
-                                            if(fObject[key].id === id){
+                                    }).then((data) => {
+                                        const fObject: any = data.toJSON()
+                                        for (let key in fObject) {
+                                            if (fObject[key].id === id) {
                                                 db.ref('/notification').child('/feeds').child(type + 's').child(key).remove().then(() => {
                                                     window.location.href = '/content'
                                                 })
@@ -313,17 +323,17 @@ const CreateFeed = React.memo(() => {
                 isAdminApproved: true,
                 ...rest
             }).then(() => {
-                if(notificationId) {
+                if (notificationId) {
                     db.ref('/notification').child('/feeds').child(type + 's').child(notificationId).remove().then(() => {
                         window.location.href = '/notifications'
                     })
-                }else{
-                    db.ref('/notification').child('feeds').child(type + 's').once('value', function(snapshot){
+                } else {
+                    db.ref('/notification').child('feeds').child(type + 's').once('value', function (snapshot) {
                         return snapshot.toJSON()
-                    }).then((data)=>{
-                        const fObject:any = data.toJSON()
-                        for (let key in fObject){
-                            if(fObject[key].id === id){
+                    }).then((data) => {
+                        const fObject: any = data.toJSON()
+                        for (let key in fObject) {
+                            if (fObject[key].id === id) {
                                 db.ref('/notification').child('/feeds').child(type + 's').child(key).remove().then(() => {
                                     window.location.href = '/content'
                                 })
@@ -353,7 +363,7 @@ const CreateFeed = React.memo(() => {
             return 'handled';
         }
     }
-    const onManagerSaveModel = (values:FormikValues) => {
+    const onManagerSaveModel = (values: FormikValues) => {
         Swal.fire({
             showCloseButton: true,
             showConfirmButton: false,
@@ -375,11 +385,11 @@ const CreateFeed = React.memo(() => {
             }
         })
         const confirmBtn = document.getElementById("yesSave")
-        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        confirmBtn?.addEventListener('click', () => Swal.clickConfirm())
         const deleteBtn = document.getElementById("noGoBack")
-        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+        deleteBtn?.addEventListener('click', () => Swal.clickCancel())
     }
-    const onAdminApproveModal = (values:FormikValues) => {
+    const onAdminApproveModal = (values: FormikValues) => {
         Swal.fire({
             showCloseButton: true,
             showConfirmButton: false,
@@ -400,36 +410,34 @@ const CreateFeed = React.memo(() => {
             }
         })
         const confirmBtn = document.getElementById("yesSave")
-        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        confirmBtn?.addEventListener('click', () => Swal.clickConfirm())
         const deleteBtn = document.getElementById("noGoBack")
-        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+        deleteBtn?.addEventListener('click', () => Swal.clickCancel())
     }
     const onAssetManagerModal = () => {
         Swal.fire({
             showCloseButton: true,
             showConfirmButton: false,
             title: `<div class="modalTitle fz30" style="margin: 35px 0;">APPROVE REQUEST</div>`,
-            html: `
-                                                    <div>
-                                                        <div class="medium black fz21">Do you really want to approve this post?</div>
-                                                        <br>
-                                                        <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
-                                                            <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
-                                                            <button id="yesSave" class="modal-submit">YES, APPROVE</button>
-                                                        </div>
-                                                    </div>
-                                                `
+            html: `<div>
+                    <div class="medium black fz21">Do you really want to approve this post?</div>
+                    <br>
+                    <div class="modal-two-buttons-wrapper" style="margin: 35px 0;">
+                        <button id="noGoBack" class="modal-submit">NO, GO BACK</button>
+                        <button id="yesSave" class="modal-submit">YES, APPROVE</button>
+                    </div>
+                  </div>`
         }).then((result) => {
             if (result.isConfirmed) {
                 onApprove()
             }
         })
         const confirmBtn = document.getElementById("yesSave")
-        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        confirmBtn?.addEventListener('click', () => Swal.clickConfirm())
         const deleteBtn = document.getElementById("noGoBack")
-        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+        deleteBtn?.addEventListener('click', () => Swal.clickCancel())
     }
-    const onManagerSubmitModal = (values:FormikValues) => {
+    const onManagerSubmitModal = (values: FormikValues) => {
         Swal.fire({
             showCloseButton: true,
             showConfirmButton: false,
@@ -453,9 +461,9 @@ const CreateFeed = React.memo(() => {
             }
         })
         const confirmBtn = document.getElementById("yesSave")
-        confirmBtn?.addEventListener('click', ()=> Swal.clickConfirm())
+        confirmBtn?.addEventListener('click', () => Swal.clickConfirm())
         const deleteBtn = document.getElementById("noGoBack")
-        deleteBtn?.addEventListener('click', ()=> Swal.clickCancel())
+        deleteBtn?.addEventListener('click', () => Swal.clickCancel())
     }
 
     if (pending) return <div className={'preloaderWrapper'}><Preloader/></div>
@@ -496,31 +504,34 @@ const CreateFeed = React.memo(() => {
                         const isVideo = type !== 'video' ? !editLen : false
                         // console.log(editLen)
                         const isAdminIsPublish = !state.userData.isAdmin && isPublish
-                        const isFeedApproved =  isAdminApproved && isAssetManagerApproved
+                        const isFeedApproved = isAdminApproved && isAssetManagerApproved
                         const dis = (isPublish && !state.userData.isAdmin) || isFeedApproved || (state.userData.isAdmin && isAdminApproved)
                         return (
                             <Form>
                                 <Field disabled={dis} as={FeedCreateInput}
                                        name={'title'} status={!!titleLength}
-                                       title={`${t("assetManagerHomeScreen.title")} (${titleLength})`} maxLength={'250'}/>
+                                       title={`${t("assetManagerHomeScreen.title")} (${titleLength})`}
+                                       maxLength={'250'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTitle'}
                                        title={`${t("assetManagerHomeScreen.addPimp")} $14.50`}/>
                                 <br/>
                                 <Field disabled={dis} as={FeedCreateInput}
                                        name={'teaser'} status={!!teaserLength}
-                                       title={`${t("assetManagerHomeScreen.teaser")} (${teaserLength})`} maxLength={'500'}/>
+                                       title={`${t("assetManagerHomeScreen.teaser")} (${teaserLength})`}
+                                       maxLength={'500'}/>
                                 <Field disabled={isPublish} as={FeedAddPrimp} name={'proofForTeaser'}
                                        title={`${t("assetManagerHomeScreen.addPimp")} $14.50`}/>
                                 <br/>
                                 <Field disabled={editLen ? editLen : dis} as={FeedCreateInput}
                                        name={'link'}
-                                       title={type === 'video' ? t("assetManagerHomeScreen.videoLink") : `${t("assetManagerHomeScreen.eitherLink")} ${t('assetManagerHomeScreen.'+type)}`}/>
+                                       title={type === 'video' ? t("assetManagerHomeScreen.videoLink") : `${t("assetManagerHomeScreen.eitherLink")} ${t('assetManagerHomeScreen.' + type)}`}/>
                                 <br/>
                                 <br/>
                                 {
                                     type !== 'video'
                                         ? <>
-                                            <span className={MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>{t("assetManagerHomeScreen.writeHere")} ({MAX_LENGTH - editLen})</span>
+                                            <span
+                                                className={MAX_LENGTH - editLen ? 'bodyText' : 'bodyText error'}>{t("assetManagerHomeScreen.writeHere")} ({MAX_LENGTH - editLen})</span>
                                             <br/>
                                             {
                                                 isAdminIsPublish || isAdminApproved || values.link
@@ -583,12 +594,12 @@ const CreateFeed = React.memo(() => {
                                 }
                                 <div className={'btn__wrapper'}>
                                     {
-                                        isPublish  ? <div/>
+                                        isPublish ? <div/>
                                             // submit by Manager to save feed
                                             : <SubmitButton
                                                 disabled={!values.title}
                                                 type={'button'}
-                                                onClick={()=>onManagerSaveModel(values)}
+                                                onClick={() => onManagerSaveModel(values)}
                                             >
                                                 {t("assetManagerHomeScreen.saveBtn")}
                                             </SubmitButton>
@@ -603,7 +614,10 @@ const CreateFeed = React.memo(() => {
                                     }
                                     {
                                         isPublish && isAdminApproved && isAssetManagerApproved
-                                            ? null
+                                            ? <SubmitButton
+                                                type={"button"}
+                                                onClick={onDisabled}
+                                            >Disabled</SubmitButton>
                                             : !isAssetManagerApproved && !isAdminApproved && isPublish
                                             // Approve by Super-Admin
                                             ? null
@@ -615,12 +629,13 @@ const CreateFeed = React.memo(() => {
                                                 >{t("assetManagerHomeScreen.approveBtn")}</SubmitButton>
                                                 //    onSubmit by Manager to create feed
                                                 : !state.userData.isAdmin ? <SubmitButton
-                                                    disabled={(values.link.length ? false : isVideo ) || !hasChanged || hasErrors || isSubmitting}
-                                                    onClick={() => onManagerSubmitModal(values)}
-                                                    type={'button'}
-                                                >
-                                                    {t("assetManagerHomeScreen.submit")}
-                                                </SubmitButton> : null
+                                                        disabled={(values.link.length ? false : isVideo) || !hasChanged || hasErrors || isSubmitting}
+                                                        onClick={() => onManagerSubmitModal(values)}
+                                                        type={'button'}
+                                                    >
+                                                        {t("assetManagerHomeScreen.submit")}
+                                                    </SubmitButton>
+                                                    : null
                                     }
                                 </div>
                             </Form>

@@ -73,14 +73,20 @@ const Feed: React.FC<{ isAdmin?: boolean, companies?: any }> = (props) => {
     })
     const sortStatus = (i: any, option: any) => {
         let opt = option?.toLocaleLowerCase()
-        return opt === 'all' ? i
-            : opt === 'draft'
-                ? !i.isPublish
-                : opt === 'submitted'
-                    ? i.isPublish && !i.isAdminApproved
-                    : opt === 'approved'
-                        ? i.isAdminApproved && !i.isAssetManagerApproved
-                        : i.isAssetManagerApproved
+        if(opt === 'all') return i;
+        if(opt === 'draft') return !i.isPublish
+        if(opt === 'submitted') return i.isPublish && !i.isAdminApproved;
+        if(opt === 'approved') return i.isAdminApproved && !i.isAssetManagerApproved;
+        if(opt === 'published') return i.isPublish && i.isAssetManagerApproved;
+        return i
+        // return opt === 'all' ? i
+        //     : opt === 'draft'
+        //         ? !i.isPublish
+        //         : opt === 'submitted'
+        //             ? i.isPublish && !i.isAdminApproved
+        //             : opt === 'approved'
+        //                 ? i.isAdminApproved && !i.isAssetManagerApproved
+        //                 : i.isAssetManagerApproved
     }
     const sortCompany = (a: any, key: any, option: any) => (typeof a[key] === 'string') && a[key].toLowerCase() === option.toLowerCase()
     const sortFeeds = (key: string, num: number, option?: string) => {
